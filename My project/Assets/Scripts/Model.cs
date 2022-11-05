@@ -13,10 +13,13 @@ namespace Model
     [Serializable]
     public class Game
     {
+        public int id;
         public int round;
         public bool currentPlayer;
         public Player player1;
         public Player player2;
+        public Shop shop;
+        public Structure[] structures;
     }
 
     [Serializable]
@@ -55,6 +58,7 @@ namespace Model
         public int id;
         public string name;
         public CharacterClass characterClass;
+        public int actionRange;
         public int attack;
         public int defense;
         public int hp;
@@ -119,7 +123,6 @@ namespace Model
     {
         public int id;
         public string structureClass;
-        public string name;
         public int level;
         public int hp;
         public int remainingRound;
@@ -127,5 +130,14 @@ namespace Model
         public int x;
         public int y;
         public Character[] characters;
+    }
+
+    [Serializable]
+    public class Shop
+    {
+        public Equipment[] equipments;
+        public Item[] items;
+        public Mount[] mounts;
+        public int[][] index;
     }
 }
