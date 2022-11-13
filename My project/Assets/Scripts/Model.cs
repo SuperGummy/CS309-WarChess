@@ -20,6 +20,7 @@ namespace Model
         public Player player2;
         public Shop shop;
         public Structure[] structures;
+        public int[,] map;
     }
 
     [Serializable]
@@ -58,11 +59,14 @@ namespace Model
         public int id;
         public string name;
         public CharacterClass characterClass;
+        public int actionState;
         public int actionRange;
         public int attack;
         public int defense;
         public int hp;
         public int level;
+        public int x;
+        public int y;
         public Equipment equipment;
         public Mount mount;
     }
@@ -85,7 +89,7 @@ namespace Model
         public int hp;
         public string description;
     }
-    
+
     [Serializable]
     public class Mount
     {
@@ -117,12 +121,12 @@ namespace Model
         CANNON,
         SHIELD,
     }
-    
+
     [Serializable]
     public class Structure
     {
         public int id;
-        public string structureClass;
+        public StructureClass structureClass;
         public int level;
         public int hp;
         public int remainingRound;
@@ -133,11 +137,21 @@ namespace Model
     }
 
     [Serializable]
+    public enum StructureClass
+    {
+        VILLAGE,
+        CAMP,
+        MARKET,
+        INSTITUTE,
+        RELIC,
+    }
+
+    [Serializable]
     public class Shop
     {
         public Equipment[] equipments;
         public Item[] items;
         public Mount[] mounts;
-        public int[][] index;
+        public int[,] index;
     }
 }
