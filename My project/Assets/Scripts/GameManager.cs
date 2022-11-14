@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
         {
             //grid_ = GetComponent<Grid>();
             Vector3Int cellPosition = GetMousePosition();
-			int x = cellPosition.y + 8;
-			int y = cellPosition.x + 8;
+			int x = cellPosition.x + 8;
+			int y = cellPosition.y + 8;
 			Debug.Log(x + " " + y);
 			if(clickState == 0) {
 				// TODO: check whether is a clickable grid: 

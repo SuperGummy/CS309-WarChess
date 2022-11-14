@@ -10,8 +10,8 @@ public class GridController : MonoBehaviour
 {
     public static GridController Instance;
     private Grid grid;
-    [SerializeField] private Tilemap interactiveMap = null;
-    [SerializeField] private Tile hoverTile = null;
+    [SerializeField] private Tilemap interactiveMap;
+    [SerializeField] private Tile hoverTile;
     [SerializeField] private Tilemap buildingMap;
     [SerializeField] private Tile village;
     [SerializeField] private Tile relic;
@@ -21,7 +21,7 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tile redMarket;
     [SerializeField] private Tile blueInstitute;
     [SerializeField] private Tile redInstitute;
-    private Vector3Int previousMousePos = new Vector3Int();
+    private Vector3Int previousMousePos;
 
 
     // Start is called before the first frame update
