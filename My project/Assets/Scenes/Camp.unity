@@ -2589,7 +2589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButton: {fileID: 720299886}
   gameManager: {fileID: 0}
-  SceneName: Camp
+  SceneName: 
 --- !u!114 &720299886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2978,6 +2978,7 @@ MonoBehaviour:
   - {fileID: 720299886}
   - {fileID: 176827892}
   - {fileID: 1427174863}
+  GampCharacterImage: {fileID: 117911715}
 --- !u!1 &868983718
 GameObject:
   m_ObjectHideFlags: 0
@@ -4507,7 +4508,7 @@ MonoBehaviour:
   hasCharacter: 1
   character: {fileID: 221433763}
   empty: {fileID: 90994821}
-  isTraining: 1
+  isTraining: 0
   endTurns: 4
   updateType: 0
   updateValue: 2
