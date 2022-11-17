@@ -45,7 +45,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 764109c7ec45d444b8052458ef2ff4a3, type: 2}
     - target: {fileID: 5072296781591474193, guid: 684dc6f066d6aa24ba2e94ba5d77ffb7, type: 3}
       propertyPath: m_Name
-      value: Character
+      value: CharacterRenderer
       objectReference: {fileID: 0}
     - target: {fileID: 7072306897282474192, guid: 684dc6f066d6aa24ba2e94ba5d77ffb7, type: 3}
       propertyPath: m_Size.x
