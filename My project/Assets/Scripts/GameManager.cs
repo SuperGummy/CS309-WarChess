@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
 	public bool gridEnable;
 	public GameObject characterInfoButton;
 	public GameObject placeInfoButton;
+    public Button recruitBtn;
 	
 	// click state: 
 	// 	0: Click show movement
@@ -16,9 +19,15 @@ public class GameManager : MonoBehaviour
 	int clickState = 0;
 	int lastClickX = 0, lastClickY = 0;
 
+	
+    private void RecruitOnClick()
+    {
+        SceneManager.LoadScene("recruit");
+    }
     // Start is called before the first frame update
     void Start()
     {
+        recruitBtn.onClick.AddListener(RecruitOnClick);
         gridEnable = true;
     }
 
