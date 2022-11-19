@@ -1402,6 +1402,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skill3
       objectReference: {fileID: 0}
+    - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 860232381991014083, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5812,6 +5816,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skill4
       objectReference: {fileID: 0}
+    - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 860232381991014083, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6146,6 +6154,10 @@ PrefabInstance:
     - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Name
       value: skill8
+      objectReference: {fileID: 0}
+    - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 860232381991014083, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Pivot.x
@@ -6545,6 +6557,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 778637620}
     m_Modifications:
+    - target: {fileID: 860232381219335956, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 860232381219335958, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -6568,6 +6584,10 @@ PrefabInstance:
     - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Name
       value: skill5
+      objectReference: {fileID: 0}
+    - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 860232381991014083, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Pivot.x
@@ -6865,6 +6885,10 @@ PrefabInstance:
     - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Name
       value: skill0
+      objectReference: {fileID: 0}
+    - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 860232381991014082, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Color.b
