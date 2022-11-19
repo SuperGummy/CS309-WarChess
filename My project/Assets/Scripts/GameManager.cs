@@ -105,17 +105,24 @@ public class GameManager : MonoBehaviour
 
 	private bool CheckAttack(Vector3Int position)
 	{
-		if (DataManager.Instance.GetCharacterByPosition(position).player.id != DataManager.Instance.currentPlayer.id)
+		if (DataManager.Instance.GetCharacterByPosition(position) != null)
 		{
-			return true;
+			if (DataManager.Instance.GetCharacterByPosition(position).player.id !=
+			    DataManager.Instance.currentPlayer.id)
+			{
+				return true;
+			}
 		}
 
-		if (DataManager.Instance.GetStructureByPosition(position).player == null ||
-		    DataManager.Instance.GetStructureByPosition(position).player.id != DataManager.Instance.currentPlayer.id)
+		if (DataManager.Instance.GetStructureByPosition(position) != null)
 		{
-			return true;
+			if (DataManager.Instance.GetStructureByPosition(position).player == null ||
+			    DataManager.Instance.GetStructureByPosition(position).player.id !=
+			    DataManager.Instance.currentPlayer.id)
+			{
+				return true;
+			}
 		}
-
 		return false;
 	}
 	
