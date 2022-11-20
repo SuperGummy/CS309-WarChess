@@ -910,7 +910,6 @@ GameObject:
   - component: {fileID: 127121212}
   - component: {fileID: 127121211}
   - component: {fileID: 127121210}
-  - component: {fileID: 127121213}
   m_Layer: 0
   m_Name: CharacterInfoButton
   m_TagString: Untagged
@@ -982,9 +981,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 127121213}
-        m_TargetAssemblyTypeName: CharacterInfoButton, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 764328141}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ShowCharacterInfo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1032,24 +1031,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127121208}
   m_CullTransparentMesh: 1
---- !u!114 &127121213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127121208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f957386e42dd8a4f8c03c363adcfa9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  x: 0
-  y: 0
-  showCharacter: 0
-  characterInfoFrame: {fileID: 871692142}
-  gameManager: {fileID: 0}
-  state: 0
 --- !u!1 &129491801
 GameObject:
   m_ObjectHideFlags: 0
@@ -6031,7 +6012,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 764328138}
-  - component: {fileID: 764328137}
+  - component: {fileID: 764328141}
+  - component: {fileID: 764328142}
+  - component: {fileID: 764328139}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6039,22 +6022,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &764328137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 764328136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f919ab60f03927741af9165455e7af45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 1188997514}
-  gridEnable: 0
-  characterInfoButton: {fileID: 127121208}
-  placeInfoButton: {fileID: 1878142712}
 --- !u!4 &764328138
 Transform:
   m_ObjectHideFlags: 0
@@ -6070,6 +6037,92 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &764328139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764328136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e92f70a36ad0949894af715c6c87d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &764328141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764328136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e6c5bafc1c5af45a16f9529c1b4fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 1188997514}
+  backpackButton: {fileID: 2021300017}
+  finish: {fileID: 13824692}
+  characterInfoButton: {fileID: 127121208}
+  characterInfoFrame: {fileID: 871692142}
+  placeInfoButton: {fileID: 1878142712}
+  placeInfoFrame: {fileID: 342910644}
+  backpack: 0
+  shop: 0
+  characterInfo: 0
+  structureInfo: 0
+  nextRound: 0
+--- !u!114 &764328142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764328136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b510df9fa628c44be4d810b14bb2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameID: 0
+  round: 0
+  currentPlayer:
+    id: 0
+    stars: 0
+    prosperityDegree: 0
+    peaceDegree: 0
+    equipments: []
+    mounts: []
+    items: []
+    shop:
+      equipments: []
+      items: []
+      mounts: []
+  player1:
+    id: 0
+    stars: 0
+    prosperityDegree: 0
+    peaceDegree: 0
+    equipments: []
+    mounts: []
+    items: []
+    shop:
+      equipments: []
+      items: []
+      mounts: []
+  player2:
+    id: 0
+    stars: 0
+    prosperityDegree: 0
+    peaceDegree: 0
+    equipments: []
+    mounts: []
+    items: []
+    shop:
+      equipments: []
+      items: []
+      mounts: []
 --- !u!1 &771782498
 GameObject:
   m_ObjectHideFlags: 0
@@ -9857,9 +9910,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3416e980587b063469719b2be71b2d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridEnable: 0
   interactiveMap: {fileID: 422301513}
+  buildingMap: {fileID: 1125306398}
   hoverTile: {fileID: 11400000, guid: a1204487e13e6bb40a4b43a44b35fa5d, type: 2}
-  buildingMap: {fileID: 0}
   village: {fileID: 0}
   relic: {fileID: 0}
   blueCamp: {fileID: 0}
@@ -19818,7 +19872,6 @@ GameObject:
   - component: {fileID: 1878142716}
   - component: {fileID: 1878142715}
   - component: {fileID: 1878142714}
-  - component: {fileID: 1878142717}
   m_Layer: 0
   m_Name: PlaceInfoButton
   m_TagString: Untagged
@@ -19890,9 +19943,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1878142717}
-        m_TargetAssemblyTypeName: PlaceInfoButton, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 764328141}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ShowStructureInfo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19940,24 +19993,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878142712}
   m_CullTransparentMesh: 1
---- !u!114 &1878142717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1878142712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d28b22f598da3514383ca4fd442a5526, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  x: 0
-  y: 0
-  showPlace: 0
-  placeInfoFrame: {fileID: 342910644}
-  gameManager: {fileID: 0}
-  state: 0
 --- !u!1 &1886995598
 GameObject:
   m_ObjectHideFlags: 0
@@ -20738,7 +20773,6 @@ GameObject:
   - component: {fileID: 2021300019}
   - component: {fileID: 2021300018}
   - component: {fileID: 2021300017}
-  - component: {fileID: 2021300020}
   m_Layer: 0
   m_Name: BackpackButton
   m_TagString: Untagged
@@ -20810,9 +20844,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2021300020}
-        m_TargetAssemblyTypeName: BackPackButton, Assembly-CSharp
-        m_MethodName: OnClickBackPack
+      - m_Target: {fileID: 764328141}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OpenBackPack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20860,20 +20894,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021300015}
   m_CullTransparentMesh: 1
---- !u!114 &2021300020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2021300015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2213d7a593d9fc343b3556cab3ce38f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backPackFrame: {fileID: 0}
-  gameManager: {fileID: 0}
 --- !u!1 &2082693942
 GameObject:
   m_ObjectHideFlags: 0
