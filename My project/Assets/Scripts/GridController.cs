@@ -10,9 +10,10 @@ public class GridController : MonoBehaviour
 {
     public static GridController Instance;
     private Grid grid;
+    public bool gridEnable;
     [SerializeField] private Tilemap interactiveMap;
-    [SerializeField] private Tile hoverTile;
     [SerializeField] private Tilemap buildingMap;
+    [SerializeField] private Tile hoverTile;
     [SerializeField] private Tile village;
     [SerializeField] private Tile relic;
     [SerializeField] private Tile blueCamp;
@@ -24,22 +25,32 @@ public class GridController : MonoBehaviour
     private Vector3Int previousMousePos;
 
 
+    private void Awake()
+    {
+        gridEnable = true;
+        Instance = this;
+    }
+
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         grid = gameObject.GetComponent<Grid>();
     }
     
     // Update is called once per frame
     void Update() {
         // Mouse over -> highlight tile
-        Vector3Int mousePos = GetMousePosition();
-        if (!mousePos.Equals(previousMousePos)) {
-            interactiveMap.SetTile(previousMousePos, null); // Remove old hoverTile
-            if (Math.Abs(mousePos.x) <= 8 && Math.Abs(mousePos.y) <= 8)
-            {
-                interactiveMap.SetTile(mousePos, hoverTile);
+        if (gridEnable)
+        {
+            Vector3Int mousePos = GetMousePosition();
+            if (!mousePos.Equals(previousMousePos)) {
+                interactiveMap.SetTile(previousMousePos, null); // Remove old hoverTile
+                if (Math.Abs(mousePos.x) <= 8 && Math.Abs(mousePos.y) <= 8)
+                {
+                    interactiveMap.SetTile(mousePos, hoverTile);
+                }
+                previousMousePos = mousePos;
             }
-            previousMousePos = mousePos;
         }
     }
 
