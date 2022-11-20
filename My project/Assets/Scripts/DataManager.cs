@@ -630,12 +630,14 @@ public class DataManager : MonoBehaviour
         if (res == null)
         {
             EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
+            GameManager.Instance.error = true;
             return default;
         }
 
         if (res.StatusCode != HttpStatusCode.OK)
         {
             EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
+            GameManager.Instance.error = true;
             return default;
         }
 
@@ -644,12 +646,14 @@ public class DataManager : MonoBehaviour
 
         if (model == null)
         {
+            GameManager.Instance.error = true;
             return default;
         }
 
         if (model.code != 200)
         {
             EditorUtility.DisplayDialog("Bad Request", model.msg, "ok");
+            GameManager.Instance.error = true;
             return default;
         }
 
