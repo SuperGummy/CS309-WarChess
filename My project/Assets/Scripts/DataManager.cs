@@ -582,6 +582,11 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
+        if (option == 0) currentPlayer.stars -= 0;
+        else if (option <= 3) currentPlayer.stars -= 4;
+        else if (option <= 9) currentPlayer.stars -= 10;
+        else currentPlayer.stars -= 20;
+            
         UpdateStructureAttribute(structure);
         _characters[position.x, position.y].actionState = 2;
     }
