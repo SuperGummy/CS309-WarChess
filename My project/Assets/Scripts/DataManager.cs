@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,10 +20,11 @@ public class DataManager : MonoBehaviour
     public Player currentPlayer;
     public Player player1;
     public Player player2;
+    public int[,] _tech = new int [2, TechSize];
     private int[,] _map = new int[MapSize, MapSize];
     private Character[,] _characters = new Character[MapSize, MapSize];
     private Structure[,] _structures = new Structure[MapSize, MapSize];
-    private int[,] _tech = new int [2, TechSize];  
+
     private void Awake()
     {
         Instance = this;
@@ -173,13 +173,14 @@ public class DataManager : MonoBehaviour
             UpdateStructureAttribute(structure);
         }
     }
+
     /* Player Controller */
     public async Task GetAll(int playerId)
     {
         var res = await api.GET(
             url: api.Player + "/" + currentPlayer.id,
-            param:null
-            );
+            param: null
+        );
         var player = GetModel<Model.Player>(res);
         if (player == null)
         {
@@ -193,9 +194,11 @@ public class DataManager : MonoBehaviour
         currentPlayer.items = player.items;
         currentPlayer.stars = player.stars;
     }
-    
-    public async Task UpdateItem(int characterId, int itemId)
+
+    public async Task UpdateItem(Vector3Int position, int itemId)
     {
+        if (GetCharacterByPosition(position) == null) return;
+        var characterId = GetCharacterByPosition(position).id;
         var res = await api.PUT(
             url: api.Player + "/" + currentPlayer.id + "/item",
             param: new Dictionary<string, string>
@@ -209,6 +212,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
+
         UpdateCharacterAttribute(character, false);
         for (int i = 0; i < currentPlayer.items.Length; i++)
         {
@@ -220,15 +224,17 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public async Task UpdateEquipment(int characterId, int equipmentId,bool off)
+    public async Task UpdateEquipment(Vector3Int position, int equipmentId, bool off)
     {
+        if (GetCharacterByPosition(position) == null) return;
+        var characterId = GetCharacterByPosition(position).id;
         var res = await api.PUT(
-            url:api.Player+"/"+currentPlayer.id+"/equip",
-            param:new Dictionary<string, string>
+            url: api.Player + "/" + currentPlayer.id + "/equip",
+            param: new Dictionary<string, string>
             {
-                {"characterid",characterId.ToString()},
-                {"equipmentid",equipmentId.ToString()},
-                {"off",off.ToString()}
+                { "characterid", characterId.ToString() },
+                { "equipmentid", equipmentId.ToString() },
+                { "off", off.ToString() }
             }
         );
         var character = GetModel<Model.Character>(res);
@@ -237,7 +243,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        UpdateCharacterAttribute(character,false);
+        UpdateCharacterAttribute(character, false);
         if (off)
         {
         }
@@ -248,23 +254,24 @@ public class DataManager : MonoBehaviour
             {
                 if (currentPlayer.equipments[i].id == equipmentId)
                 {
-                    currentPlayer.equipments[i] = null;        
+                    currentPlayer.equipments[i] = null;
                     break;
                 }
             }
-            
         }
     }
 
-    public async Task UpdateMount(int characterId, int mountId,bool off)
+    public async Task UpdateMount(Vector3Int position, int mountId, bool off)
     {
+        if (GetCharacterByPosition(position) == null) return;
+        var characterId = GetCharacterByPosition(position).id;
         var res = await api.PUT(
-            url:api.Player+"/"+currentPlayer.id+"/mount",
-            param:new Dictionary<string, string>
+            url: api.Player + "/" + currentPlayer.id + "/mount",
+            param: new Dictionary<string, string>
             {
-                {"characterid",characterId.ToString()},
-                {"mountid",mountId.ToString()},
-                {"off",off.ToString()}
+                { "characterid", characterId.ToString() },
+                { "mountid", mountId.ToString() },
+                { "off", off.ToString() }
             }
         );
         var character = GetModel<Model.Character>(res);
@@ -273,7 +280,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        UpdateCharacterAttribute(character,false);
+        UpdateCharacterAttribute(character, false);
         if (off)
         {
         }
@@ -284,20 +291,18 @@ public class DataManager : MonoBehaviour
             {
                 if (currentPlayer.mounts[i].id == mountId)
                 {
-                    currentPlayer.mounts[i] = null;        
+                    currentPlayer.mounts[i] = null;
                     break;
                 }
             }
-            
         }
     }
 
-    
-    
+
     public async Task GetTechnologies()
     {
         var res = await api.GET(
-            url: api.Player + "/" + currentPlayer.id+"/tech",
+            url: api.Player + "/" + currentPlayer.id + "/tech",
             param: null);
         var tech = GetModel<int[,]>(res);
         if (tech == null) return;
@@ -307,7 +312,7 @@ public class DataManager : MonoBehaviour
     public async Task GetEquipments()
     {
         var res = await api.GET(
-            url:api.Player+"/"+currentPlayer.id+"/equip",
+            url: api.Player + "/" + currentPlayer.id + "/equip",
             param: null);
         var equipments = GetModel<Equipment[]>(res);
         if (equipments == null) return;
@@ -317,9 +322,9 @@ public class DataManager : MonoBehaviour
     public async Task GetMount()
     {
         var res = await api.GET(
-            url:api.Player+"/"+currentPlayer.id+"/mount",
+            url: api.Player + "/" + currentPlayer.id + "/mount",
             param: null
-            );
+        );
         var mounts = GetModel<Mount[]>(res);
         if (mounts == null) return;
         currentPlayer.mounts = mounts;
@@ -328,7 +333,7 @@ public class DataManager : MonoBehaviour
     public async Task GetItem()
     {
         var res = await api.GET(
-            url:api.Player+"/"+currentPlayer.id+"/item",
+            url: api.Player + "/" + currentPlayer.id + "/item",
             param: null
         );
         var items = GetModel<Model.Item[]>(res);
@@ -349,10 +354,10 @@ public class DataManager : MonoBehaviour
         var equipment = GetModel<Model.Equipment>(res);
         if (equipment == null) return;
         currentPlayer.stars -= 7;
-        currentPlayer.equipments.AddRange(new Equipment[] {equipment});
+        currentPlayer.equipments.AddRange(new Equipment[] { equipment });
         for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
         {
-            if (currentPlayer.shop.index[0,i]==shopid)
+            if (currentPlayer.shop.index[0, i] == shopid)
             {
                 currentPlayer.equipments[i] = null;
                 break;
@@ -372,10 +377,10 @@ public class DataManager : MonoBehaviour
         var mount = GetModel<Mount>(res);
         if (mount == null) return;
         currentPlayer.stars -= 7;
-        currentPlayer.mounts.AddRange(new Mount[] {mount});
+        currentPlayer.mounts.AddRange(new Mount[] { mount });
         for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
         {
-            if (currentPlayer.shop.index[2,i]==shopid)
+            if (currentPlayer.shop.index[2, i] == shopid)
             {
                 currentPlayer.equipments[i] = null;
                 break;
@@ -383,7 +388,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    
+
     public async Task BuyItems(int shopid)
     {
         var res = await api.POST(
@@ -395,37 +400,38 @@ public class DataManager : MonoBehaviour
         );
         var item = GetModel<Model.Item>(res);
         if (item == null) return;
-        currentPlayer.items.AddRange(new Model.Item[] {item});
+        currentPlayer.items.AddRange(new Model.Item[] { item });
         currentPlayer.stars -= 7;
         for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
         {
-            if (currentPlayer.shop.index[1,i]==shopid)
+            if (currentPlayer.shop.index[1, i] == shopid)
             {
                 currentPlayer.equipments[i] = null;
                 break;
             }
         }
-
     }
-    
+
     /* Character Controller*/
 
-    
+
     public async Task GetCharacter(int id)
     {
         var res = await api.GET(
-            url:api.Character+"/"+id,
+            url: api.Character + "/" + id,
             param: null
         );
         var character = GetModel<Model.Character>(res);
         if (character == null) return;
-        UpdateCharacterAttribute(character,true);
+        UpdateCharacterAttribute(character, true);
     }
 
-    public async Task DismissCharacter(int characterOld)
+    public async Task DismissCharacter(Vector3Int position)
     {
+        var characterOld = GetCharacterByPosition(position);
+        if (characterOld == null) return;
         var res = await api.PUT(
-            url:api.Character+"/"+characterOld+"/dismiss",
+            url: api.Character + "/" + characterOld + "/dismiss",
             param: null
         );
         var character = GetModel<Model.Character>(res);
@@ -433,55 +439,56 @@ public class DataManager : MonoBehaviour
         _characters[character.x, character.y] = null;
     }
 
-    public async Task MoveCharacter(Vector3Int oldPosition,Vector3Int newPosition)
+    public async Task MoveCharacter(Vector3Int oldPosition, Vector3Int newPosition)
     {
         var characterOld = GetCharacterByPosition(oldPosition);
         if (characterOld == null) return;
         var res = await api.PUT(
-            url:api.Character+"/"+characterOld.id+"/move",
+            url: api.Character + "/" + characterOld.id + "/move",
             param: new Dictionary<string, string>
             {
-                {"x",newPosition.x.ToString()},
-                {"y",newPosition.y.ToString()}
+                { "x", newPosition.x.ToString() },
+                { "y", newPosition.y.ToString() }
             }
         );
         var character = GetModel<Model.Character>(res);
         if (character == null) return;
         _characters[oldPosition.x, oldPosition.y] = null;
-        UpdateCharacterAttribute(character,true);
+        UpdateCharacterAttribute(character, true);
     }
-    public async Task AttackCharacter(Vector3Int oldPosition,Vector3Int newPosition)
+
+    public async Task AttackCharacter(Vector3Int oldPosition, Vector3Int newPosition)
     {
         var characterAttack = GetCharacterByPosition(oldPosition);
         var characterAttacked = GetCharacterByPosition(newPosition);
         var res = await api.PUT(
-            url:api.Character+"/"+characterAttack.id+"/char",
+            url: api.Character + "/" + characterAttack.id + "/char",
             param: new Dictionary<string, string>
             {
-                {"attackid",characterAttacked.id.ToString()}
+                { "attackid", characterAttacked.id.ToString() }
             }
         );
         var character = GetModel<Model.Character>(res);
         if (character == null) return;
-        UpdateCharacterAttribute(character,false);
-        
-        _characters[oldPosition.x,oldPosition.y].actionState = 2;
+        UpdateCharacterAttribute(character, false);
+
+        _characters[oldPosition.x, oldPosition.y].actionState = 2;
 
         if (character.hp <= 0)
         {
-             GetStructure(new Vector3Int(character.x, character.y));
+            GetStructure(new Vector3Int(character.x, character.y));
         }
     }
-    
-    public async Task AttackStructure(Vector3Int oldPosition,Vector3Int newPosition)
+
+    public async Task AttackStructure(Vector3Int oldPosition, Vector3Int newPosition)
     {
         var characterAttack = GetCharacterByPosition(oldPosition);
         var structureAttacked = GetStructureByPosition(newPosition);
         var res = await api.PUT(
-            url:api.Character+"/"+characterAttack.id+"/structure",
+            url: api.Character + "/" + characterAttack.id + "/structure",
             param: new Dictionary<string, string>
             {
-                {"attackid",structureAttacked.id.ToString()}
+                { "attackid", structureAttacked.id.ToString() }
             }
         );
         var structure = GetModel<Model.Structure>(res);
@@ -490,6 +497,7 @@ public class DataManager : MonoBehaviour
         {
             UpdateStructurePlayer(structure);
         }
+
         UpdateStructureAttribute(structure);
         _characters[oldPosition.x, oldPosition.y].actionState = 2;
     }
@@ -499,26 +507,26 @@ public class DataManager : MonoBehaviour
     {
         var structureOld = GetStructureByPosition(position);
         var res = await api.GET(
-            url:api.Structure+"/"+structureOld.id,
-            param:null
+            url: api.Structure + "/" + structureOld.id,
+            param: null
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
         UpdateStructureAttribute(structure);
     }
 
-    public async Task BuyCharacters(Vector3Int position,int id,int x,int y,int type)
+    public async Task BuyCharacters(Vector3Int position, int id, int x, int y, int type)
     {
         var structureOld = GetStructureByPosition(position);
         var res = await api.POST(
-            url:api.Structure+"/"+structureOld.id+"/char",
-            param:new Dictionary<string, string>
+            url: api.Structure + "/" + structureOld.id + "/char",
+            param: new Dictionary<string, string>
             {
-                {"playerid",currentPlayer.id.ToString()},
-                {"id",id.ToString()},
-                {"x",x.ToString()},
-                {"y",y.ToString()},
-                {"type",type.ToString()}
+                { "playerid", currentPlayer.id.ToString() },
+                { "id", id.ToString() },
+                { "x", x.ToString() },
+                { "y", y.ToString() },
+                { "type", type.ToString() }
             }
         );
         var structure = GetModel<Model.Structure>(res);
@@ -527,37 +535,19 @@ public class DataManager : MonoBehaviour
         await GetCharacter(id);
         currentPlayer.stars -= 3;
     }
-    public async Task UpdateCharacter(Vector3Int position,int option)
+
+    public async Task UpdateCharacter(Vector3Int position, int option)
     {
         var structureOld = GetStructureByPosition(position);
         var character = GetCharacterByPosition(position);
         if (structureOld == null) return;
         if (character == null) return;
         var res = await api.PUT(
-            url:api.Structure+"/"+structureOld.id+"/camp",
-            param:new Dictionary<string, string>
+            url: api.Structure + "/" + structureOld.id + "/camp",
+            param: new Dictionary<string, string>
             {
-                {"characterid",character.id.ToString()},
-                {"option",option.ToString()}
-            }
-        );
-        var structure = GetModel<Model.Structure>(res);
-        if (structure == null) return;
-        UpdateStructureAttribute(structure);
-        _characters[position.x, position.y].actionState = 2;
-    }
-    
-    public async Task EarnStars(Vector3Int position)
-    {
-        var structureOld = GetStructureByPosition(position);
-        var character = GetCharacterByPosition(position);
-        if (structureOld == null) return;
-        if (character == null) return;
-        var res = await api.PUT(
-            url:api.Structure+"/"+structureOld.id+"/market",
-            param:new Dictionary<string, string>
-            {
-                {"characterid",character.id.ToString()},
+                { "characterid", character.id.ToString() },
+                { "option", option.ToString() }
             }
         );
         var structure = GetModel<Model.Structure>(res);
@@ -566,18 +556,37 @@ public class DataManager : MonoBehaviour
         _characters[position.x, position.y].actionState = 2;
     }
 
-    public async Task UpdateTechnologies(Vector3Int position,int option)
+    public async Task EarnStars(Vector3Int position)
     {
         var structureOld = GetStructureByPosition(position);
         var character = GetCharacterByPosition(position);
         if (structureOld == null) return;
         if (character == null) return;
         var res = await api.PUT(
-            url:api.Structure+"/"+structureOld.id+"/insititude",
-            param:new Dictionary<string, string>
+            url: api.Structure + "/" + structureOld.id + "/market",
+            param: new Dictionary<string, string>
             {
-                {"characterid",character.id.ToString()},
-                {"option",option.ToString()}
+                { "characterid", character.id.ToString() },
+            }
+        );
+        var structure = GetModel<Model.Structure>(res);
+        if (structure == null) return;
+        UpdateStructureAttribute(structure);
+        _characters[position.x, position.y].actionState = 2;
+    }
+
+    public async Task UpdateTechnologies(Vector3Int position, int option)
+    {
+        var structureOld = GetStructureByPosition(position);
+        var character = GetCharacterByPosition(position);
+        if (structureOld == null) return;
+        if (character == null) return;
+        var res = await api.PUT(
+            url: api.Structure + "/" + structureOld.id + "/insititude",
+            param: new Dictionary<string, string>
+            {
+                { "characterid", character.id.ToString() },
+                { "option", option.ToString() }
             }
         );
         var structure = GetModel<Model.Structure>(res);
@@ -586,20 +595,20 @@ public class DataManager : MonoBehaviour
         else if (option <= 3) currentPlayer.stars -= 4;
         else if (option <= 9) currentPlayer.stars -= 10;
         else currentPlayer.stars -= 20;
-            
+
         UpdateStructureAttribute(structure);
         _characters[position.x, position.y].actionState = 2;
     }
 
-    public async Task UpdateStructure(Vector3Int position,int option)
+    public async Task UpdateStructure(Vector3Int position, int option)
     {
         var structureOld = GetStructureByPosition(position);
         if (structureOld == null) return;
         var res = await api.PUT(
-            url:api.Structure+"/"+structureOld.id+"/upd",
-            param:new Dictionary<string, string>
+            url: api.Structure + "/" + structureOld.id + "/upd",
+            param: new Dictionary<string, string>
             {
-                {"option",option.ToString()}
+                { "option", option.ToString() }
             }
         );
         var structure = GetModel<Model.Structure>(res);
@@ -607,7 +616,7 @@ public class DataManager : MonoBehaviour
         UpdateStructureAttribute(structure);
         currentPlayer.stars -= structureOld.level * 10;
     }
-    
+
     private T GetModel<T>(HttpResponseMessage res)
     {
         if (res == null)
@@ -661,14 +670,14 @@ public class DataManager : MonoBehaviour
         SetPlayerShop(game.currentPlayer ? player1 : player2, game.shop);
     }
 
-    private void UpdateCharacterAttribute(Model.Character character,bool flag)
+    private void UpdateCharacterAttribute(Model.Character character, bool flag)
     {
-
         if (character.hp <= 0)
         {
             _characters[character.x, character.y] = null;
             return;
         }
+
         if (_characters[character.x, character.y] == null)
         {
             _characters[character.x, character.y] = new Character();
@@ -703,9 +712,9 @@ public class DataManager : MonoBehaviour
 
     private void SetCharacter(Model.Character character1, Model.Character character2)
     {
-        UpdateCharacterAttribute(character1,false);
+        UpdateCharacterAttribute(character1, false);
         _characters[character1.x, character1.y].player = player1;
-        UpdateCharacterAttribute(character2,false);
+        UpdateCharacterAttribute(character2, false);
         _characters[character2.x, character2.y].player = player2;
     }
 
@@ -722,9 +731,15 @@ public class DataManager : MonoBehaviour
         _structures[structure.x, structure.y].hp = structure.hp;
         _structures[structure.x, structure.y].remainingRound = structure.remainingRound;
         _structures[structure.x, structure.y].value = structure.value;
+        if (structure.characters == null)
+        {
+            return;
+        }
+
         _structures[structure.x, structure.y].characters = new Character[structure.characters.Length];
         for (var i = 0; i < structure.characters.Length; i++)
         {
+            _structures[structure.x, structure.y].characters[i] = new Character();
             _structures[structure.x, structure.y].characters[i].id = structure.characters[i].id;
             _structures[structure.x, structure.y].characters[i].name = structure.characters[i].name;
             _structures[structure.x, structure.y].characters[i].actionRange = structure.characters[i].actionRange;
@@ -782,8 +797,7 @@ public class DataManager : MonoBehaviour
         {
             for (int j = 0; j < sourceMap.GetLength(1); j++)
             {
-                int target = (sourceMap[i, j] >> 2) & 3;
-                _map[i, j] = target == 3 ? 0 : target;
+                _map[i, j] = sourceMap[i, j] == 3 ? 0 : sourceMap[i, j];
             }
         }
     }
