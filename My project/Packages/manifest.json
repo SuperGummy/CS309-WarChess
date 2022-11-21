@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.proyecto26.restclient": "https://github.com/proyecto26/RestClient.git#upm",
     "com.rsg.promise": "3.0.1",
     "com.unity.cinemachine": "2.8.9",
     "com.unity.collab-proxy": "1.17.2",

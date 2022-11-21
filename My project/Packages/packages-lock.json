@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.proyecto26.restclient": {
-      "version": "https://github.com/proyecto26/RestClient.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.rsg.promise": "3.0.1"
-      },
-      "hash": "6b1fff42acda809d14be9305eb1c510fc99893e7"
-    },
     "com.rsg.promise": {
       "version": "3.0.1",
       "depth": 0,
