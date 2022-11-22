@@ -85,10 +85,18 @@ namespace Model
     {
         public int id;
         public string name;
+        public ItemClass itemClass;
         public int attack;
         public int defense;
         public int hp;
         public string description;
+    }
+
+    public enum ItemClass
+    {
+        BEER,
+        POTION,
+        FISH,
     }
 
     [Serializable]
@@ -96,10 +104,18 @@ namespace Model
     {
         public int id;
         public string name;
+        public MountClass mountClass;
         public int attack;
         public int defense;
         public int actionRange;
         public string description;
+    }
+
+    public enum MountClass
+    {
+        FOX,
+        HORSE,
+        ELEPHANT,
     }
 
     [Serializable]
@@ -117,7 +133,7 @@ namespace Model
     [Serializable]
     public enum EquipmentClass
     {
-        LANCE,
+        SWORD,
         ARROW,
         CANNON,
         SHIELD,
