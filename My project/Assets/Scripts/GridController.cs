@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 public class GridController : MonoBehaviour
 {
@@ -62,13 +62,14 @@ public class GridController : MonoBehaviour
 
     public void AddStructure(Vector3Int position, int type)
     {
+        var random = new Random();
         if (type == 0)
         {
-            buildingMap.SetTile(position, Random.Range(0, 1) == 0 ? village1 : village2);
+            buildingMap.SetTile(position, random.Next(2) == 0 ? village1 : village2);
         }
         else
         {
-            buildingMap.SetTile(position, Random.Range(0, 1) == 0 ? relic1 : relic2);
+            buildingMap.SetTile(position, random.Next(2) == 0 ? relic1 : relic2);
         }
     }
 
