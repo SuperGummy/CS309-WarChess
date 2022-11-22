@@ -16,7 +16,6 @@ public class CharacterInfoFrame : MonoBehaviour
     public TextMeshProUGUI actionRange;
     public Image equipment;
     public Image mount;
-
     private Vector3Int _position;
 
     private void OnEnable()

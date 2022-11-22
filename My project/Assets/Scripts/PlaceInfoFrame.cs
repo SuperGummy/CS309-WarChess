@@ -1,13 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceInfoFrame : MonoBehaviour
 {
-    private int x, y;
-    public void Inform(int x, int y)
+    public Image structureImage;
+    public TextMeshProUGUI structureName;
+    public Slider hp;
+    private Vector3Int _position;
+
+    public void Inform(Vector3Int position)
     {
-        this.x = x;
-        this.y = y;
+        _position = position;
+    }
+
+    public void RenderData(Vector3Int position)
+    {
+        var structure = DataManager.Instance.GetStructureByPosition(position);
+        structureName.text = structure.structureClass.ToString();
+        hp.value = structure.hp;
     }
 }
