@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Model;
 
 public class RenderManager : MonoBehaviour
 {
-    public static RenderManager renderManager;
+    public static RenderManager Instance;
     [SerializeField] private Sprite scholarBlueImage;
     [SerializeField] private Sprite scholarRedImage;
     [SerializeField] private Sprite explorerBlueImage;
@@ -27,31 +28,52 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite swordEquipment;
     [SerializeField] private Sprite shieldEquipment;
 
-    public Sprite GetCharacterImage(Model.CharacterClass type, String side)
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public Sprite GetCharacterImage(CharacterClass type, String side)
     {
         return type switch
         {
-            Model.CharacterClass.SCHOLAR => side == "blue" ? scholarBlueImage : scholarRedImage,
-            Model.CharacterClass.EXPLORER => side == "blue" ? explorerBlueImage : explorerRedImage,
-            Model.CharacterClass.WARRIOR => side == "blue" ? fighterBlueImage : fighterRedImage,
+            CharacterClass.SCHOLAR => side == "blue" ? scholarBlueImage : scholarRedImage,
+            CharacterClass.EXPLORER => side == "blue" ? explorerBlueImage : explorerRedImage,
+            CharacterClass.WARRIOR => side == "blue" ? fighterBlueImage : fighterRedImage,
             _ => null
         };
     }
 
-    public Sprite GetBackPackImage(String objectName)
+    public Sprite GetItemImage(ItemClass type)
     {
-        return objectName switch
+        return type switch
         {
-            "fox" => foxMount,
-            "horse" => horseMount,
-            "elephant" => elephantMount,
-            "arrow" => arrowEquipment,
-            "sword" => swordEquipment,
-            "shield" => shieldEquipment,
-            "cannon" => cannonEquipment,
-            "potion" => potionProperty,
-            "fish" => fishProperty,
-            "beer" => beerProperty,
+            ItemClass.BEER => beerProperty,
+            ItemClass.POTION => potionProperty,
+            ItemClass.FISH => fishProperty,
+            _ => null
+        };
+    }
+
+    public Sprite GetMountImage(MountClass type)
+    {
+        return type switch
+        {
+            MountClass.FOX => foxMount,
+            MountClass.HORSE => horseMount,
+            MountClass.ELEPHANT => elephantMount,
+            _ => null
+        };
+    }
+
+    public Sprite GetEquipmentImage(EquipmentClass type)
+    {
+        return type switch
+        {
+            EquipmentClass.ARROW => arrowEquipment,
+            EquipmentClass.SWORD => swordEquipment,
+            EquipmentClass.SHIELD => shieldEquipment,
+            EquipmentClass.CANNON => cannonEquipment,
             _ => null
         };
     }
