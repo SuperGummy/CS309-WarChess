@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Cinemachine.Utility;
 using Model;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -508,11 +510,25 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-        if (DataManager.Instance.GetStructureByPosition(position)?.player.id != DataManager.Instance.currentPlayer.id)
+        if (x == 0 && y == DataManager.MapSize - 1)
         {
             return false;
         }
 
+        if (x == DataManager.MapSize - 1 && y == 0)
+        {
+            return false;
+        }
+        
+
+        if (DataManager.Instance.GetStructureByPosition(position) != null)
+        {
+            if (DataManager.Instance.GetStructureByPosition(position)?.player.id !=
+                DataManager.Instance.currentPlayer.id)
+            {
+                return false;
+            }
+        }
         return true;
     }
 
