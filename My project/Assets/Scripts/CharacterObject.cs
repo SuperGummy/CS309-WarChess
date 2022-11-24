@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
 public class CharacterObject : MonoBehaviour
@@ -9,11 +10,11 @@ public class CharacterObject : MonoBehaviour
     [SerializeField] private List<Vector3> destinations;
     [SerializeField] private int destinationId;
     [SerializeField] private GameObject characterRenderer;
-    [SerializeField] private Grid grid;
+    public Grid grid;
 
     private CharacterRenderer _characterRenderer;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _characterRenderer = characterRenderer.GetComponent<CharacterRenderer>();
         grid = GameObject.Find("Grid").GetComponent<Grid>();
@@ -22,6 +23,12 @@ public class CharacterObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void Concrete(CharacterClass type, String side)
+    {
+        _characterRenderer.SetSprite(RenderManager.Instance.GetCharacterImage(type, side));
+        _characterRenderer.SetController(RenderManager.Instance.GetCharacterController(type, side));
     }
 
     public void SetSpeed(float inputSpeed)
@@ -37,17 +44,12 @@ public class CharacterObject : MonoBehaviour
     public void SetDestinations(List<Vector3Int> dests)
     {
         destinations.Clear();
-        Debug.Log("Set destination!");
         for (int i = 0; i < dests.Count; i++)
         {
             Vector3 position = grid.CellToWorld(new Vector3Int(dests[i].x - 8,
                 dests[i].y - 8, dests[i].z));
             position.y += 0.24f;
             destinations.Add(position);
-            if (i == 0)
-            {
-                Debug.Log("Where are you going?" + transform.position + " " + destinations[0]);
-            }
         }
         destinationId = 0;
     }
@@ -101,10 +103,7 @@ public class CharacterObject : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Ending: My position now: " + transform.position + " dest: " + 
-                                              destinations[destinationId - 1] + " distance: " +
-                                              Vector3.Distance(transform.position, destinations[destinationId - 1]));
-                                    SetSpeed(0);
+                        SetSpeed(0);
                     }
                 }
             }

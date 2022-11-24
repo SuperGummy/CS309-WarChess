@@ -38,19 +38,19 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite marketBlueImage;
     [SerializeField] private Sprite marketRedImage;
     
-    [SerializeField] private Animator scholarBlueAnimator;
-    [SerializeField] private Animator scholarRedAnimator;
-    [SerializeField] private Animator explorerBlueAnimator;
-    [SerializeField] private Animator explorerRedAnimator;
-    [SerializeField] private Animator fighterBlueAnimator;
-    [SerializeField] private Animator fighterRedAnimator;
+    public RuntimeAnimatorController scholarBlueController;
+    public RuntimeAnimatorController scholarRedController;
+    public RuntimeAnimatorController explorerBlueController;
+    public RuntimeAnimatorController explorerRedController;
+    public RuntimeAnimatorController fighterBlueController;
+    public RuntimeAnimatorController fighterRedController;
 
     [SerializeField] private float characterSpeed;
-    [SerializeField] private CharacterObject currentCharacter;
     
     private void Awake()
     {
         Instance = this;
+        Instance.characterSpeed = 1.2f;
     }
 
     public Sprite GetCharacterImage(CharacterClass type, String side)
@@ -64,13 +64,13 @@ public class RenderManager : MonoBehaviour
         };
     }
     
-    public Animator GetCharacterAnimator(CharacterClass type, String side)
+    public RuntimeAnimatorController GetCharacterController(CharacterClass type, String side)
     {
         return type switch
         {
-            CharacterClass.SCHOLAR => side == "blue" ? scholarBlueAnimator : scholarRedAnimator,
-            CharacterClass.EXPLORER => side == "blue" ? explorerBlueAnimator : explorerRedAnimator,
-            CharacterClass.WARRIOR => side == "blue" ? fighterBlueAnimator : fighterRedAnimator,
+            CharacterClass.SCHOLAR => side == "blue" ? scholarBlueController : scholarRedController,
+            CharacterClass.EXPLORER => side == "blue" ? explorerBlueController : explorerRedController,
+            CharacterClass.WARRIOR => side == "blue" ? fighterBlueController : fighterRedController,
             _ => null
         };
     }
@@ -122,11 +122,10 @@ public class RenderManager : MonoBehaviour
         };
     }
 
-    public void PlayCharacterRoute(List<Vector3Int> route)
+    public void PlayCharacterRoute(CharacterObject currentCharacter, List<Vector3Int> route)
     {
+        route.RemoveAt(0);
         currentCharacter.SetDestinations(route);
         currentCharacter.SetSpeed(characterSpeed);
     }
-    
-    //public void 
 }

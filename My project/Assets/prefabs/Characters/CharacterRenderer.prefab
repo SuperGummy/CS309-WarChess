@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 515122912224411123}
+  spriteRenderer: {fileID: 7072306897282474192}
