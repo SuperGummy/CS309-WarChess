@@ -652,6 +652,20 @@ public class DataManager : MonoBehaviour
         return model.data;
     }
 
+    public int CheckCharacterSide(Character character)
+    {
+        if (character.player == null) return 0;
+        if (character.player.id == player1.id) return -1;
+        return 1;
+    }
+    
+    public int CheckStructureSide(Structure structure)
+    {
+        if (structure.player == null) return 0;
+        if (structure.player.id == player1.id) return -1;
+        return 1;
+    }
+
     private void SetData(Game game)
     {
         gameID = game.id;
