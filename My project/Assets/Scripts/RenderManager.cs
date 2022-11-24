@@ -27,7 +27,27 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite cannonEquipment;
     [SerializeField] private Sprite swordEquipment;
     [SerializeField] private Sprite shieldEquipment;
+    
+    [SerializeField] private Sprite villageImage;
+    [SerializeField] private Sprite villageBlueImage;
+    [SerializeField] private Sprite villageRedImage;
+    [SerializeField] private Sprite campBlueImage;
+    [SerializeField] private Sprite campRedImage;
+    [SerializeField] private Sprite schoolBlueImage;
+    [SerializeField] private Sprite schoolRedImage;
+    [SerializeField] private Sprite marketBlueImage;
+    [SerializeField] private Sprite marketRedImage;
+    
+    [SerializeField] private Animator scholarBlueAnimator;
+    [SerializeField] private Animator scholarRedAnimator;
+    [SerializeField] private Animator explorerBlueAnimator;
+    [SerializeField] private Animator explorerRedAnimator;
+    [SerializeField] private Animator fighterBlueAnimator;
+    [SerializeField] private Animator fighterRedAnimator;
 
+    [SerializeField] private float characterSpeed;
+    [SerializeField] private CharacterObject currentCharacter;
+    
     private void Awake()
     {
         Instance = this;
@@ -40,6 +60,17 @@ public class RenderManager : MonoBehaviour
             CharacterClass.SCHOLAR => side == "blue" ? scholarBlueImage : scholarRedImage,
             CharacterClass.EXPLORER => side == "blue" ? explorerBlueImage : explorerRedImage,
             CharacterClass.WARRIOR => side == "blue" ? fighterBlueImage : fighterRedImage,
+            _ => null
+        };
+    }
+    
+    public Animator GetCharacterAnimator(CharacterClass type, String side)
+    {
+        return type switch
+        {
+            CharacterClass.SCHOLAR => side == "blue" ? scholarBlueAnimator : scholarRedAnimator,
+            CharacterClass.EXPLORER => side == "blue" ? explorerBlueAnimator : explorerRedAnimator,
+            CharacterClass.WARRIOR => side == "blue" ? fighterBlueAnimator : fighterRedAnimator,
             _ => null
         };
     }
@@ -77,4 +108,25 @@ public class RenderManager : MonoBehaviour
             _ => null
         };
     }
+    
+    public Sprite GetStructureImage(StructureClass type, String side)
+    {
+        return type switch
+        {
+            StructureClass.VILLAGE => side == "middle" ? villageImage : 
+                side == "blue" ? villageBlueImage : villageRedImage,
+            StructureClass.MARKET => side == "blue" ? marketBlueImage : marketRedImage,
+            StructureClass.INSTITUTE => side == "blue" ? schoolBlueImage : schoolRedImage,
+            StructureClass.CAMP => side == "blue" ? campBlueImage : campRedImage,
+            _ => null
+        };
+    }
+
+    public void PlayCharacterRoute(List<Vector3Int> route)
+    {
+        currentCharacter.SetDestinations(route);
+        currentCharacter.SetSpeed(characterSpeed);
+    }
+    
+    //public void 
 }

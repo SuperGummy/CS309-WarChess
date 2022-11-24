@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            Debug.Log(x + " " + y);
+            Debug.Log(x + " " + y + " " + cellPosition.z);
 
             if (characterActionRange != null)
             {
