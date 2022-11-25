@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using Cinemachine.Utility;
 using Model;
 using Unity.VisualScripting;
@@ -8,6 +9,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    private string _username1;
+    private string _username2;
     public Grid grid;
 
     public Button backpackButton;
@@ -37,6 +40,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Initiate();
         backpackButton = backpackButton.GetComponent<Button>();
         finish = finish.GetComponent<Button>();
     }
@@ -105,11 +109,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (characterInfo)
-            {
-                return;
-            }
-
+            if (characterInfo) return;
             characterInfo = true;
             characterInfoButton.SetActive(true);
         }
@@ -117,11 +117,7 @@ public class GameManager : MonoBehaviour
 
     private void CloseCharacterInfoButton()
     {
-        if (!characterInfo)
-        {
-            return;
-        }
-
+        if (!characterInfo) return;
         characterInfo = false;
         characterInfoButton.SetActive(false);
     }
@@ -129,31 +125,31 @@ public class GameManager : MonoBehaviour
     private void ShowStructureInfoButton(Vector3Int position)
     {
         var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure?.player?.id != DataManager.Instance.currentPlayer.id)
+        if (structure == null) CloseStructureInfoButton();
+        else if (structure.player == null || structure.player.id == DataManager.Instance.currentPlayer.id)
         {
-            CloseStructureInfoButton();
-        }
-        else
-        {
-            if (structureInfo)
-            {
-                return;
-            }
-
+            if (structureInfo) return;
             structureInfo = true;
             placeInfoButton.SetActive(true);
         }
+        else CloseStructureInfoButton();
     }
 
     private void CloseStructureInfoButton()
     {
-        if (!structureInfo)
-        {
-            return;
-        }
-
+        if (!structureInfo) return;
         structureInfo = false;
         placeInfoButton.SetActive(false);
+    }
+
+    private async void Initiate()
+    {
+        await DataManager.Instance.Play("123", _username2);
+        var pos1 = new Vector3Int(0, 16, 0);
+        var pos2 = new Vector3Int(16, 0, 0);
+        GridController.Instance.CreateCharacter(pos1);
+        GridController.Instance.CreateCharacter(pos2);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
     // backpack
@@ -299,40 +295,33 @@ public class GameManager : MonoBehaviour
     private void ShowActionRange(Vector3Int position)
     {
         characterActionRange = GetActionRange(position);
-        if (characterActionRange == null)
-        {
-            return;
-        }
-        // render range
+        if (characterActionRange == null) return;
+        GridController.Instance.SetMovableHighlight(characterActionRange, true);
     }
 
     private void CloseActionRange()
     {
+        if (characterActionRange == null) return;
+        GridController.Instance.SetMovableHighlight(characterActionRange, false);
         characterActionRange = null;
-        // render
     }
 
     private void ShowAttackRange(Vector3Int position)
     {
         characterAttackRange = GetAttackRange(position);
-        if (characterAttackRange == null)
-        {
-            return;
-        }
-
-        // render range
+        if (characterAttackRange == null) return;
+        GridController.Instance.SetAttackableHighlight(characterAttackRange, true);
     }
 
     private void CloseAttackRange()
     {
+        if (characterAttackRange == null) return;
+        GridController.Instance.SetAttackableHighlight(characterAttackRange, false);
         characterAttackRange = null;
-        //render
     }
 
     public void GetCharacter(int id)
     {
-        
-
         //render the character at position ?
     }
 
@@ -388,14 +377,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public async void MoveCharacter(Vector3Int position, Vector3Int newPosition)
+    public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
     {
-        var path = GetActionPath(previousPosition, position);
         DataManager.Instance.MoveCharacter(position, newPosition);
-
-
-        // render
-        // add character to new position   delete character at position
+        var path = GetActionPath(previousPosition, newPosition);
+        GridController.Instance.PlayCharacterRoute(path);
     }
 
     public async void DismissCharacter(Vector3Int position)
@@ -505,30 +491,23 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
+        if (y % 2 == 1 && x == DataManager.MapSize - 1)
+        {
+            return false;
+        }
+
         if (DataManager.Instance.GetCharacterByPosition(position) != null)
         {
             return false;
         }
 
-        if (x == 0 && y == DataManager.MapSize - 1)
+        var structure = DataManager.Instance.GetStructureByPosition(position);
+        if (structure != null)
         {
-            return false;
+            if (structure.player == null) return false;
+            if (structure.player.id != DataManager.Instance.currentPlayer.id) return false;
         }
 
-        if (x == DataManager.MapSize - 1 && y == 0)
-        {
-            return false;
-        }
-        
-
-        if (DataManager.Instance.GetStructureByPosition(position) != null)
-        {
-            if (DataManager.Instance.GetStructureByPosition(position)?.player.id !=
-                DataManager.Instance.currentPlayer.id)
-            {
-                return false;
-            }
-        }
         return true;
     }
 
@@ -550,230 +529,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (DataManager.Instance.GetStructureByPosition(position) != null)
+        var structure = DataManager.Instance.GetStructureByPosition(position);
+        if (structure != null)
         {
-            if (DataManager.Instance.GetStructureByPosition(position)?.player.id !=
-                DataManager.Instance.currentPlayer.id)
-            {
-                return true;
-            }
+            if (structure.player?.id != DataManager.Instance.currentPlayer.id) return true;
         }
 
         return false;
-    }
-
-    private List<Vector3Int> GetAttackRange(Vector3Int position)
-    {
-        var character = DataManager.Instance.GetCharacterByPosition(position);
-        if (character == null)
-        {
-            return default;
-        }
-
-        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
-        {
-            return default;
-        }
-
-        if (character.actionState >= 2)
-        {
-            // can't attack
-            return default;
-        }
-
-        var n = DataManager.MapSize;
-        var actionRange = character.actionRange;
-        var result = new List<Vector3Int>();
-        var dis = new int[n, n];
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                dis[i, j] = 0;
-            }
-        }
-
-        dis[position.x, position.y] = 1;
-        for (var t = 1; t < actionRange; t++)
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            if (dis[i, j] == t)
-            {
-                var temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i, j + 1] == 0)
-                    {
-                        dis[i, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i, j - 1] == 0)
-                    {
-                        dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-            }
-
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                var temp = new Vector3Int(i, j);
-                if (dis[i, j] != 0 && CheckAttack(temp))
-                {
-                    result.Add(temp);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private List<Vector3Int> GetActionRange(Vector3Int position)
-    {
-        var character = DataManager.Instance.GetCharacterByPosition(position);
-        if (character == null)
-        {
-            return default;
-        }
-
-        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
-        {
-            return default;
-        }
-
-        if (character.actionState >= 1)
-        {
-            // can't move
-            return default;
-        }
-
-        var n = DataManager.MapSize;
-        var actionRange = character.actionRange;
-        var result = new List<Vector3Int>();
-        var dis = new int[n, n];
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                dis[i, j] = 0;
-            }
-        }
-
-        dis[position.x, position.y] = 1;
-        for (var t = 1; t < actionRange; t++)
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            if (dis[i, j] == t)
-            {
-                var temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i, j + 1] == 0)
-                    {
-                        dis[i, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i, j - 1] == 0)
-                    {
-                        dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-            }
-
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                if (dis[i, j] != 0)
-                {
-                    var temp = new Vector3Int(i, j);
-                    result.Add(temp);
-                }
-            }
-        }
-
-        return result;
     }
 
     private List<Vector3Int> GetActionPath(Vector3Int position, Vector3Int target)
@@ -785,7 +547,7 @@ public class GameManager : MonoBehaviour
         }
 
         var n = DataManager.MapSize;
-        var actionRange = character.actionRange;
+        var actionRange = character.actionRange + 1;
         var result = new List<Vector3Int>();
         var dis = new int[n, n];
         for (var i = 0; i < n; i++)
@@ -837,17 +599,17 @@ public class GameManager : MonoBehaviour
 
                 if (CheckAccessible(new Vector3Int(i + 1, j - 1, position.z)))
                 {
-                    if (dis[i + 1, j] == 0)
+                    if (dis[i + 1, j - 1] == 0)
                     {
-                        dis[i + 1, j] = t + 1;
+                        dis[i + 1, j - 1] = t + 1;
                     }
                 }
 
                 if (CheckAccessible(new Vector3Int(i - 1, j - 1, position.z)))
                 {
-                    if (dis[i - 1, j] == 0)
+                    if (dis[i - 1, j - 1] == 0)
                     {
-                        dis[i - 1, j] = t + 1;
+                        dis[i - 1, j - 1] = t + 1;
                     }
                 }
             }
@@ -863,29 +625,29 @@ public class GameManager : MonoBehaviour
         result.Add(target);
         for (var t = dis[x, y] - 1; t >= 1; t--)
         {
-            if (dis[x, y - 1] == t)
+            if (y > 0 && dis[x, y - 1] == t)
             {
                 y -= 1;
             }
-            else if (dis[x, y + 1] == t)
+            else if (y + 1 < n && dis[x, y + 1] == t)
             {
                 y += 1;
             }
-            else if (dis[x + 1, y - 1] == t)
+            else if (x + 1 < n && y > 0 && dis[x + 1, y - 1] == t)
             {
                 x += 1;
                 y -= 1;
             }
-            else if (dis[x - 1, y - 1] == t)
+            else if (x > 0 && y > 0 && dis[x - 1, y - 1] == t)
             {
                 x -= 1;
                 y -= 1;
             }
-            else if (dis[x + 1, y] == t)
+            else if (x + 1 < n && dis[x + 1, y] == t)
             {
                 x += 1;
             }
-            else if (dis[x - 1, y] == t)
+            else if (x > 0 && dis[x - 1, y] == t)
             {
                 x -= 1;
             }
@@ -894,6 +656,224 @@ public class GameManager : MonoBehaviour
         }
 
         result.Reverse();
+
+        return result;
+    }
+
+
+    private List<Vector3Int> GetActionRange(Vector3Int position)
+    {
+        var character = DataManager.Instance.GetCharacterByPosition(position);
+        if (character == null)
+        {
+            return default;
+        }
+
+        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
+        {
+            return default;
+        }
+
+        if (character.actionState >= 1)
+        {
+            // can't move
+            return default;
+        }
+
+        var n = DataManager.MapSize;
+        var actionRange = character.actionRange + 1;
+        var result = new List<Vector3Int>();
+        var dis = new int[n, n];
+        for (var i = 0; i < n; i++)
+        {
+            for (var j = 0; j < n; j++)
+            {
+                dis[i, j] = 0;
+            }
+        }
+
+        dis[position.x, position.y] = 1;
+        for (var t = 1; t < actionRange; t++)
+        for (var i = 0; i < n; i++)
+        for (var j = 0; j < n; j++)
+            if (dis[i, j] == t)
+            {
+                var temp = new Vector3Int(i, j + 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j + 1] == 0)
+                    {
+                        dis[i, j + 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j - 1] == 0)
+                    {
+                        dis[i, j - 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + 1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + 1, j] == 0)
+                    {
+                        dis[i + 1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i - 1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i - 1, j] == 0)
+                    {
+                        dis[i - 1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + 1, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + 1, j - 1] == 0)
+                    {
+                        dis[i + 1, j - 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i - 1, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i - 1, j - 1] == 0)
+                    {
+                        dis[i - 1, j - 1] = t + 1;
+                    }
+                }
+            }
+
+        for (var i = 0; i < n; i++)
+        {
+            for (var j = 0; j < n; j++)
+            {
+                if (dis[i, j] > 1)
+                {
+                    var temp = new Vector3Int(i, j);
+                    result.Add(temp);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private List<Vector3Int> GetAttackRange(Vector3Int position)
+    {
+        var character = DataManager.Instance.GetCharacterByPosition(position);
+        if (character == null)
+        {
+            return default;
+        }
+
+        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
+        {
+            return default;
+        }
+
+        if (character.actionState >= 2)
+        {
+            return default;
+        }
+
+        var n = DataManager.MapSize;
+        var attackRange = character.actionRange;
+        if (character.equipment == null)
+            attackRange += 1;
+        else
+            attackRange += character.equipment.attackRange + 1;
+        var result = new List<Vector3Int>();
+        var dis = new int[n, n];
+        for (var i = 0; i < n; i++)
+        {
+            for (var j = 0; j < n; j++)
+            {
+                dis[i, j] = 0;
+            }
+        }
+
+        dis[position.x, position.y] = 1;
+        for (var t = 1; t < attackRange; t++)
+        for (var i = 0; i < n; i++)
+        for (var j = 0; j < n; j++)
+            if (dis[i, j] == t)
+            {
+                var temp = new Vector3Int(i, j + 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j + 1] == 0)
+                    {
+                        dis[i, j + 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j - 1] == 0)
+                    {
+                        dis[i, j - 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + 1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + 1, j] == 0)
+                    {
+                        dis[i + 1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i - 1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i - 1, j] == 0)
+                    {
+                        dis[i - 1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + 1, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + 1, j - 1] == 0)
+                    {
+                        dis[i + 1, j - 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i - 1, j - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i - 1, j - 1] == 0)
+                    {
+                        dis[i - 1, j - 1] = t + 1;
+                    }
+                }
+            }
+
+        for (var i = 0; i < n; i++)
+        {
+            for (var j = 0; j < n; j++)
+            {
+                var temp = new Vector3Int(i, j);
+                if (dis[i, j] != 0 && CheckAttack(temp))
+                {
+                    result.Add(temp);
+                }
+            }
+        }
 
         return result;
     }
