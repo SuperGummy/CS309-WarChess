@@ -90,7 +90,7 @@ namespace API
                     keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, item.Value));
                 }
 
-                return http.PostAsync(url, new FormUrlEncodedContent(keyValuePairs));
+                return http.PutAsync(url, new FormUrlEncodedContent(keyValuePairs));
             }
 
             return http.PutAsync(url, null);
