@@ -630,9 +630,7 @@ public class GameManager : MonoBehaviour
         var x = target.x;
         var y = target.y;
         result.Add(target);
-        
-        
-        for (var t = dis[x, y] - 1; t >= 1; t--) {
+        for (var t = dis[x, y] - 1; t >= 2; t--) {
                 var op = 1;
                 if (y % 2 == 0) op = -1;
                 var temp = new Vector3Int(x+op, y + 1);
@@ -695,15 +693,21 @@ public class GameManager : MonoBehaviour
                 temp = new Vector3Int(x - 1, y);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[x-1, y + 1] == t)
+                    if (dis[x-1, y] == t)
                     {
                         result.Add(temp);
                         x -= 1;
                     }
                 }
         }
+        
+        result.Add(position);
         result.Reverse();
-
+        // Debug.Log(result.Count);
+        // for (var i=0;i<result.Count;i+=1)
+        // {
+        //     Debug.Log(result[i].x.ToString()+" "+result[i].y.ToString());
+        // }
         return result;
     }
 
