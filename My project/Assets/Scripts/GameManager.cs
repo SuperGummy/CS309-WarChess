@@ -564,15 +564,46 @@ public class GameManager : MonoBehaviour
         for (var j = 0; j < n; j++)
             if (dis[i, j] == t)
             {
-                if (CheckAccessible(new Vector3Int(i, j + 1, position.z)))
+                var op = 1;
+                if (j % 2 == 0) op = -1;
+                var temp = new Vector3Int(i+op, j + 1);
+                if (CheckAccessible(temp))
                 {
-                    if (dis[i, j + 1] == 0)
+                    if (dis[i+op, j + 1] == 0)
                     {
-                        dis[i, j + 1] = t + 1;
+                        dis[i+op, j + 1] = t + 1;
                     }
                 }
 
-                if (CheckAccessible(new Vector3Int(i, j - 1, position.z)))
+                temp = new Vector3Int(i+1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i+1, j] == 0)
+                    {
+                        dis[i+1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + op, j-1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + op, j-1] == 0)
+                    {
+                        dis[i + op, j-1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i , j+1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j+1] == 0)
+                    {
+                        dis[i, j+1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i , j - 1);
+                if (CheckAccessible(temp))
                 {
                     if (dis[i, j - 1] == 0)
                     {
@@ -580,36 +611,12 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                if (CheckAccessible(new Vector3Int(i + 1, j, position.z)))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                if (CheckAccessible(new Vector3Int(i - 1, j, position.z)))
+                temp = new Vector3Int(i - 1, j);
+                if (CheckAccessible(temp))
                 {
                     if (dis[i - 1, j] == 0)
                     {
                         dis[i - 1, j] = t + 1;
-                    }
-                }
-
-
-                if (CheckAccessible(new Vector3Int(i + 1, j - 1, position.z)))
-                {
-                    if (dis[i + 1, j - 1] == 0)
-                    {
-                        dis[i + 1, j - 1] = t + 1;
-                    }
-                }
-
-                if (CheckAccessible(new Vector3Int(i - 1, j - 1, position.z)))
-                {
-                    if (dis[i - 1, j - 1] == 0)
-                    {
-                        dis[i - 1, j - 1] = t + 1;
                     }
                 }
             }
@@ -623,38 +630,78 @@ public class GameManager : MonoBehaviour
         var x = target.x;
         var y = target.y;
         result.Add(target);
-        for (var t = dis[x, y] - 1; t >= 1; t--)
-        {
-            if (y > 0 && dis[x, y - 1] == t)
-            {
-                y -= 1;
-            }
-            else if (y + 1 < n && dis[x, y + 1] == t)
-            {
-                y += 1;
-            }
-            else if (x + 1 < n && y > 0 && dis[x + 1, y - 1] == t)
-            {
-                x += 1;
-                y -= 1;
-            }
-            else if (x > 0 && y > 0 && dis[x - 1, y - 1] == t)
-            {
-                x -= 1;
-                y -= 1;
-            }
-            else if (x + 1 < n && dis[x + 1, y] == t)
-            {
-                x += 1;
-            }
-            else if (x > 0 && dis[x - 1, y] == t)
-            {
-                x -= 1;
-            }
+        
+        
+        for (var t = dis[x, y] - 1; t >= 1; t--) {
+                var op = 1;
+                if (y % 2 == 0) op = -1;
+                var temp = new Vector3Int(x+op, y + 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x+op, y + 1] == t)
+                    {
+                        result.Add(temp);
+                        x += op;
+                        y += 1;
+                        continue;
+                    }
+                }
 
-            result.Add(new Vector3Int(x, y, target.z));
+                temp = new Vector3Int(x+1, y);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x+1, y] == t)
+                    {
+                        result.Add(temp);
+                        x += 1;
+                        continue;
+                    }
+                }
+
+                temp = new Vector3Int(x + op, y-1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x + op, y - 1] == t)
+                    {
+                        result.Add(temp);
+                        x += op;
+                        y -= 1;
+                        continue;
+                    }
+                }
+
+                temp = new Vector3Int(x , y+1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x, y + 1] == t)
+                    {
+                        result.Add(temp);
+                        y += 1;
+                        continue;
+                    }
+                }
+
+                temp = new Vector3Int(x , y - 1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x, y - 1] == t)
+                    {
+                        result.Add(temp);
+                        y -= 1;
+                        continue;
+                    }
+                }
+
+                temp = new Vector3Int(x - 1, y);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[x-1, y + 1] == t)
+                    {
+                        result.Add(temp);
+                        x -= 1;
+                    }
+                }
         }
-
         result.Reverse();
 
         return result;
@@ -698,30 +745,50 @@ public class GameManager : MonoBehaviour
         for (var j = 0; j < n; j++)
             if (dis[i, j] == t)
             {
-                var temp = new Vector3Int(i, j + 1);
+                var op = 1;
+                if (j % 2 == 0) op = -1;
+                var temp = new Vector3Int(i+op, j + 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i, j + 1] == 0)
+                    if (dis[i+op, j + 1] == 0)
                     {
-                        dis[i, j + 1] = t + 1;
+                        dis[i+op, j + 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i, j - 1);
+                temp = new Vector3Int(i+1, j);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i+1, j] == 0)
+                    {
+                        dis[i+1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + op, j-1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i + op, j-1] == 0)
+                    {
+                        dis[i + op, j-1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i , j+1);
+                if (CheckAccessible(temp))
+                {
+                    if (dis[i, j+1] == 0)
+                    {
+                        dis[i, j+1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i , j - 1);
                 if (CheckAccessible(temp))
                 {
                     if (dis[i, j - 1] == 0)
                     {
                         dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
                     }
                 }
 
@@ -731,24 +798,6 @@ public class GameManager : MonoBehaviour
                     if (dis[i - 1, j] == 0)
                     {
                         dis[i - 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j - 1] == 0)
-                    {
-                        dis[i + 1, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j - 1] == 0)
-                    {
-                        dis[i - 1, j - 1] = t + 1;
                     }
                 }
             }
@@ -808,8 +857,37 @@ public class GameManager : MonoBehaviour
         for (var j = 0; j < n; j++)
             if (dis[i, j] == t)
             {
-                var temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp))
+                var op = 1;
+                if (j % 2 == 0) op = -1;
+                var temp = new Vector3Int(i + op, j + 1);
+                if (CheckBound(temp))
+                {
+                    if (dis[i + op, j + 1] == 0)
+                    {
+                        dis[i + op, j + 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + 1, j);
+                if (CheckBound(temp))
+                {
+                    if (dis[i + 1, j] == 0)
+                    {
+                        dis[i + 1, j] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i + op, j - 1);
+                if (CheckBound(temp))
+                {
+                    if (dis[i + op, j - 1] == 0)
+                    {
+                        dis[i + op, j - 1] = t + 1;
+                    }
+                }
+
+                temp = new Vector3Int(i, j + 1);
+                if (CheckBound(temp))
                 {
                     if (dis[i, j + 1] == 0)
                     {
@@ -818,7 +896,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp))
+                if (CheckBound(temp))
                 {
                     if (dis[i, j - 1] == 0)
                     {
@@ -826,39 +904,12 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
                 temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp))
+                if (CheckBound(temp))
                 {
                     if (dis[i - 1, j] == 0)
                     {
                         dis[i - 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i + 1, j - 1] == 0)
-                    {
-                        dis[i + 1, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j - 1);
-                if (CheckAccessible(temp))
-                {
-                    if (dis[i - 1, j - 1] == 0)
-                    {
-                        dis[i - 1, j - 1] = t + 1;
                     }
                 }
             }
