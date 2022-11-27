@@ -17,6 +17,10 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tilemap buildingMap;
     [SerializeField] private Tilemap movableMap;
     [SerializeField] private Tile hoverTile;
+    [SerializeField] private Tile blueLeftCastle;
+    [SerializeField] private Tile redLeftCastle;
+    [SerializeField] private Tile blueRightCastle;
+    [SerializeField] private Tile redRightCastle;
     [SerializeField] private Tile village1;
     [SerializeField] private Tile village2;
     [SerializeField] private Tile blueVillage;
@@ -113,7 +117,14 @@ public class GridController : MonoBehaviour
             case StructureClass.VILLAGE:
                 buildingMap.SetTile(position, side == "blue" ? blueVillage : redVillage);
                 break;
-            default: return;
+            default:
+                Tile tile = null;
+                if (position.x == 0 && position.y == DataManager.MapSize - 1)
+                    tile = side == "blue" ? blueLeftCastle : redLeftCastle;
+                if (position.x == DataManager.MapSize - 1 && position.y == 0)
+                    tile = side == "blue" ? blueRightCastle : redRightCastle;
+                buildingMap.SetTile(position, tile);
+                break;
         }
     }
 
