@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public bool error;
     public bool backpack;
     public bool shop;
+    public bool camp;
+    public bool tech;
     public bool characterInfo;
     public bool structureInfo;
     public bool nextRound;
@@ -54,28 +56,16 @@ public class GameManager : MonoBehaviour
             var x = cellPosition.x + 8;
             var y = cellPosition.y + 8;
             var position = new Vector3Int(x, y, cellPosition.z);
-            if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize)
-            {
-                return;
-            }
-
+            if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize) return;
             Debug.Log(x + " " + y + " " + cellPosition.z);
 
             if (characterActionRange != null)
-            {
                 if (characterActionRange.Exists(c => c.x == x && c.y == y))
-                {
                     MoveCharacter(previousPosition, position);
-                }
-            }
-
+            
             if (characterAttackRange != null)
-            {
                 if (characterAttackRange.Exists(c => c.x == x && c.y == y))
-                {
                     AttackPosition(previousPosition, position);
-                }
-            }
 
             UpdatePosition(position);
             ShowCharacterInfoButton(position);
@@ -152,13 +142,9 @@ public class GameManager : MonoBehaviour
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
-    // backpack
     public async void OpenBackPack()
     {
-        if (backpack)
-        {
-            return;
-        }
+        if (backpack) return;
 
         backpack = true;
         // var task1 = DataManager.Instance.GetEquipments();
@@ -185,11 +171,7 @@ public class GameManager : MonoBehaviour
         else
         {
             SceneController.Instance.LoadBackPack();
-            GridController.Instance.gridEnable = false;
-            CloseCharacterInfoButton();
-            CloseStructureInfoButton();
-            finish.enabled = false;
-            backpackButton.enabled = false;
+            disableBackground();
         }
 
         error = false;
@@ -197,40 +179,71 @@ public class GameManager : MonoBehaviour
 
     public void CloseBackPack()
     {
-        if (!backpack)
-        {
-            return;
-        }
-
+        if (!backpack) return;
         backpack = false;
         SceneController.Instance.UnloadBackPack();
-        GridController.Instance.gridEnable = true;
-        ShowCharacterInfoButton(previousPosition);
-        ShowStructureInfoButton(previousPosition);
-        finish.enabled = true;
-        backpackButton.enabled = true;
+        enableBackground();
     }
 
-    // show character
+    public void OpenShop()
+    {
+        if (shop) return;
+        shop = true;
+        SceneController.Instance.LoadShop();
+        disableBackground();
+    }
+
+    public void CloseShop()
+    {
+        if (!shop) return;
+        shop = false;
+        SceneController.Instance.UnloadShop();
+        enableBackground();
+    }
+
+    public void OpenTechnologies()
+    {
+        if (tech) return;
+        tech = true;
+        SceneController.Instance.LoadTechTree();
+        disableBackground();
+    }
+
+    public void CloseTechnologies()
+    {
+        if (!tech) return;
+        tech = false;
+        SceneController.Instance.UnloadTechTree();
+        enableBackground();
+    }
+
+    public void OpenCamp()
+    {
+        if (camp) return;
+        camp = true;
+        SceneController.Instance.LoadCamp();
+        disableBackground();
+    }
+
+    public void CloseCamp()
+    {
+        if (!camp) return;
+        camp = false;
+        SceneController.Instance.UnloadCamp();
+        enableBackground();
+    }
+
     public void ShowCharacterInfo()
     {
         if (!characterInfo) return;
         characterInfoFrame.GetComponent<CharacterInfoFrame>().Inform(previousPosition);
         characterInfoFrame.SetActive(true);
-        GridController.Instance.gridEnable = false;
-        CloseCharacterInfoButton();
-        CloseStructureInfoButton();
-        finish.enabled = false;
-        backpackButton.enabled = false;
+        disableBackground();
     }
 
     public void CloseCharacterInfo()
     {
-        GridController.Instance.gridEnable = true;
-        ShowCharacterInfoButton(previousPosition);
-        ShowStructureInfoButton(previousPosition);
-        finish.enabled = true;
-        backpackButton.enabled = true;
+        enableBackground();
     }
 
     public void ShowStructureInfo()
@@ -238,16 +251,16 @@ public class GameManager : MonoBehaviour
         if (!structureInfo) return;
         placeInfoFrame.GetComponent<PlaceInfoFrame>().Inform(previousPosition);
         placeInfoFrame.SetActive(true);
-
-        GridController.Instance.gridEnable = false;
-        CloseCharacterInfoButton();
-        CloseStructureInfoButton();
-        finish.enabled = false;
-        backpackButton.enabled = false;
+        disableBackground();
     }
 
     public void CloseStructureInfo()
     {
+        enableBackground();
+    }
+
+    private void enableBackground()
+    {
         GridController.Instance.gridEnable = true;
         ShowCharacterInfoButton(previousPosition);
         ShowStructureInfoButton(previousPosition);
@@ -255,41 +268,13 @@ public class GameManager : MonoBehaviour
         backpackButton.enabled = true;
     }
 
-    public void OpenShop()
+    private void disableBackground()
     {
-        if (shop)
-        {
-            return;
-        }
-
-        shop = true;
-        var task1 = DataManager.Instance.currentPlayer.shop;
-        //need get data to render
         GridController.Instance.gridEnable = false;
         CloseCharacterInfoButton();
         CloseStructureInfoButton();
         finish.enabled = false;
         backpackButton.enabled = false;
-
-
-        //render shop frame 
-    }
-
-    public void CloseShop()
-    {
-        if (!shop)
-        {
-            return;
-        }
-
-        shop = false;
-        GridController.Instance.gridEnable = true;
-        ShowCharacterInfoButton(previousPosition);
-        ShowStructureInfoButton(previousPosition);
-        finish.enabled = true;
-        backpackButton.enabled = true;
-
-        //close shop frame
     }
 
     private void ShowActionRange(Vector3Int position)
@@ -339,40 +324,11 @@ public class GameManager : MonoBehaviour
             if (DataManager.Instance.GetStructureByPosition(positionAttacked).player?.id ==
                 DataManager.Instance.currentPlayer.id)
             {
-                if (DataManager.Instance.currentPlayer.id == DataManager.Instance.player1.id)
-                {
-                    switch (DataManager.Instance.GetStructureByPosition(positionAttacked).structureClass)
-                    {
-                        case StructureClass.CAMP:
-                            GridController.Instance.SetBlueCamp(positionAttacked);
-                            break;
-                        case StructureClass.MARKET:
-                            GridController.Instance.SetBlueMarket(positionAttacked);
-                            break;
-                        case StructureClass.INSTITUTE:
-                            GridController.Instance.SetBlueInstitute(positionAttacked);
-                            break;
-                        default:
-                            return;
-                    }
-                }
+                var structureAttacked = DataManager.Instance.GetStructureByPosition(positionAttacked);
+                if (DataManager.Instance.CheckStructureSide(structureAttacked) == -1)
+                    GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "blue");
                 else
-                {
-                    switch (DataManager.Instance.GetStructureByPosition(positionAttacked).structureClass)
-                    {
-                        case StructureClass.CAMP:
-                            GridController.Instance.SetRedCamp(positionAttacked);
-                            break;
-                        case StructureClass.MARKET:
-                            GridController.Instance.SetRedMarket(positionAttacked);
-                            break;
-                        case StructureClass.INSTITUTE:
-                            GridController.Instance.SetRedInstitute(positionAttacked);
-                            break;
-                        default:
-                            return;
-                    }
-                }
+                    GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "red");
             }
         }
     }
@@ -394,16 +350,6 @@ public class GameManager : MonoBehaviour
         // render 
         // update position character
     }
-
-    public void TransferToTechnologiesScene()
-    {
-        //api
-        DataManager.Instance.GetTechnologies();
-
-        //render
-        //change to tech scene and it use data DataManager.instance._tech
-    }
-
 
     public void UpdateTech(int t)
     {
@@ -566,43 +512,43 @@ public class GameManager : MonoBehaviour
             {
                 var op = 1;
                 if (j % 2 == 0) op = -1;
-                var temp = new Vector3Int(i+op, j + 1);
+                var temp = new Vector3Int(i + op, j + 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i+op, j + 1] == 0)
+                    if (dis[i + op, j + 1] == 0)
                     {
-                        dis[i+op, j + 1] = t + 1;
+                        dis[i + op, j + 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i+1, j);
+                temp = new Vector3Int(i + 1, j);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i+1, j] == 0)
+                    if (dis[i + 1, j] == 0)
                     {
-                        dis[i+1, j] = t + 1;
+                        dis[i + 1, j] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i + op, j-1);
+                temp = new Vector3Int(i + op, j - 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i + op, j-1] == 0)
+                    if (dis[i + op, j - 1] == 0)
                     {
-                        dis[i + op, j-1] = t + 1;
+                        dis[i + op, j - 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i , j+1);
+                temp = new Vector3Int(i, j + 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i, j+1] == 0)
+                    if (dis[i, j + 1] == 0)
                     {
-                        dis[i, j+1] = t + 1;
+                        dis[i, j + 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i , j - 1);
+                temp = new Vector3Int(i, j - 1);
                 if (CheckAccessible(temp))
                 {
                     if (dis[i, j - 1] == 0)
@@ -630,77 +576,78 @@ public class GameManager : MonoBehaviour
         var x = target.x;
         var y = target.y;
         result.Add(target);
-        for (var t = dis[x, y] - 1; t >= 2; t--) {
-                var op = 1;
-                if (y % 2 == 0) op = -1;
-                var temp = new Vector3Int(x+op, y + 1);
-                if (CheckAccessible(temp))
+        for (var t = dis[x, y] - 1; t >= 2; t--)
+        {
+            var op = 1;
+            if (y % 2 == 0) op = -1;
+            var temp = new Vector3Int(x + op, y + 1);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x + op, y + 1] == t)
                 {
-                    if (dis[x+op, y + 1] == t)
-                    {
-                        result.Add(temp);
-                        x += op;
-                        y += 1;
-                        continue;
-                    }
+                    result.Add(temp);
+                    x += op;
+                    y += 1;
+                    continue;
                 }
+            }
 
-                temp = new Vector3Int(x+1, y);
-                if (CheckAccessible(temp))
+            temp = new Vector3Int(x + 1, y);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x + 1, y] == t)
                 {
-                    if (dis[x+1, y] == t)
-                    {
-                        result.Add(temp);
-                        x += 1;
-                        continue;
-                    }
+                    result.Add(temp);
+                    x += 1;
+                    continue;
                 }
+            }
 
-                temp = new Vector3Int(x + op, y-1);
-                if (CheckAccessible(temp))
+            temp = new Vector3Int(x + op, y - 1);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x + op, y - 1] == t)
                 {
-                    if (dis[x + op, y - 1] == t)
-                    {
-                        result.Add(temp);
-                        x += op;
-                        y -= 1;
-                        continue;
-                    }
+                    result.Add(temp);
+                    x += op;
+                    y -= 1;
+                    continue;
                 }
+            }
 
-                temp = new Vector3Int(x , y+1);
-                if (CheckAccessible(temp))
+            temp = new Vector3Int(x, y + 1);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x, y + 1] == t)
                 {
-                    if (dis[x, y + 1] == t)
-                    {
-                        result.Add(temp);
-                        y += 1;
-                        continue;
-                    }
+                    result.Add(temp);
+                    y += 1;
+                    continue;
                 }
+            }
 
-                temp = new Vector3Int(x , y - 1);
-                if (CheckAccessible(temp))
+            temp = new Vector3Int(x, y - 1);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x, y - 1] == t)
                 {
-                    if (dis[x, y - 1] == t)
-                    {
-                        result.Add(temp);
-                        y -= 1;
-                        continue;
-                    }
+                    result.Add(temp);
+                    y -= 1;
+                    continue;
                 }
+            }
 
-                temp = new Vector3Int(x - 1, y);
-                if (CheckAccessible(temp))
+            temp = new Vector3Int(x - 1, y);
+            if (CheckAccessible(temp))
+            {
+                if (dis[x - 1, y] == t)
                 {
-                    if (dis[x-1, y] == t)
-                    {
-                        result.Add(temp);
-                        x -= 1;
-                    }
+                    result.Add(temp);
+                    x -= 1;
                 }
+            }
         }
-        
+
         result.Add(position);
         result.Reverse();
         // Debug.Log(result.Count);
@@ -751,43 +698,43 @@ public class GameManager : MonoBehaviour
             {
                 var op = 1;
                 if (j % 2 == 0) op = -1;
-                var temp = new Vector3Int(i+op, j + 1);
+                var temp = new Vector3Int(i + op, j + 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i+op, j + 1] == 0)
+                    if (dis[i + op, j + 1] == 0)
                     {
-                        dis[i+op, j + 1] = t + 1;
+                        dis[i + op, j + 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i+1, j);
+                temp = new Vector3Int(i + 1, j);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i+1, j] == 0)
+                    if (dis[i + 1, j] == 0)
                     {
-                        dis[i+1, j] = t + 1;
+                        dis[i + 1, j] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i + op, j-1);
+                temp = new Vector3Int(i + op, j - 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i + op, j-1] == 0)
+                    if (dis[i + op, j - 1] == 0)
                     {
-                        dis[i + op, j-1] = t + 1;
+                        dis[i + op, j - 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i , j+1);
+                temp = new Vector3Int(i, j + 1);
                 if (CheckAccessible(temp))
                 {
-                    if (dis[i, j+1] == 0)
+                    if (dis[i, j + 1] == 0)
                     {
-                        dis[i, j+1] = t + 1;
+                        dis[i, j + 1] = t + 1;
                     }
                 }
 
-                temp = new Vector3Int(i , j - 1);
+                temp = new Vector3Int(i, j - 1);
                 if (CheckAccessible(temp))
                 {
                     if (dis[i, j - 1] == 0)
