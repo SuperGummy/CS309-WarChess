@@ -19,6 +19,8 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tile hoverTile;
     [SerializeField] private Tile village1;
     [SerializeField] private Tile village2;
+    [SerializeField] private Tile blueVillage;
+    [SerializeField] private Tile redVillage;
     [SerializeField] private Tile relic1;
     [SerializeField] private Tile relic2;
     [SerializeField] private Tile blueCamp;
@@ -33,15 +35,16 @@ public class GridController : MonoBehaviour
     [SerializeField] private GameObject characterPrefab;
     private Vector3Int previousMousePos;
     public const int MapSize = 17;
-    private CharacterObject[] _characters = new CharacterObject[MapSize*MapSize];
-    private GameObject[] characterObjects = new GameObject[MapSize*MapSize];
-    
+    private CharacterObject[] _characters = new CharacterObject[MapSize * MapSize];
+    private GameObject[] characterObjects = new GameObject[MapSize * MapSize];
+
     [SerializeField] private CharacterRenderer explorerBlue;
     [SerializeField] private CharacterRenderer explorerRed;
     [SerializeField] private CharacterRenderer scholarBlue;
     [SerializeField] private CharacterRenderer scholarRed;
     [SerializeField] private CharacterRenderer fighterBlue;
     [SerializeField] private CharacterRenderer fighterRed;
+
     private void Awake()
     {
         gridEnable = true;
@@ -89,43 +92,29 @@ public class GridController : MonoBehaviour
     {
         var random = new Random();
         if (type == 0)
-        {
             buildingMap.SetTile(position, random.Next(2) == 0 ? village1 : village2);
-        }
         else
-        {
             buildingMap.SetTile(position, random.Next(2) == 0 ? relic1 : relic2);
+    }
+
+    public void SetStructure(Vector3Int position, StructureClass structureClass, string side)
+    {
+        switch (structureClass)
+        {
+            case StructureClass.CAMP:
+                buildingMap.SetTile(position, side == "blue" ? blueCamp : redCamp);
+                break;
+            case StructureClass.MARKET:
+                buildingMap.SetTile(position, side == "blue" ? blueMarket : redMarket);
+                break;
+            case StructureClass.INSTITUTE:
+                buildingMap.SetTile(position, side == "blue" ? blueInstitute : redInstitute);
+                break;
+            case StructureClass.VILLAGE:
+                buildingMap.SetTile(position, side == "blue" ? blueVillage : redVillage);
+                break;
+            default: return;
         }
-    }
-
-    public void SetBlueCamp(Vector3Int position)
-    {
-        buildingMap.SetTile(position, blueCamp);
-    }
-
-    public void SetRedCamp(Vector3Int position)
-    {
-        buildingMap.SetTile(position, redCamp);
-    }
-
-    public void SetBlueMarket(Vector3Int position)
-    {
-        buildingMap.SetTile(position, blueMarket);
-    }
-
-    public void SetRedMarket(Vector3Int position)
-    {
-        buildingMap.SetTile(position, redMarket);
-    }
-
-    public void SetBlueInstitute(Vector3Int position)
-    {
-        buildingMap.SetTile(position, blueInstitute);
-    }
-
-    public void SetRedInstitute(Vector3Int position)
-    {
-        buildingMap.SetTile(position, redInstitute);
     }
 
     Vector3Int GetMousePosition()
@@ -140,11 +129,11 @@ public class GridController : MonoBehaviour
     {
         foreach (var position in movableList)
         {
-            movableMap.SetTile(new Vector3Int(position.x - 8, position.y - 8, position.z), 
+            movableMap.SetTile(new Vector3Int(position.x - 8, position.y - 8, position.z),
                 draw ? movableTile : null);
         }
     }
-    
+
     public void SetAttackableHighlight(List<Vector3Int> attackableList, bool draw)
     {
         foreach (var position in attackableList)
@@ -166,7 +155,7 @@ public class GridController : MonoBehaviour
         Destroy(characterObjects[arrayPosition]);
         characterObjects[arrayPosition] = null;
     }
-    
+
     public void PlayCharacterRoute(List<Vector3Int> route)
     {
         int startPosition = GetIndex(route[0]);
@@ -185,10 +174,10 @@ public class GridController : MonoBehaviour
             position.y - 8, position.z));
         characterMapPosition.y += 0.24f;
         GameObject _character = Instantiate(characterPrefab, characterMapPosition, Quaternion.identity);
-        _character.transform.parent=characterHolder.transform;
+        _character.transform.parent = characterHolder.transform;
         characterObjects[arrayPosition] = _character;
 
-        CharacterObject character =  _character.GetComponent<CharacterObject>();
+        CharacterObject character = _character.GetComponent<CharacterObject>();
         character.grid = grid;
         Character characterInfo = DataManager.Instance.GetCharacterByPosition(position);
         // TODO: instantiate object and concrete by characterInfo
@@ -197,4 +186,3 @@ public class GridController : MonoBehaviour
         _characters[arrayPosition] = character;
     }
 }
-
