@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Camp;
@@ -8,8 +9,11 @@ using UnityEngine.UI;
 public class CampManager : MonoBehaviour
 {
     public Button[] buttonList;
-
-    public GameObject GampCharacterImage;
+    public GameObject campCharacterImage;
+    public static Vector3Int position;
+    [SerializeField] private GameObject campPropObject;
+    [SerializeField] private GameObject campCharacterHolderObject;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,22 +26,40 @@ public class CampManager : MonoBehaviour
         
     }
 
-    public void enableBackGround()
+    private void OnEnable()
+    {
+        UpdateInfo();
+    }
+
+    public void UpdateInfo()
+    {
+        campPropObject.GetComponent<CampProp>().UpdateInfo(position);
+        campCharacterHolderObject.GetComponent<CampCharacterHolder>().UpdateInfo(position);
+    }
+    
+    public void UpdateInfo(Vector3Int _position)
+    {
+        position = _position;
+        campPropObject.GetComponent<CampProp>().UpdateInfo(position);
+        campCharacterHolderObject.GetComponent<CampCharacterHolder>().UpdateInfo(position);
+    }
+
+    public void EnableBackGround()
     {
         for (int i = 0; i < buttonList.Length; i++)
         {
             buttonList[i].interactable = true;
         }
 
-        GampCharacterImage.GetComponent<CampCharacterImage>().active = true;
+        campCharacterImage.GetComponent<CampCharacterImage>().active = true;
     }
 
-    public void disableBackGround()
+    public void DisableBackGround()
     {
         for (int i = 0; i < buttonList.Length; i++)
         {
             buttonList[i].interactable = false;
         }
-        GampCharacterImage.GetComponent<CampCharacterImage>().active = false;
+        campCharacterImage.GetComponent<CampCharacterImage>().active = false;
     }
 }

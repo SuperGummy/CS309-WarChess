@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TestButton : MonoBehaviour
@@ -35,21 +36,23 @@ public class TestButton : MonoBehaviour
 
     public void OnClick()
     {
-        gridController.CreateCharacter(position);
-        switch (forTest)
-        {
-            case 0:
-                gridController.ShowCharacterDamageText(position, 3);
-                break;
-            case 1:
-                gridController.ShowCharacterAddHealthText(position, 6);
-                break;
-            case 2:
-                gridController.ShowCharacterAddStrengthText(position, 7);
-                break;
-            case 3:
-                gridController.ShowConquerText(position);
-                break;
-        }
+        // gridController.CreateCharacter(position);
+        // switch (forTest)
+        // {
+        //     case 0:
+        //         gridController.ShowCharacterDamageText(position, 3);
+        //         break;
+        //     case 1:
+        //         gridController.ShowCharacterAddHealthText(position, 6);
+        //         break;
+        //     case 2:
+        //         gridController.ShowCharacterAddStrengthText(position, 7);
+        //         break;
+        //     case 3:
+        //         gridController.ShowConquerText(position);
+        //         break;
+        // }
+        CampManager.position = new Vector3Int(0, 0, 0);
+        SceneManager.LoadSceneAsync("Camp", LoadSceneMode.Additive);
     }
 }

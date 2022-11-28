@@ -20,7 +20,7 @@ namespace Camp
         public void OnClick()
         {
             this.transform.parent.gameObject.SetActive(false);
-            CampManager.GetComponent<CampManager>().enableBackGround();
+            CampManager.GetComponent<CampManager>().EnableBackGround();
         }
     }
 }

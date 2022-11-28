@@ -7,6 +7,8 @@ namespace Camp
     {
         public GameObject characterPanel;
         public bool active;
+        private Structure _structure;
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -18,14 +20,19 @@ namespace Camp
         {
         
         }
+
+        public void Inform(Structure structure)
+        {
+            _structure = structure;
+        }
     
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
             if (active)
             {
-                // TODO: check if there is character
-                //characterPanel.GetComponent<CampCharacterPanel>().SetInfo(_character.characterClass, _character.name, isTraining, endTurns);
+                characterPanel.GetComponent<CampCharacterPanel>().SetInfo(
+                        _structure.remainingRound > 0);
                 characterPanel.SetActive(true);
             }
         }

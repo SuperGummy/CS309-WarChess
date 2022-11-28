@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CampStopTrainingButton : MonoBehaviour
 {
-    public GameObject CampCharacterHolder;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +20,6 @@ public class CampStopTrainingButton : MonoBehaviour
     public void OnClick()
     {
         // TODO: stop training
-        CampCharacterHolder.GetComponent<CampCharacterHolder>().UpdateInfo();
+        //CampCharacterHolder.GetComponent<CampCharacterHolder>().UpdateInfo();
     }
 }

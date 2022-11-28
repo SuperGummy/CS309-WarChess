@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Model;
 
+public enum StatType{
+    HEALTH,
+    STRENGTH
+}
+
 public class RenderManager : MonoBehaviour
 {
     public static RenderManager Instance;
@@ -37,6 +42,9 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite schoolRedImage;
     [SerializeField] private Sprite marketBlueImage;
     [SerializeField] private Sprite marketRedImage;
+    
+    [SerializeField] private Sprite healthIcon;
+    [SerializeField] private Sprite strengthIcon;
     
     public RuntimeAnimatorController scholarBlueController;
     public RuntimeAnimatorController scholarRedController;
@@ -105,6 +113,16 @@ public class RenderManager : MonoBehaviour
             EquipmentClass.SWORD => swordEquipment,
             EquipmentClass.SHIELD => shieldEquipment,
             EquipmentClass.CANNON => cannonEquipment,
+            _ => null
+        };
+    }
+    
+    public Sprite GetStatIcon(StatType statType)
+    {
+        return statType switch
+        {
+            StatType.HEALTH => healthIcon,
+            StatType.STRENGTH => strengthIcon,
             _ => null
         };
     }

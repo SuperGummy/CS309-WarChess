@@ -9,7 +9,7 @@ namespace BackPack
     {
         [SerializeField] private BackPackSlot[] slots;
         [SerializeField] private GameObject slotHolder;
-        private Dictionary<string, int> _slotDictionary;
+        private readonly Dictionary<string, int> _slotDictionary = new ();
         [SerializeField] private Equipment[] equipments;
         [SerializeField] private Mount[] mounts;
         [SerializeField] private Item[] items;

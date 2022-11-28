@@ -1,33 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Camp
 {
     public class CampCharacterHolder : MonoBehaviour
     {
-        private int currentx, currenty;
-        private Model.Character _character;
-        public bool hasCharacter;
         public GameObject character, empty;
-        public bool isTraining;
-        public int endTurns;
-        public int updateType, updateValue;
+        private Vector3Int _position;
+        [SerializeField] private Character characterInfo;
+        [SerializeField] private Structure structureInfo;
+        [SerializeField] private CampCharacterImage characterImage;
 
         // Start is called before the first frame update
         void Start()
         {
         
-        }
-        public void Inform(int x, int y)
-        {
-            currentx = x;
-            currenty = y;
-            UpdateInfo();
-        }
-
-        void GetInfo()
-        {
-            // TODO: get character based on x & y;
-            // get end turn, get update type and update value
         }
 
         // Update is called once per frame
@@ -36,20 +23,14 @@ namespace Camp
         
         }
 
-        private void OnEnable()
+        public void UpdateInfo(Vector3Int position)
         {
-            UpdateInfo();
-        }
-
-        public void UpdateInfo()
-        {
-            // TODO: Check whether there is a character
-            GetInfo();
-            if (hasCharacter)
+            characterInfo = DataManager.Instance.GetCharacterByPosition(position);
+            if (!(characterInfo is null))
             {
-                //character.GetComponent<CampCharacter>().Inform(_character.characterClass, _character.name, isTraining, endTurns);
-                character.GetComponent<CampCharacter>().Inform(Model.CharacterClass.SCHOLAR, "Ruthor",
-                    isTraining, endTurns, updateType, updateValue);
+                structureInfo = DataManager.Instance.GetStructureByPosition(position);
+                character.GetComponent<CampCharacter>().Inform(characterInfo, structureInfo);
+                characterImage.Inform(structureInfo);
                 character.SetActive(true);
                 empty.SetActive(false);
             }

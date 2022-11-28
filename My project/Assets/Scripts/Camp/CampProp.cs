@@ -1,21 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Camp;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CampProp : MonoBehaviour
 {
     public TextMeshProUGUI trainingRoundsText;
-    public TextMeshProUGUI HealthIncreaseText;
-    public TextMeshProUGUI StrengthIncreaseText;
-    public TextMeshProUGUI LevelText;
+    public TextMeshProUGUI healthIncreaseText;
+    public TextMeshProUGUI strengthIncreaseText;
+    public TextMeshProUGUI levelText;
     public GameObject levelUpPanel;
+    [SerializeField] private int trainingRounds;
+    [SerializeField] private Structure structureInfo;
     
-    private int currentx, currenty;
-
-    public int campLevel, healthIncreaseValue, strengthIcreaseValue;
-    private int trainingRounds = 2;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,30 +28,14 @@ public class CampProp : MonoBehaviour
         
     }
 
-    public void Inform(int x, int y)
+    public void UpdateInfo(Vector3Int position)
     {
-        currentx = x;
-        currenty = y;
-        UpdateInfo();
-    }
-
-    void GetInfo()
-    {
-        // TODO: get current camp level, etc
-    }
-
-    public void UpdateInfo()
-    {
-        GetInfo();
-        HealthIncreaseText.text = "+" + healthIncreaseValue;
-        StrengthIncreaseText.text = "+" + strengthIcreaseValue;
+        structureInfo = DataManager.Instance.GetStructureByPosition(position);
+        healthIncreaseText.text = "+" + structureInfo.level * 2;
+        strengthIncreaseText.text = "+" + structureInfo.level * 2;
         trainingRoundsText.text = "Train for " + trainingRounds + " rounds: ";
-        LevelText.text = "Place for training your characters. \n Current camp level: " + campLevel;
-        levelUpPanel.GetComponent<CampLevelUpPanel>().SetInfo(campLevel, healthIncreaseValue, strengthIcreaseValue);
-    }
-
-    private void OnEnable()
-    {
-        UpdateInfo();
+        levelText.text = "Place for training your characters. \n Current camp level: " + structureInfo.level;
+        levelUpPanel.GetComponent<CampLevelUpPanel>().SetInfo(
+            structureInfo.level * 2, structureInfo.level * 2);
     }
 }

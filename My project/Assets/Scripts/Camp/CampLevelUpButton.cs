@@ -21,6 +21,6 @@ public class CampLevelUpButton : MonoBehaviour
     public void OnClick()
     {
         levelUpPanel.SetActive(true);
-        CampManager.GetComponent<CampManager>().disableBackGround();
+        CampManager.GetComponent<CampManager>().DisableBackGround();
     }
 }

@@ -46,7 +46,7 @@ namespace Camp
             {
                 startTrainingPanel.SetActive(true);
             }
-            CampManager.GetComponent<CampManager>().disableBackGround();
+            CampManager.GetComponent<CampManager>().DisableBackGround();
         }
     }
 }

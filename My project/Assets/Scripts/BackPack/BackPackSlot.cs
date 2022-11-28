@@ -13,6 +13,7 @@ namespace BackPack
         public TextMeshProUGUI count;
         [SerializeField] private int countNumber;
         [SerializeField] private GameObject descriptionPanel;
+        public TextMeshProUGUI emptyText;
 
         // Update is called once per frame
         void Update()
@@ -29,8 +30,10 @@ namespace BackPack
         public void UpdateCount()
         {
             count.text = countNumber.ToString();
-            if (countNumber > 0)
+            if (countNumber > 0) {
                 count.gameObject.SetActive(true);
+                emptyText.gameObject.SetActive(false);
+            }
             else
             {
                 ClearSlot();
@@ -72,6 +75,9 @@ namespace BackPack
             slotIcon.gameObject.SetActive(false);
             descriptionPanel.SetActive(false);
             countNumber = 0;
+            count.gameObject.SetActive(false);
+            emptyText.gameObject.SetActive(true);
+            Debug.Log("Should clear slot!");
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)

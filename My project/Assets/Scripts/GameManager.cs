@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Initiate();
+        //Initiate();
         backpackButton = backpackButton.GetComponent<Button>();
         finish = finish.GetComponent<Button>();
     }

@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Camp
 {
@@ -9,9 +10,6 @@ namespace Camp
         public GameObject trainingPanel, characterPanel;
         public TextMeshProUGUI characterName;
         public GameObject characterImage, characterOpButton;
-    
-        public bool isTraining, currentPlayer;
-        public int endTurns, updateType, updateValue;
         // Start is called before the first frame update
         void Start()
         {
@@ -23,23 +21,19 @@ namespace Camp
         {
         
         }
-        public void Inform(Model.CharacterClass type, String characterName, bool isTraining, 
-            int endTurns, int updateType, int updateValue)
+        public void Inform(Character characterInfo, Structure structureInfo)
         {
-            // TODO: set according to type & player characterImage.GetComponent<Image>().sprite();
-            this.characterName.text = characterName;
-            this.isTraining = isTraining;
-            this.endTurns = endTurns;
-            this.updateValue = updateValue;
-            this.updateType = updateType;
-            characterPanel.GetComponent<CampCharacterPanel>().SetInfo(this.isTraining);
-            trainingPanel.GetComponent<CampTrainingPanel>().SetInfo(this.endTurns, this.updateType, this.updateValue);
-            characterOpButton.GetComponent<CampCharacterOpButton>().Inform(this.isTraining);
-        }
-
-        void OnEnable()
-        {
-            // TODO: Find Icon according to type & current player & set Image
+            characterName.text = characterInfo.name;
+            characterImage.GetComponent<Image>().sprite =
+                RenderManager.Instance.GetCharacterImage(
+                    characterInfo.characterClass,
+                    DataManager.Instance.CheckCharacterSide(characterInfo) == -1 ? "blue" : "red"
+                );
+            
+            bool isTraining = structureInfo.remainingRound > 0;
+            characterPanel.GetComponent<CampCharacterPanel>().SetInfo(isTraining);
+            trainingPanel.GetComponent<CampTrainingPanel>().SetInfo(structureInfo);
+            characterOpButton.GetComponent<CampCharacterOpButton>().Inform(isTraining);
         }
     }
 }

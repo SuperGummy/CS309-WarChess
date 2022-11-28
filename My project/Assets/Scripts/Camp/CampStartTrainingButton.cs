@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class CampStartTrainingButton : MonoBehaviour
 {
-    public GameObject CampCharacterHolder;
-
     public int updateType;
+
+    [SerializeField] private GameObject closeButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +23,6 @@ public class CampStartTrainingButton : MonoBehaviour
 
     public void OnClick()
     {
-        // TODO: start training according to update type;
-        CampCharacterHolder.GetComponent<CampCharacterHolder>().UpdateInfo();
+        GameManager.Instance.UpdateCharacterAtCamp(updateType, closeButton);
     }
 }

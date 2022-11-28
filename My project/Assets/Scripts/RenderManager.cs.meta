@@ -29,13 +29,14 @@ MonoImporter:
   - schoolRedImage: {fileID: 21300000, guid: 6765ad9ee8aca4d4aab185a69721cdc0, type: 3}
   - marketBlueImage: {fileID: 21300000, guid: 5bcae895e36da484495a53188a412db3, type: 3}
   - marketRedImage: {fileID: 21300000, guid: 0843872e23d0fee408e72ccc2e3d6c05, type: 3}
+  - healthIcon: {fileID: 21300000, guid: 87a7c4321fd50514c8e41d6779a071da, type: 3}
+  - strengthIcon: {fileID: 21300000, guid: 90e99a7fde056a4418b9fe16084adb5c, type: 3}
   - scholarBlueController: {fileID: 9100000, guid: c2a7664ede622714cba7932d10dff463, type: 2}
   - scholarRedController: {fileID: 9100000, guid: 764109c7ec45d444b8052458ef2ff4a3, type: 2}
   - explorerBlueController: {fileID: 9100000, guid: a60df4481ddefcb418a7ca8c8f8d2cd2, type: 2}
   - explorerRedController: {fileID: 9100000, guid: 12a8e5e8f5194d1429153ffbbf0aa516, type: 2}
   - fighterBlueController: {fileID: 9100000, guid: d3dd3f2b1159a174e9cb009755684c03, type: 2}
   - fighterRedController: {fileID: 9100000, guid: 1b42191774add9f439eae0004d724803, type: 2}
-  - currentCharacter: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

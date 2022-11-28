@@ -24,18 +24,26 @@ namespace Camp
 
         }
 
-        public void SetInfo(int endTurns, int updateType, int updateValue)
+        public void SetInfo(Structure structureInfo)
         {
-            this._endTurns = endTurns;
-            this._updateType = updateType;
-            this._updateValue = updateValue;
+            _endTurns = structureInfo.remainingRound;
+            _updateType = structureInfo.value;
+            _updateValue = structureInfo.level * 2;
         }
 
         public void OnEnable()
         {
             endTurnText.text = "Rounds to go: " + _endTurns;
             updateText.text = "+" + _updateValue;
-            // TODO: update icon according to update type;
+            switch (_updateValue)
+            {
+                case 0:
+                    characterIcon.sprite = RenderManager.Instance.GetStatIcon(StatType.HEALTH);
+                    break;
+                case 1:
+                    characterIcon.sprite = RenderManager.Instance.GetStatIcon(StatType.STRENGTH);
+                    break;
+            }
         }
     }
 }
