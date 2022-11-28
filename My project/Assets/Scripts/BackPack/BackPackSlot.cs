@@ -1,3 +1,4 @@
+using Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,23 +8,11 @@ namespace BackPack
 {
     public class BackPackSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        public ItemHolder itemHolder;
         public TextMeshProUGUI description;
-
-        public Image slotIconGO;
-        //public 
-        public int slotId;
+        public Image slotIcon;
         public TextMeshProUGUI count;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            slotIconGO = transform.GetChild(0).gameObject.GetComponent<Image>();
-            if (itemHolder == null || itemHolder.hold == 0)
-            {
-                slotIconGO.gameObject.SetActive(false);
-            }
-        }
+        [SerializeField] private int countNumber;
+        [SerializeField] private GameObject descriptionPanel;
 
         // Update is called once per frame
         void Update()
@@ -31,37 +20,76 @@ namespace BackPack
         
         }
 
-        public void UpdateSlot()
+        public void AddItem(int x)
         {
-            if(itemHolder != null && itemHolder.hold > 0)
-            {
-                Debug.Log("Updated!");
-                slotIconGO.sprite = itemHolder.item.GetComponent<ItemDisplay>().icon.sprite;
-                description.text = itemHolder.item.GetComponent<ItemDisplay>().description.text;
-                count.text = itemHolder.hold.ToString();
-                Debug.Log("Active!");
-                slotIconGO.gameObject.SetActive(true);
+            countNumber += x;
+            UpdateCount();
+        }
+
+        public void UpdateCount()
+        {
+            count.text = countNumber.ToString();
+            if (countNumber > 0)
                 count.gameObject.SetActive(true);
-            }
             else
             {
-                transform.Find("DescriptionPanel").gameObject.SetActive(false);
-                count.gameObject.SetActive(false);
-                slotIconGO.gameObject.SetActive(false);
+                ClearSlot();
             }
+        }
+
+        public void UpdateCount(int x)
+        {
+            countNumber = x;
+            UpdateCount();
+        }
+
+        public void InitializeEquipment(Equipment equipment)
+        {
+            slotIcon.sprite = RenderManager.Instance.GetEquipmentImage(equipment.equipmentClass);
+            description.text = equipment.description;
+            UpdateCount(1);
+            slotIcon.gameObject.SetActive(true);
+        }
+        
+        public void InitializeMount(Mount mount)
+        {
+            slotIcon.sprite = RenderManager.Instance.GetMountImage(mount.mountClass);
+            description.text = mount.description;
+            UpdateCount(1);
+            slotIcon.gameObject.SetActive(true);
+        }
+        
+        public void InitializeItem(Item item)
+        {
+            slotIcon.sprite = RenderManager.Instance.GetItemImage(item.itemClass);
+            description.text = item.description;
+            UpdateCount(1);
+            slotIcon.gameObject.SetActive(true);
+        }
+
+        public void ClearSlot()
+        {
+            slotIcon.gameObject.SetActive(false);
+            descriptionPanel.SetActive(false);
+            countNumber = 0;
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            if (itemHolder != null && itemHolder.hold > 0)
+            if (countNumber > 0)
             {
-                transform.Find("DescriptionPanel").gameObject.SetActive(true);
+                descriptionPanel.SetActive(true);
             }
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
-            transform.Find("DescriptionPanel").gameObject.SetActive(false);
+            descriptionPanel.SetActive(false);
+        }
+
+        void OnClick()
+        {
+            
         }
     }
 }

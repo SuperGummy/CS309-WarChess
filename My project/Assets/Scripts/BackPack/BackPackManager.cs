@@ -1,14 +1,18 @@
+using System;
+using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
 namespace BackPack
 {
     public class BackPackManager : MonoBehaviour
     {
-        public BackPackSlot[] slots;
-        public GameObject backPackFrame;
-        public GameObject slotHolder;
-        public GameObject itemSet;
-        public GameManager gameManager;
+        [SerializeField] private BackPackSlot[] slots;
+        [SerializeField] private GameObject slotHolder;
+        private Dictionary<string, int> _slotDictionary;
+        [SerializeField] private Equipment[] equipments;
+        [SerializeField] private Mount[] mounts;
+        [SerializeField] private Item[] items;
 
 
         void Awake()
@@ -16,10 +20,76 @@ namespace BackPack
             for(int i = 0; i < slots.Length; i ++)
             {
                 slots[i] = slotHolder.transform.GetChild(i).gameObject.GetComponent<BackPackSlot>();
-                Debug.Log("added listener");
-                slots[i].slotId = i;
-                slots[i].UpdateSlot();
             }
+        }
+
+        void UpdateInfo()
+        {
+            _slotDictionary.Clear();
+            //var equipments = DataManager.Instance.currentPlayer.equipments;
+            int maxId = 0;
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                string equipmentName = equipments[i].name;
+                if (_slotDictionary.ContainsKey(equipmentName))
+                {
+                    int slotId = _slotDictionary[equipmentName];
+                    slots[slotId].AddItem(1);
+                }
+                else
+                {
+                    int slotId = maxId;
+                    maxId += 1;
+                    slots[slotId].InitializeEquipment(equipments[i]);
+                    _slotDictionary.Add(equipmentName, slotId);
+                }
+            }
+
+            //var mounts = DataManager.Instance.currentPlayer.mounts;
+            for (int i = 0; i < mounts.Length; i++)
+            {
+                string mountName = mounts[i].name;
+                if (_slotDictionary.ContainsKey(mountName))
+                {
+                    int slotId = _slotDictionary[mountName];
+                    slots[slotId].AddItem(1);
+                }
+                else
+                {
+                    int slotId = maxId;
+                    maxId += 1;
+                    slots[slotId].InitializeMount(mounts[i]);
+                    _slotDictionary.Add(mountName, slotId);
+                }
+            }
+            
+            //var items = DataManager.Instance.currentPlayer.items;
+            for (int i = 0; i < items.Length; i++)
+            {
+                string itemName = items[i].name;
+                if (_slotDictionary.ContainsKey(itemName))
+                {
+                    int slotId = _slotDictionary[itemName];
+                    slots[slotId].AddItem(1);
+                }
+                else
+                {
+                    int slotId = maxId;
+                    maxId += 1;
+                    slots[slotId].InitializeItem(items[i]);
+                    _slotDictionary.Add(itemName, slotId);
+                }
+            }
+
+            for (; maxId < slots.Length; maxId ++)
+            {
+                slots[maxId].ClearSlot();
+            }
+        }
+
+        void OnEnable()
+        {
+            UpdateInfo();
         }
 
         // void CallSellObjectFrame()
@@ -39,22 +109,6 @@ namespace BackPack
         void Update()
         {
         
-        }
-
-        void Start()
-        {
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            itemSet = GameObject.Find("ItemSet");
-            UpdateInfo();
-        }
-
-        public void UpdateInfo()
-        {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                slots[i].itemHolder = itemSet.GetComponent<ItemSet>().itemHolder[i].GetComponent<ItemHolder>();
-                slots[i].UpdateSlot();
-            }
         }
 
     }
