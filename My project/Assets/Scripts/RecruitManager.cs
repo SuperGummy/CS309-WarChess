@@ -5,42 +5,163 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+using TMPro;
+
 
 public class RecruitManager : MonoBehaviour
 {
-    public Button next;
     public GameObject confirm;
     public GameObject choose;
-    public Button recruitBtn1;
-    public Button recruitBtn2;
-    public Button recruitBtn3;
-    public Button next1;
-    public Button next2;
-    public Member role;
-    private void OnClickNext()
+    public GameObject noPlace;
+    public Button[] nextBtn;
+    private int _id;
+    private Vector3Int _pos;
+    private Character[] _characters;
+    public GameObject[] members;
+    public Button[] recruitBtn;
+    public GameObject[] career;
+    private bool _place;
+
+
+    private void OnClickNext(Button btn)
     {
+        string characterName = btn.transform.GetComponentInChildren<TextMeshProUGUI>().text.Split(" ")[1];
+        foreach (Character character in _characters)
+        {
+            if ((character.name).Equals(characterName))
+            {
+                _id = character.id;
+                break;
+            }
+        }
+        
+        btn.enabled = false;
         
         confirm.SetActive(false);
         choose.SetActive(true);
     }
-
-    private void OnClickRecruit()
+    
+    
+    public class NameNotFound: ApplicationException
     {
+        public NameNotFound(string message): base(message)
+        {
+        }
+    }
+
+    private void OnClickRecruit(Button btn)
+    {
+        int type = -1;
+        switch (btn.name)
+        {
+            case "RecruitMemberButton0":
+                type = 2;
+                break;
+            case "RecruitMemberButton1":
+                type = 0;
+                break;
+            case "RecruitMemberButton2":
+                type = 1;
+                break;
+            default:
+                throw new NameNotFound("Cannot find " + btn.name);
+        }
+        
+        Debug.Log(type);
+        
+        GameManager.Instance.BuyCharacter(_id, _pos, type);
+        
         choose.SetActive(false);
-        SceneManager.LoadScene("Game");
         
     }
+    
+    // Get info about characters by structure position
+    public void Inform(Vector3Int pos, bool place)
+    {
+        _pos = pos;
+        _place = place;
+    }
+
+    void RenderInitial(Vector3Int pos)
+    {
+        Structure structure = DataManager.Instance.GetStructureByPosition(pos);
+        _characters = structure.characters;
+        // _characters = new Character[2];
+        // _characters[0] = new Character();
+        // _characters[1] = new Character();
+        // _characters[0].attack = 10;
+        // _characters[0].hp = 20;
+        // _characters[0].defense = 15;
+        // _characters[0].name = "flower";
+        // _characters[1].attack = 20;
+        // _characters[1].hp = 10;
+        // _characters[1].defense = 25;
+        // _characters[1].name = "sea";
+        //
+        // _characters[2].attack = 40;
+        // _characters[2].hp = 50;
+        // _characters[2].defense = 65;
+        // _characters[2].name = "aaaa";
+
+        int idx = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(i + " " + nextBtn[i].enabled);
+            if (!nextBtn[i].enabled)
+                continue;
+            RecruitInfoFrame member = members[i].GetComponent<RecruitInfoFrame>();
+            (member.defend).text = "defend: " + (_characters[idx].defense);
+            (member.life).text = "life: " + (_characters[idx].hp);
+            (member.naming).text = "name: " + (_characters[idx].name);
+            (member.strength).text = "attack: " + (_characters[idx].attack);
+            nextBtn[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = "Get " + _characters[idx].name;
+            idx++;  
+        } 
+    }
+
+    private void OnEnable()
+    {
+        // _pos = new Vector3Int(1, 1, 0);
+        // nextBtn[2].enabled = false;
+        
+        RenderInitial(_pos);
+        // _place = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        confirm.SetActive(true);
-        next.onClick.AddListener(OnClickNext);
-        next1.onClick.AddListener(OnClickNext);
-        next2.onClick.AddListener(OnClickNext);
-        recruitBtn1.onClick.AddListener(OnClickRecruit);
-        recruitBtn2.onClick.AddListener(OnClickRecruit);
-        recruitBtn3.onClick.AddListener(OnClickRecruit);
-        
+        if (_place)
+        {
+            confirm.SetActive(true);
+            choose.SetActive(false);
+            foreach (Button btn in nextBtn)
+            {
+                if (btn.enabled)
+                {
+                    btn.onClick.AddListener(delegate { OnClickNext(btn); });
+                }
+                else
+                {
+                    btn.GetComponentInChildren<TextMeshProUGUI>().text = "sold out!";
+                    btn.GetComponentInChildren<Image>().color = Color.gray;
+                }
+
+            }
+
+            foreach (Button btn in recruitBtn)
+            {
+                btn.onClick.AddListener(delegate { OnClickRecruit(btn); });
+            }
+        }
+        else
+        {
+           confirm.SetActive(false);
+           choose.SetActive(false);
+           noPlace.SetActive(true); 
+        }
+
     }
 
     // Update is called once per frame

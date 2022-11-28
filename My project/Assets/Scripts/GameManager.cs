@@ -395,9 +395,9 @@ public class GameManager : MonoBehaviour
         //render    refresh shop frame
     }
 
-    public async void BuyCharacter(int id, int x, int y, int type)
+    public async void BuyCharacter(int id, Vector3Int pos, int type)
     {
-        await DataManager.Instance.BuyCharacters(previousPosition, id, x, y, type);
+        // await DataManager.Instance.BuyCharacters(previousPosition, id, x, y, type);
         //need character data ro render
 
         //render
