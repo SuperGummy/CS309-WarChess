@@ -10,6 +10,7 @@ namespace Camp
         [SerializeField] private Character characterInfo;
         [SerializeField] private Structure structureInfo;
         [SerializeField] private CampCharacterImage characterImage;
+      
 
         // Start is called before the first frame update
         void Start()

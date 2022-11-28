@@ -6333,6 +6333,7 @@ MonoBehaviour:
     remainingRound: 2
     value: 0
     characters: []
+  levelUpText: {fileID: 1224245264}
 --- !u!1 &1864711042
 GameObject:
   m_ObjectHideFlags: 0

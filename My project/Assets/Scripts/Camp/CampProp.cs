@@ -15,6 +15,7 @@ public class CampProp : MonoBehaviour
     public GameObject levelUpPanel;
     [SerializeField] private int trainingRounds;
     [SerializeField] private Structure structureInfo;
+    [SerializeField] private TextMeshProUGUI levelUpText;
     
     // Start is called before the first frame update
     void Start()
@@ -37,5 +38,6 @@ public class CampProp : MonoBehaviour
         levelText.text = "Place for training your characters. \n Current camp level: " + structureInfo.level;
         levelUpPanel.GetComponent<CampLevelUpPanel>().SetInfo(
             structureInfo.level * 2, structureInfo.level * 2);
+        levelUpText.text = structureInfo.level * 10 + "$";
     }
 }
