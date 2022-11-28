@@ -571,7 +571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2186,7 +2186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureImage: {fileID: 1329929918}
   structureName: {fileID: 68717951}
-  function: {fileID: 0}
+  function: {fileID: 779795138}
   hp: {fileID: 25051656}
 --- !u!1 &353140011
 GameObject:

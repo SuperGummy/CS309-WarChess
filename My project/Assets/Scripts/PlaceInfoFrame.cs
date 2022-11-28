@@ -16,7 +16,6 @@ public class PlaceInfoFrame : MonoBehaviour
 
     private void OnEnable()
     {
-        function = function.GetComponent<Button>();
         RenderData(_position);
     }
 
@@ -38,7 +37,7 @@ public class PlaceInfoFrame : MonoBehaviour
         else
             side = "middle";
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
-        function.enabled = true;
+        function.interactable = true;
         switch (structure.structureClass)
         {
             case StructureClass.CAMP:
@@ -54,7 +53,7 @@ public class PlaceInfoFrame : MonoBehaviour
                 function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
                 break;
             case StructureClass.VILLAGE:
-                function.enabled = false;
+                function.interactable = false;
                 break;
         }
     }

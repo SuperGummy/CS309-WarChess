@@ -34,15 +34,8 @@ public class PlayerInfoBar : MonoBehaviour
             for (int j = 0; j < DataManager.MapSize; j++)
             {
                 var pos = new Vector3Int(i, j);
-                if (DataManager.Instance.GetCharacterByPosition(pos)?.player.id == player.id)
-                {
-                    character += 1;
-                }
-
-                if (DataManager.Instance.GetStructureByPosition(pos)?.player.id == player.id)
-                {
-                    structure += 1;
-                }
+                if (DataManager.Instance.GetCharacterByPosition(pos)?.player?.id == player.id) character += 1;
+                if (DataManager.Instance.GetStructureByPosition(pos)?.player?.id == player.id) structure += 1;
             }
         }
 
