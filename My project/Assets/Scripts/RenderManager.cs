@@ -50,7 +50,7 @@ public class RenderManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Instance.characterSpeed = 1.2f;
+        Instance.characterSpeed = 1.3f;
     }
 
     public Sprite GetCharacterImage(CharacterClass type, String side)

@@ -2,11 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Model;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 using Random = System.Random;
+
+public enum AnimatedTextType
+{
+    HEALTH, STRENGTH, DAMAGE, LEVEL_UP, CONQUER
+}
 
 public class GridController : MonoBehaviour
 {
@@ -48,6 +54,10 @@ public class GridController : MonoBehaviour
     [SerializeField] private CharacterRenderer scholarRed;
     [SerializeField] private CharacterRenderer fighterBlue;
     [SerializeField] private CharacterRenderer fighterRed;
+    [SerializeField] private GameObject animatedTextPrefab;
+    [SerializeField] private GameObject textHolder;
+
+    [SerializeField] private float textShift;
 
     private void Awake()
     {
@@ -178,12 +188,50 @@ public class GridController : MonoBehaviour
         RenderManager.Instance.PlayCharacterRoute(_characters[endPosition], route);
     }
 
+    public Vector3 GetCharacterMapPosition(Vector3Int position)
+    {
+        Vector3 characterPosition = grid.CellToWorld(new Vector3Int(position.x - 8,
+            position.y - 8, position.z));
+        characterPosition.y += 0.24f;
+        return characterPosition;
+    }
+
+    public void ShowCharacterDamageText(Vector3Int position, int damage)
+    {
+        var characterPosition = GetCharacterMapPosition(position);
+        characterPosition.y += textShift;
+        var stringBuilder = "-" + damage;
+        CreateText(characterPosition, stringBuilder, AnimatedTextType.DAMAGE);
+    }
+    
+    public void ShowCharacterAddHealthText(Vector3Int position, int health)
+    {
+        var characterPosition = GetCharacterMapPosition(position);
+        characterPosition.y += textShift;
+        var stringBuilder = "+" + health;
+        CreateText(characterPosition, stringBuilder, AnimatedTextType.HEALTH);
+    }
+    
+    public void ShowCharacterAddStrengthText(Vector3Int position, int strength)
+    {
+        var characterPosition = GetCharacterMapPosition(position);
+        characterPosition.y += textShift;
+        var stringBuilder = "+" + strength;
+        CreateText(characterPosition, stringBuilder, AnimatedTextType.STRENGTH);
+    }
+    
+    public void ShowConquerText(Vector3Int position)
+    {
+        var characterPosition = GetCharacterMapPosition(position);
+        characterPosition.y += textShift;
+        var stringBuilder = "CONQUERED";
+        CreateText(characterPosition, stringBuilder, AnimatedTextType.CONQUER);
+    }
+
     public void CreateCharacter(Vector3Int position)
     {
         int arrayPosition = GetIndex(position);
-        Vector3 characterMapPosition = grid.CellToWorld(new Vector3Int(position.x - 8,
-            position.y - 8, position.z));
-        characterMapPosition.y += 0.24f;
+        Vector3 characterMapPosition = GetCharacterMapPosition(position);
         GameObject _character = Instantiate(characterPrefab, characterMapPosition, Quaternion.identity);
         _character.transform.parent = characterHolder.transform;
         characterObjects[arrayPosition] = _character;
@@ -194,6 +242,35 @@ public class GridController : MonoBehaviour
         // TODO: instantiate object and concrete by characterInfo
         String side = DataManager.Instance.CheckCharacterSide(characterInfo) == -1 ? "blue" : "red";
         character.Concrete(characterInfo.characterClass, side);
+        //character.Concrete(CharacterClass.SCHOLAR, "blue");
         _characters[arrayPosition] = character;
+    }
+    
+    public void CreateText(Vector3 position, String text, AnimatedTextType type)
+    {
+        var animatedTextObject = Instantiate(animatedTextPrefab, position, Quaternion.identity);
+        animatedTextObject.transform.parent = textHolder.transform;
+        TextMeshPro animatedText = animatedTextObject.GetComponent<TextMeshPro>();
+        animatedText.text = text;
+        switch (type)
+        {
+            case AnimatedTextType.STRENGTH:
+                animatedText.color = Color.blue;
+                break;
+            case AnimatedTextType.HEALTH:
+                animatedText.color = Color.green;
+                break;
+            case AnimatedTextType.LEVEL_UP:
+                animatedText.color = Color.yellow;
+                break;
+            case AnimatedTextType.CONQUER:
+                animatedText.fontSize = 3.2f;
+                animatedText.color = Color.yellow;
+                break;
+            case AnimatedTextType.DAMAGE:
+                animatedText.color = Color.red;
+                break;
+        }
+        
     }
 }

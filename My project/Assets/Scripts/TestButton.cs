@@ -35,21 +35,21 @@ public class TestButton : MonoBehaviour
 
     public void OnClick()
     {
-        if (forTest == 0)
+        gridController.CreateCharacter(position);
+        switch (forTest)
         {
-            gridController.SetAttackableHighlight(destinations, true);
-        }
-        else if (forTest == 1)
-        {
-            gridController.SetAttackableHighlight(destinations, false);
-        }
-        else if (forTest == 2)
-        {
-            gridController.SetMovableHighlight(destinations, true);
-        }
-        else if (forTest == 3)
-        {
-            gridController.SetMovableHighlight(destinations, false);
+            case 0:
+                gridController.ShowCharacterDamageText(position, 3);
+                break;
+            case 1:
+                gridController.ShowCharacterAddHealthText(position, 6);
+                break;
+            case 2:
+                gridController.ShowCharacterAddStrengthText(position, 7);
+                break;
+            case 3:
+                gridController.ShowConquerText(position);
+                break;
         }
     }
 }
