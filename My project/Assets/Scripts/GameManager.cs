@@ -205,6 +205,7 @@ public class GameManager : MonoBehaviour
     {
         if (func) return;
         func = true;
+        CampManager.position = _previousPosition;
         SceneController.Instance.LoadCamp();
         disableBackground();
     }

@@ -11,6 +11,7 @@ public class CampManager : MonoBehaviour
     public Button[] buttonList;
     public GameObject campCharacterImage;
     public static Vector3Int position;
+    public Button closeButton;
     [SerializeField] private GameObject campPropObject;
     [SerializeField] private GameObject campCharacterHolderObject;
     
@@ -29,6 +30,7 @@ public class CampManager : MonoBehaviour
     private void OnEnable()
     {
         UpdateInfo();
+        closeButton.onClick.AddListener(GameManager.Instance.CloseCamp);
     }
 
     public void UpdateInfo()
