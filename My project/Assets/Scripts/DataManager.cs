@@ -25,6 +25,9 @@ public class DataManager : MonoBehaviour
     private Character[] _characters = new Character[MapSize * MapSize];
     private Structure[] _structures = new Structure[MapSize * MapSize];
 
+    public int purchasingIndex;
+    public int purchasingType;
+
     private void Awake()
     {
         Instance = this;
@@ -770,6 +773,7 @@ public class DataManager : MonoBehaviour
             GridController.Instance.AddStructure(new Vector3Int(s.x - 8, s.y - 8, 0),
                 s.structureClass == StructureClass.VILLAGE ? 0 : 1);
         }
+
         UpdateStructureAttribute(structure1);
         UpdateStructureAttribute(structure2);
         _structures[structure1.x * MapSize + structure1.y].player = player1;

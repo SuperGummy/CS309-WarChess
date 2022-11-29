@@ -571,7 +571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 441.5159
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2186,6 +2186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureImage: {fileID: 1329929918}
   structureName: {fileID: 68717951}
+  recruit: {fileID: 1002313219}
   function: {fileID: 779795138}
   hp: {fileID: 25051656}
 --- !u!1 &353140011
@@ -6189,9 +6190,7 @@ MonoBehaviour:
   placeInfoFrame: {fileID: 342910644}
   error: 0
   backpack: 0
-  shop: 0
-  camp: 0
-  tech: 0
+  func: 0
   characterInfo: 0
   structureInfo: 0
   nextRound: 0

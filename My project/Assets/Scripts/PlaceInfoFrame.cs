@@ -10,6 +10,7 @@ public class PlaceInfoFrame : MonoBehaviour
 {
     public Image structureImage;
     public TextMeshProUGUI structureName;
+    public Button recruit;
     public Button function;
     public Slider hp;
     private Vector3Int _position;
@@ -22,6 +23,7 @@ public class PlaceInfoFrame : MonoBehaviour
     public void Inform(Vector3Int position)
     {
         _position = position;
+        recruit.onClick.AddListener(GameManager.Instance.OpenRecruit);
     }
 
     public void RenderData(Vector3Int position)
@@ -41,18 +43,19 @@ public class PlaceInfoFrame : MonoBehaviour
         switch (structure.structureClass)
         {
             case StructureClass.CAMP:
-                function.GetComponent<TextMeshProUGUI>().text= "train";
+                function.GetComponentInChildren<TextMeshProUGUI>().text= "train";
                 function.onClick.AddListener(GameManager.Instance.OpenCamp);
                 break;
             case StructureClass.MARKET:
-                function.GetComponent<TextMeshProUGUI>().text = "shop";
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "trade";
                 function.onClick.AddListener(GameManager.Instance.OpenShop);
                 break;
             case StructureClass.INSTITUTE:
-                function.GetComponent<TextMeshProUGUI>().text = "Tech";
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
                 function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
                 break;
             case StructureClass.VILLAGE:
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
                 function.interactable = false;
                 break;
         }
