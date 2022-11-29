@@ -23,16 +23,16 @@ public class GameManager : MonoBehaviour
 
     public bool error;
     public bool backpack;
-    public bool shop;
-    public bool camp;
-    public bool tech;
+    public bool func;
+    public bool recruit;
     public bool characterInfo;
     public bool structureInfo;
     public bool nextRound;
 
-    private Vector3Int previousPosition = Vector3Int.back;
-    private List<Vector3Int> characterActionRange;
-    private List<Vector3Int> characterAttackRange;
+    private Vector3Int _previousPosition = Vector3Int.back;
+    private List<Vector3Int> _characterActionRange;
+    private List<Vector3Int> _characterAttackRange;
+    private List<Vector3Int> _characterAvailablePosition;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Initiate();
+        Initiate();
         backpackButton = backpackButton.GetComponent<Button>();
         finish = finish.GetComponent<Button>();
     }
@@ -59,13 +59,17 @@ public class GameManager : MonoBehaviour
             if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize) return;
             Debug.Log(x + " " + y + " " + cellPosition.z);
 
-            if (characterActionRange != null)
-                if (characterActionRange.Exists(c => c.x == x && c.y == y))
-                    MoveCharacter(previousPosition, position);
-            
-            if (characterAttackRange != null)
-                if (characterAttackRange.Exists(c => c.x == x && c.y == y))
-                    AttackPosition(previousPosition, position);
+            if (_characterActionRange != null)
+                if (_characterActionRange.Exists(c => c.x == x && c.y == y))
+                    MoveCharacter(_previousPosition, position);
+
+            if (_characterAttackRange != null)
+                if (_characterAttackRange.Exists(c => c.x == x && c.y == y))
+                    AttackPosition(_previousPosition, position);
+
+            if (recruit)
+                if (_characterAvailablePosition.Exists(c => c.x == x && c.y == y))
+                    BuyCharacter(position);
 
             UpdatePosition(position);
             ShowCharacterInfoButton(position);
@@ -77,7 +81,13 @@ public class GameManager : MonoBehaviour
     {
         CloseActionRange();
         CloseAttackRange();
-        previousPosition = position;
+        if (recruit)
+        {
+            GridController.Instance.SetMovableHighlight(_characterAvailablePosition, false);
+            recruit = false;
+        }
+
+        _previousPosition = position;
         ShowActionRange(position);
         ShowAttackRange(position);
     }
@@ -142,39 +152,12 @@ public class GameManager : MonoBehaviour
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
-    public async void OpenBackPack()
+    public void OpenBackPack()
     {
         if (backpack) return;
-
         backpack = true;
-        // var task1 = DataManager.Instance.GetEquipments();
-        // var task2 = DataManager.Instance.GetItem();
-        // var task3 = DataManager.Instance.GetMount();
-        // await Task.WhenAll(task1, task2, task3).ContinueWith(task =>
-        // {
-        //     if (task.IsFaulted)
-        //     {
-        //         error = true;
-        //         backpack = false;
-        //         GridController.Instance.gridEnable = true;
-        //         finish.enabled = true;
-        //         Debug.Log(task.Exception?.Message);
-        //     }
-        // });
-
-        if (error)
-        {
-            backpack = false;
-            GridController.Instance.gridEnable = true;
-            finish.enabled = true;
-        }
-        else
-        {
-            SceneController.Instance.LoadBackPack();
-            disableBackground();
-        }
-
-        error = false;
+        SceneController.Instance.LoadBackPack();
+        disableBackground();
     }
 
     public void CloseBackPack()
@@ -187,56 +170,77 @@ public class GameManager : MonoBehaviour
 
     public void OpenShop()
     {
-        if (shop) return;
-        shop = true;
+        if (func) return;
+        func = true;
         SceneController.Instance.LoadShop();
         disableBackground();
     }
 
     public void CloseShop()
     {
-        if (!shop) return;
-        shop = false;
+        if (!func) return;
+        func = false;
         SceneController.Instance.UnloadShop();
         enableBackground();
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
     public void OpenTechnologies()
     {
-        if (tech) return;
-        tech = true;
+        if (func) return;
+        func = true;
         SceneController.Instance.LoadTechTree();
         disableBackground();
     }
 
     public void CloseTechnologies()
     {
-        if (!tech) return;
-        tech = false;
+        if (!func) return;
+        func = false;
         SceneController.Instance.UnloadTechTree();
         enableBackground();
     }
 
     public void OpenCamp()
     {
-        if (camp) return;
-        camp = true;
+        if (func) return;
+        func = true;
+        CampManager.position = _previousPosition;
         SceneController.Instance.LoadCamp();
         disableBackground();
     }
 
     public void CloseCamp()
     {
-        if (!camp) return;
-        camp = false;
+        if (!func) return;
+        func = false;
         SceneController.Instance.UnloadCamp();
+        enableBackground();
+    }
+
+    public void OpenRecruit()
+    {
+        if (func) return;
+        func = true;
+        _characterAvailablePosition = GetEmptyPosition(_previousPosition);
+        GetComponent<RecruitManager>().Inform(_previousPosition, _characterAvailablePosition != null);
+        SceneController.Instance.LoadRecruit();
+        placeInfoFrame.SetActive(false);
+        disableBackground();
+    }
+
+    public void CloseRecruit()
+    {
+        if (!func) return;
+        func = false;
+        SceneController.Instance.UnloadRecruit();
         enableBackground();
     }
 
     public void ShowCharacterInfo()
     {
         if (!characterInfo) return;
-        characterInfoFrame.GetComponent<CharacterInfoFrame>().Inform(previousPosition);
+        characterInfoFrame.GetComponent<CharacterInfoFrame>().Inform(_previousPosition);
         characterInfoFrame.SetActive(true);
         disableBackground();
     }
@@ -249,7 +253,7 @@ public class GameManager : MonoBehaviour
     public void ShowStructureInfo()
     {
         if (!structureInfo) return;
-        placeInfoFrame.GetComponent<PlaceInfoFrame>().Inform(previousPosition);
+        placeInfoFrame.GetComponent<PlaceInfoFrame>().Inform(_previousPosition);
         placeInfoFrame.SetActive(true);
         disableBackground();
     }
@@ -262,8 +266,8 @@ public class GameManager : MonoBehaviour
     private void enableBackground()
     {
         GridController.Instance.gridEnable = true;
-        ShowCharacterInfoButton(previousPosition);
-        ShowStructureInfoButton(previousPosition);
+        ShowCharacterInfoButton(_previousPosition);
+        ShowStructureInfoButton(_previousPosition);
         finish.enabled = true;
         backpackButton.enabled = true;
     }
@@ -279,47 +283,45 @@ public class GameManager : MonoBehaviour
 
     private void ShowActionRange(Vector3Int position)
     {
-        characterActionRange = GetActionRange(position);
-        if (characterActionRange == null) return;
-        GridController.Instance.SetMovableHighlight(characterActionRange, true);
+        _characterActionRange = GetActionRange(position);
+        if (_characterActionRange == null) return;
+        GridController.Instance.SetMovableHighlight(_characterActionRange, true);
     }
 
     private void CloseActionRange()
     {
-        if (characterActionRange == null) return;
-        GridController.Instance.SetMovableHighlight(characterActionRange, false);
-        characterActionRange = null;
+        if (_characterActionRange == null) return;
+        GridController.Instance.SetMovableHighlight(_characterActionRange, false);
+        _characterActionRange = null;
     }
 
     private void ShowAttackRange(Vector3Int position)
     {
-        characterAttackRange = GetAttackRange(position);
-        if (characterAttackRange == null) return;
-        GridController.Instance.SetAttackableHighlight(characterAttackRange, true);
+        _characterAttackRange = GetAttackRange(position);
+        if (_characterAttackRange == null) return;
+        GridController.Instance.SetAttackableHighlight(_characterAttackRange, true);
     }
 
     private void CloseAttackRange()
     {
-        if (characterAttackRange == null) return;
-        GridController.Instance.SetAttackableHighlight(characterAttackRange, false);
-        characterAttackRange = null;
-    }
-
-    public void GetCharacter(int id)
-    {
-        //render the character at position ?
+        if (_characterAttackRange == null) return;
+        GridController.Instance.SetAttackableHighlight(_characterAttackRange, false);
+        _characterAttackRange = null;
     }
 
     public async void AttackPosition(Vector3Int positionAttack, Vector3Int positionAttacked)
     {
-        // animation of attack
-
         if (DataManager.Instance.GetCharacterByPosition(positionAttacked) != null)
         {
+            GridController.Instance.ShowDamageText(positionAttacked,
+                DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
+                DataManager.Instance.GetCharacterByPosition(positionAttacked).defense);
             await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
         }
         else if (DataManager.Instance.GetStructureByPosition(positionAttacked) != null)
         {
+            GridController.Instance.ShowDamageText(positionAttacked,
+                DataManager.Instance.GetCharacterByPosition(positionAttack).attack);
             await DataManager.Instance.AttackStructure(positionAttack, positionAttacked);
             if (DataManager.Instance.GetStructureByPosition(positionAttacked).player?.id ==
                 DataManager.Instance.currentPlayer.id)
@@ -329,6 +331,7 @@ public class GameManager : MonoBehaviour
                     GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "blue");
                 else
                     GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "red");
+                GridController.Instance.ShowConquerText(positionAttacked);
             }
         }
     }
@@ -336,7 +339,7 @@ public class GameManager : MonoBehaviour
     public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
     {
         DataManager.Instance.MoveCharacter(position, newPosition);
-        var path = GetActionPath(previousPosition, newPosition);
+        var path = GetActionPath(_previousPosition, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
     }
 
@@ -353,7 +356,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateTech(int t)
     {
-        DataManager.Instance.UpdateTechnologies(previousPosition, t);
+        DataManager.Instance.UpdateTechnologies(_previousPosition, t);
         //do not need data to render
 
         //render
@@ -362,7 +365,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateCharacterAtCamp(int option, GameObject t)
     {
-        DataManager.Instance.UpdateCharacter(previousPosition, option);
+        DataManager.Instance.UpdateCharacter(_previousPosition, option);
 
         if (t != null)
         {
@@ -395,34 +398,43 @@ public class GameManager : MonoBehaviour
         //render    refresh shop frame
     }
 
-    public async void BuyCharacter(int id, Vector3Int pos, int type)
+    public void chooseNewCharacterposition(int id, int type)
     {
-        // await DataManager.Instance.BuyCharacters(previousPosition, id, x, y, type);
-        //need character data ro render
+        if (recruit) return;
+        recruit = true;
+        CloseRecruit();
+        DataManager.Instance.purchasingIndex = id;
+        DataManager.Instance.purchasingType = type;
+        GridController.Instance.SetMovableHighlight(_characterAvailablePosition, true);
+    }
 
-        //render
-        //update character at (x,y)
+    public async void BuyCharacter(Vector3Int position)
+    {
+        await DataManager.Instance.BuyCharacters(_previousPosition, DataManager.Instance.purchasingIndex, position.x,
+            position.y, DataManager.Instance.purchasingType);
+        GridController.Instance.CreateCharacter(position);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
     public void UseItem(int itemid)
     {
-        DataManager.Instance.UpdateItem(previousPosition, itemid);
+        DataManager.Instance.UpdateItem(_previousPosition, itemid);
     }
 
     public void ChangeEquipment(int equipmentid, bool off)
     {
-        DataManager.Instance.UpdateEquipment(previousPosition, equipmentid, off);
+        DataManager.Instance.UpdateEquipment(_previousPosition, equipmentid, off);
         //no need to render
     }
 
     public void ChangeMount(int mountid, bool off)
     {
-        DataManager.Instance.UpdateMount(previousPosition, mountid, off);
+        DataManager.Instance.UpdateMount(_previousPosition, mountid, off);
     }
 
     public async void UpgradeStructure(int type = 0)
     {
-        await DataManager.Instance.UpdateStructure(previousPosition, type);
+        await DataManager.Instance.UpdateStructure(_previousPosition, type);
 
         //render    may change structure
     }
@@ -658,7 +670,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-
     private List<Vector3Int> GetActionRange(Vector3Int position)
     {
         var character = DataManager.Instance.GetCharacterByPosition(position);
@@ -766,6 +777,65 @@ public class GameManager : MonoBehaviour
         }
 
         return result;
+    }
+
+    private List<Vector3Int> GetEmptyPosition(Vector3Int position)
+    {
+        var structure = DataManager.Instance.GetStructureByPosition(position);
+        if (structure?.player?.id != DataManager.Instance.currentPlayer.id) return default;
+
+        var res = new List<Vector3Int>();
+        var i = position.x;
+        var j = position.y;
+        var op = 1;
+        if (j % 2 == 0) op = -1;
+        var temp = new Vector3Int(i, j);
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i + op, j + 1);
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i + 1, j);
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i + op, j - 1);
+
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i, j + 1);
+
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i, j - 1);
+
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        temp = new Vector3Int(i - 1, j);
+
+        if (CheckAccessible(temp))
+        {
+            res.Add(temp);
+        }
+
+        return res;
     }
 
     private List<Vector3Int> GetAttackRange(Vector3Int position)

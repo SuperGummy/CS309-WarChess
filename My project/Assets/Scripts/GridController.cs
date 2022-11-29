@@ -188,50 +188,50 @@ public class GridController : MonoBehaviour
         RenderManager.Instance.PlayCharacterRoute(_characters[endPosition], route);
     }
 
-    public Vector3 GetCharacterMapPosition(Vector3Int position)
+    public Vector3 GetMapPosition(Vector3Int position)
     {
-        Vector3 characterPosition = grid.CellToWorld(new Vector3Int(position.x - 8,
+        Vector3 cellToWorld = grid.CellToWorld(new Vector3Int(position.x - 8,
             position.y - 8, position.z));
-        characterPosition.y += 0.24f;
-        return characterPosition;
+        cellToWorld.y += 0.24f;
+        return cellToWorld;
     }
 
-    public void ShowCharacterDamageText(Vector3Int position, int damage)
+    public void ShowDamageText(Vector3Int position, int damage)
     {
-        var characterPosition = GetCharacterMapPosition(position);
-        characterPosition.y += textShift;
+        var mapPosition = GetMapPosition(position);
+        mapPosition.y += textShift;
         var stringBuilder = "-" + damage;
-        CreateText(characterPosition, stringBuilder, AnimatedTextType.DAMAGE);
+        CreateText(mapPosition, stringBuilder, AnimatedTextType.DAMAGE);
     }
     
     public void ShowCharacterAddHealthText(Vector3Int position, int health)
     {
-        var characterPosition = GetCharacterMapPosition(position);
-        characterPosition.y += textShift;
+        var mapPosition = GetMapPosition(position);
+        mapPosition.y += textShift;
         var stringBuilder = "+" + health;
-        CreateText(characterPosition, stringBuilder, AnimatedTextType.HEALTH);
+        CreateText(mapPosition, stringBuilder, AnimatedTextType.HEALTH);
     }
     
     public void ShowCharacterAddStrengthText(Vector3Int position, int strength)
     {
-        var characterPosition = GetCharacterMapPosition(position);
-        characterPosition.y += textShift;
+        var mapPosition = GetMapPosition(position);
+        mapPosition.y += textShift;
         var stringBuilder = "+" + strength;
-        CreateText(characterPosition, stringBuilder, AnimatedTextType.STRENGTH);
+        CreateText(mapPosition, stringBuilder, AnimatedTextType.STRENGTH);
     }
     
     public void ShowConquerText(Vector3Int position)
     {
-        var characterPosition = GetCharacterMapPosition(position);
-        characterPosition.y += textShift;
+        var mapPosition = GetMapPosition(position);
+        mapPosition.y += textShift;
         var stringBuilder = "CONQUERED";
-        CreateText(characterPosition, stringBuilder, AnimatedTextType.CONQUER);
+        CreateText(mapPosition, stringBuilder, AnimatedTextType.CONQUER);
     }
 
     public void CreateCharacter(Vector3Int position)
     {
         int arrayPosition = GetIndex(position);
-        Vector3 characterMapPosition = GetCharacterMapPosition(position);
+        Vector3 characterMapPosition = GetMapPosition(position);
         GameObject _character = Instantiate(characterPrefab, characterMapPosition, Quaternion.identity);
         _character.transform.parent = characterHolder.transform;
         characterObjects[arrayPosition] = _character;

@@ -524,12 +524,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cedb7b80437ca8c40a2be6663ff66a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 0}
-  star: {fileID: 0}
-  characters: {fileID: 0}
-  structures: {fileID: 0}
-  prosperity: {fileID: 0}
-  peace: {fileID: 0}
+  team: {fileID: 81506988}
+  star: {fileID: 81506986}
+  characters: {fileID: 81506987}
+  structures: {fileID: 81506983}
+  prosperity: {fileID: 81506984}
+  peace: {fileID: 81506985}
 --- !u!1001 &81506982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -729,6 +729,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerInfoSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 8477915195756769456, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8898080957140251716, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -747,6 +751,72 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+--- !u!114 &81506983 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3175076209376552860, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81506984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5935257775601070410, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81506985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 479656478525347758, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81506986 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7985444731536334009, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81506987 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5330016739960959230, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81506988 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7302412846162338579, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
+  m_PrefabInstance: {fileID: 81506982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &89139931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2116,7 +2186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureImage: {fileID: 1329929918}
   structureName: {fileID: 68717951}
-  function: {fileID: 0}
+  recruit: {fileID: 1002313219}
+  function: {fileID: 779795138}
   hp: {fileID: 25051656}
 --- !u!1 &353140011
 GameObject:
@@ -6119,9 +6190,7 @@ MonoBehaviour:
   placeInfoFrame: {fileID: 342910644}
   error: 0
   backpack: 0
-  shop: 0
-  camp: 0
-  tech: 0
+  func: 0
   characterInfo: 0
   structureInfo: 0
   nextRound: 0

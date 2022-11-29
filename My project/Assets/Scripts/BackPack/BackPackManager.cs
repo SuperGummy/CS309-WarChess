@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using Model;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BackPack
 {
     public class BackPackManager : MonoBehaviour
     {
+        public Button closeButton;
         [SerializeField] private BackPackSlot[] slots;
         [SerializeField] private GameObject slotHolder;
         private readonly Dictionary<string, int> _slotDictionary = new ();
@@ -17,6 +19,7 @@ namespace BackPack
 
         void Awake()
         {
+            closeButton.onClick.AddListener(GameManager.Instance.CloseBackPack);
             for(int i = 0; i < slots.Length; i ++)
             {
                 slots[i] = slotHolder.transform.GetChild(i).gameObject.GetComponent<BackPackSlot>();

@@ -70,7 +70,7 @@ public class RecruitManager : MonoBehaviour
         
         Debug.Log(type);
         
-        GameManager.Instance.BuyCharacter(_id, _pos, type);
+        GameManager.Instance.chooseNewCharacterposition(_id, type);
         
         choose.SetActive(false);
         

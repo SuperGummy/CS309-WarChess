@@ -2839,6 +2839,7 @@ MonoBehaviour:
   - {fileID: 176827892}
   - {fileID: 1427174863}
   campCharacterImage: {fileID: 117911715}
+  closeButton: {fileID: 720299886}
   campPropObject: {fileID: 1814798061}
   campCharacterHolderObject: {fileID: 1407372440}
 --- !u!1 &868983718
