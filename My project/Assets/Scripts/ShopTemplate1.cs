@@ -13,6 +13,7 @@ public class ShopTemplate1 : MonoBehaviour
     public TMP_Text costText;
     public Image image;
     public int id;
+    public int ty;
     public int cost;
 
     public void buy()
@@ -22,7 +23,9 @@ public class ShopTemplate1 : MonoBehaviour
             NotEnoughStar();
             return;
         }
-        shopManager.star -= cost;
+        if(ty==0) GameManager.Instance.BuyEquipment(id);
+        if(ty==1) GameManager.Instance.BuyMount(id);
+        if(ty==2) GameManager.Instance.BuyItem(id);
         //Debug.Log("ababa");
         addChain();
         shopManager.updateUI();
