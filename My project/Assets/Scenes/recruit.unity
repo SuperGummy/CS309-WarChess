@@ -783,10 +783,10 @@ MonoBehaviour:
   - {fileID: 1158249839}
   - {fileID: 303978189}
   - {fileID: 305557508}
-  career:
-  - {fileID: 991297815}
-  - {fileID: 320761136}
-  - {fileID: 1007320660}
+  closeBtn:
+  - {fileID: 1886401458}
+  - {fileID: 2021533866}
+  - {fileID: 2071503202}
 --- !u!4 &132582546
 Transform:
   m_ObjectHideFlags: 0

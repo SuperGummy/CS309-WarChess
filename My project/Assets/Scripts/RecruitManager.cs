@@ -20,7 +20,6 @@ public class RecruitManager : MonoBehaviour
     private Character[] _characters;
     public GameObject[] members;
     public Button[] recruitBtn;
-    public GameObject[] career;
     public Button[] closeBtn;
     private bool _place;
     private Button _chosenBtn;
@@ -178,6 +177,10 @@ public class RecruitManager : MonoBehaviour
         {
             _chosenBtn.enabled = true;
         }
+        confirm.SetActive(false);
+        choose.SetActive(false);
+        noPlace.SetActive(false); 
+        
         GameManager.Instance.CloseRecruit();
     }
 
