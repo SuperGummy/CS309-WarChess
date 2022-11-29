@@ -6191,6 +6191,7 @@ MonoBehaviour:
   error: 0
   backpack: 0
   func: 0
+  recruit: 0
   characterInfo: 0
   structureInfo: 0
   nextRound: 0
@@ -6245,6 +6246,8 @@ MonoBehaviour:
       items: []
       mounts: []
   _tech: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  purchasingIndex: 0
+  purchasingType: 0
 --- !u!114 &764328143
 MonoBehaviour:
   m_ObjectHideFlags: 0
