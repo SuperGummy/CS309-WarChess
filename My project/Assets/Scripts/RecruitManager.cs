@@ -21,7 +21,9 @@ public class RecruitManager : MonoBehaviour
     public GameObject[] members;
     public Button[] recruitBtn;
     public GameObject[] career;
+    public Button[] closeBtn;
     private bool _place;
+    private Button _chosenBtn;
 
 
     private void OnClickNext(Button btn)
@@ -37,6 +39,7 @@ public class RecruitManager : MonoBehaviour
         }
         
         btn.enabled = false;
+        _chosenBtn = btn;
         
         confirm.SetActive(false);
         choose.SetActive(true);
@@ -132,6 +135,11 @@ public class RecruitManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _chosenBtn = null;
+        foreach (Button btn in closeBtn)
+        {
+            btn.onClick.AddListener(OnClickClose);
+        }
         if (_place)
         {
             confirm.SetActive(true);
@@ -162,6 +170,15 @@ public class RecruitManager : MonoBehaviour
            noPlace.SetActive(true); 
         }
 
+    }
+
+    public void OnClickClose()
+    {
+        if (null != _chosenBtn)
+        {
+            _chosenBtn.enabled = true;
+        }
+        GameManager.Instance.CloseRecruit();
     }
 
     // Update is called once per frame

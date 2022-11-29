@@ -7,6 +7,7 @@ public class UpgradeManager: MonoBehaviour
 {
     public Button[] upgradeBtn;
     public GameObject upgradeFrame;
+    public Button close;
 
     public void Start()
     {
@@ -39,4 +40,10 @@ public class UpgradeManager: MonoBehaviour
         
         GameManager.Instance.UpgradeStructure(type);
     }
+
+    public void OnClickClose()
+    {
+        // GameManager.Instance.close
+    }
+    
 }
