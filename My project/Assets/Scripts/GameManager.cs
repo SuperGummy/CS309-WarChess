@@ -363,15 +363,9 @@ public class GameManager : MonoBehaviour
         //scene back to main scene 
     }
 
-    public void UpdateCharacterAtCamp(int option, GameObject t)
+    public void UpdateCharacterAtCamp(int option)
     {
         DataManager.Instance.UpdateCharacter(_previousPosition, option);
-
-        if (t != null)
-        {
-            //close select window
-            t.GetComponent<Camp.CampCloseParentPanelButton>().OnClick();
-        }
     }
 
     public async void BuyEquipment(int shopId)
