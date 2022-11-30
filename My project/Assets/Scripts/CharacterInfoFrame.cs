@@ -12,15 +12,18 @@ public class CharacterInfoFrame : MonoBehaviour
     public TextMeshProUGUI type;
     public TextMeshProUGUI attack;
     public TextMeshProUGUI defense;
-    public Slider hp;
+    public TextMeshProUGUI hp;
     public TextMeshProUGUI actionRange;
     public Image equipment;
     public Image mount;
+    public Button equip;
+    public Button discharge;
     private Vector3Int _position;
 
     private void OnEnable()
     {
         RenderData(_position);
+        equip.onClick.AddListener(GameManager.Instance.OpenEquip);
     }
 
     public void Inform(Vector3Int position)
@@ -35,7 +38,7 @@ public class CharacterInfoFrame : MonoBehaviour
         type.text = character.characterClass.ToString();
         attack.text = character.attack.ToString();
         defense.text = character.defense.ToString();
-        hp.value = character.hp;
+        hp.text = character.hp.ToString();
         actionRange.text = character.actionRange.ToString();
         equipment.sprite = character.equipment == null
             ? null

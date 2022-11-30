@@ -20,9 +20,9 @@ MonoImporter:
   - cannonEquipment: {fileID: 21300000, guid: 24776abadd1cf6f438eb9d514bc0031a, type: 3}
   - swordEquipment: {fileID: 21300000, guid: 8f28955d92038974a9b04aafaeea79b0, type: 3}
   - shieldEquipment: {fileID: 21300000, guid: 256205b9c6ca12c45ab7762da8a65631, type: 3}
-  - villageImage: {fileID: 21300000, guid: 5544c425bacc20349b82bb5404ddca73, type: 3}
-  - villageBlueImage: {fileID: 21300000, guid: d42332a9bce78194f92088c072e0354c, type: 3}
-  - villageRedImage: {fileID: 21300000, guid: f133de3fe8c7aec40a4de8800b8a3614, type: 3}
+  - villageImage: {fileID: 21300000, guid: 3c20ffb634e46af4ea11584d1ad5d287, type: 3}
+  - villageBlueImage: {fileID: 21300000, guid: 7d9a1efa1df55f045b4acc93ee8a5bcd, type: 3}
+  - villageRedImage: {fileID: 21300000, guid: 2937c99a5eaba514793119c067fe1656, type: 3}
   - campBlueImage: {fileID: 21300000, guid: 83fd2ac053818aa4e982243d83a7555b, type: 3}
   - campRedImage: {fileID: 21300000, guid: 0916c2c09997a5b4da6811412fd88ceb, type: 3}
   - schoolBlueImage: {fileID: 21300000, guid: 407b17e2f4ce524438e61c3588a67436, type: 3}

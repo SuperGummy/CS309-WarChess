@@ -23,6 +23,6 @@ public class CampStartTrainingButton : MonoBehaviour
 
     public void OnClick()
     {
-        GameManager.Instance.UpdateCharacterAtCamp(updateType, closeButton);
+        GameManager.Instance.UpdateCharacterAtCamp(updateType);
     }
 }

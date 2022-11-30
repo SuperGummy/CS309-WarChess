@@ -22,8 +22,8 @@ public class DataManager : MonoBehaviour
     public Player player2;
     public int[] _tech = new int [2 * TechSize];
     private int[] _map = new int[MapSize * MapSize];
-    private Character[] _characters = new Character[MapSize * MapSize];
-    private Structure[] _structures = new Structure[MapSize * MapSize];
+    private Character[] characters = new Character[MapSize * MapSize];
+    private Structure[] structures = new Structure[MapSize * MapSize];
 
     public int purchasingIndex;
     public int purchasingType;
@@ -50,12 +50,12 @@ public class DataManager : MonoBehaviour
 
     public Character GetCharacterByPosition(Vector3Int vector3Int)
     {
-        return _characters[vector3Int.x * MapSize + vector3Int.y];
+        return characters[vector3Int.x * MapSize + vector3Int.y];
     }
 
     public Structure GetStructureByPosition(Vector3Int vector3Int)
     {
-        return _structures[vector3Int.x * MapSize + vector3Int.y];
+        return structures[vector3Int.x * MapSize + vector3Int.y];
     }
 
     public async Task Register(string username, string password)
@@ -171,10 +171,6 @@ public class DataManager : MonoBehaviour
         }
 
         UpdateData(game);
-        foreach (var structure in game.structures)
-        {
-            UpdateStructureAttribute(structure);
-        }
     }
 
     /* Player Controller */
@@ -439,7 +435,7 @@ public class DataManager : MonoBehaviour
         );
         var character = GetModel<Model.Character>(res);
         if (character == null) return;
-        _characters[character.x * MapSize + character.y] = null;
+        characters[character.x * MapSize + character.y] = null;
     }
 
     public async Task MoveCharacter(Vector3Int oldPosition, Vector3Int newPosition)
@@ -456,7 +452,7 @@ public class DataManager : MonoBehaviour
         );
         var character = GetModel<Model.Character>(res);
         if (character == null) return;
-        _characters[oldPosition.x * MapSize + oldPosition.y] = null;
+        characters[oldPosition.x * MapSize + oldPosition.y] = null;
         UpdateCharacterAttribute(character, true);
     }
 
@@ -475,7 +471,7 @@ public class DataManager : MonoBehaviour
         if (character == null) return;
         UpdateCharacterAttribute(character, false);
 
-        _characters[oldPosition.x * MapSize + oldPosition.y].actionState = 2;
+        characters[oldPosition.x * MapSize + oldPosition.y].actionState = 2;
 
         if (character.hp <= 0)
         {
@@ -502,7 +498,7 @@ public class DataManager : MonoBehaviour
         }
 
         UpdateStructureAttribute(structure);
-        _characters[oldPosition.x * MapSize + oldPosition.y].actionState = 2;
+        characters[oldPosition.x * MapSize + oldPosition.y].actionState = 2;
     }
 
     /*structure controller*/
@@ -556,7 +552,7 @@ public class DataManager : MonoBehaviour
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
         UpdateStructureAttribute(structure);
-        _characters[position.x * MapSize + position.y].actionState = 2;
+        characters[position.x * MapSize + position.y].actionState = 2;
     }
 
     public async Task EarnStars(Vector3Int position)
@@ -575,7 +571,7 @@ public class DataManager : MonoBehaviour
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
         UpdateStructureAttribute(structure);
-        _characters[position.x * MapSize + position.y].actionState = 2;
+        characters[position.x * MapSize + position.y].actionState = 2;
     }
 
     public async Task UpdateTechnologies(Vector3Int position, int option)
@@ -600,7 +596,7 @@ public class DataManager : MonoBehaviour
         else currentPlayer.stars -= 20;
 
         UpdateStructureAttribute(structure);
-        _characters[position.x * MapSize + position.y].actionState = 2;
+        characters[position.x * MapSize + position.y].actionState = 2;
     }
 
     public async Task UpdateStructure(Vector3Int position, int option)
@@ -672,13 +668,13 @@ public class DataManager : MonoBehaviour
     private void SetData(Game game)
     {
         gameID = game.id;
-        UpdateData(game);
+        InitiateData(game);
         SetMap(game.map);
         SetStructure(game.structures, game.player1.structures[0], game.player2.structures[0]);
         SetCharacter(game.player1.characters[0], game.player2.characters[0]);
     }
 
-    public void UpdateData(Game game)
+    private void InitiateData(Game game)
     {
         round = game.round / 2;
         SetPlayer(player1, game.player1);
@@ -687,82 +683,95 @@ public class DataManager : MonoBehaviour
         SetPlayerShop(game.currentPlayer ? player1 : player2, game.shop);
     }
 
+    private void UpdateData(Game game)
+    {
+        InitiateData(game);
+        foreach (var structure in game.structures)
+            UpdateStructureAttribute(structure);
+        if (game.currentPlayer)
+            foreach (var character in game.player1.characters)
+                UpdateCharacterAttribute(character, false);
+        else
+            foreach (var character in game.player2.characters)
+                UpdateCharacterAttribute(character, false);
+    }
+
     private void UpdateCharacterAttribute(Model.Character character, bool flag)
     {
         if (character.hp <= 0)
         {
-            _characters[character.x * MapSize + character.y] = null;
+            characters[character.x * MapSize + character.y] = null;
             return;
         }
 
-        if (_characters[character.x * MapSize + character.y] == null)
+        if (characters[character.x * MapSize + character.y] == null)
         {
-            _characters[character.x * MapSize + character.y] = new Character();
+            characters[character.x * MapSize + character.y] = new Character();
         }
 
 
-        _characters[character.x * MapSize + character.y].id = character.id;
-        _characters[character.x * MapSize + character.y].name = character.name;
-        _characters[character.x * MapSize + character.y].characterClass = character.characterClass;
-        _characters[character.x * MapSize + character.y].actionRange = character.actionRange;
-        _characters[character.x * MapSize + character.y].actionState = character.actionState;
-        _characters[character.x * MapSize + character.y].attack = character.attack;
-        _characters[character.x * MapSize + character.y].defense = character.defense;
-        _characters[character.x * MapSize + character.y].hp = character.hp;
-        _characters[character.x * MapSize + character.y].level = character.level;
-        _characters[character.x * MapSize + character.y].equipment = character.equipment;
-        _characters[character.x * MapSize + character.y].mount = character.mount;
+        characters[character.x * MapSize + character.y].id = character.id;
+        characters[character.x * MapSize + character.y].name = character.name;
+        characters[character.x * MapSize + character.y].characterClass = character.characterClass;
+        characters[character.x * MapSize + character.y].actionRange = character.actionRange;
+        characters[character.x * MapSize + character.y].actionState = character.actionState;
+        characters[character.x * MapSize + character.y].attack = character.attack;
+        characters[character.x * MapSize + character.y].defense = character.defense;
+        characters[character.x * MapSize + character.y].hp = character.hp;
+        characters[character.x * MapSize + character.y].level = character.level;
+        characters[character.x * MapSize + character.y].equipment = character.equipment;
+        characters[character.x * MapSize + character.y].mount = character.mount;
         if (flag)
         {
-            _characters[character.x * MapSize + character.y].player = currentPlayer;
+            characters[character.x * MapSize + character.y].player = currentPlayer;
         }
     }
 
     private void SetCharacter(Model.Character character1, Model.Character character2)
     {
         UpdateCharacterAttribute(character1, false);
-        _characters[character1.x * MapSize + character1.y].player = player1;
+        characters[character1.x * MapSize + character1.y].player = player1;
         UpdateCharacterAttribute(character2, false);
-        _characters[character2.x * MapSize + character2.y].player = player2;
+        characters[character2.x * MapSize + character2.y].player = player2;
     }
 
     private void UpdateStructureAttribute(Model.Structure structure)
     {
-        if (_structures[structure.x * MapSize + structure.y] == null)
+        if (structures[structure.x * MapSize + structure.y] == null)
         {
-            _structures[structure.x * MapSize + structure.y] = new Structure();
+            structures[structure.x * MapSize + structure.y] = new Structure();
         }
 
-        _structures[structure.x * MapSize + structure.y].id = structure.id;
-        _structures[structure.x * MapSize + structure.y].structureClass = structure.structureClass;
-        _structures[structure.x * MapSize + structure.y].level = structure.level;
-        _structures[structure.x * MapSize + structure.y].hp = structure.hp;
-        _structures[structure.x * MapSize + structure.y].remainingRound = structure.remainingRound;
-        _structures[structure.x * MapSize + structure.y].value = structure.value;
+        structures[structure.x * MapSize + structure.y].id = structure.id;
+        structures[structure.x * MapSize + structure.y].structureClass = structure.structureClass;
+        structures[structure.x * MapSize + structure.y].level = structure.level;
+        structures[structure.x * MapSize + structure.y].hp = structure.hp;
+        structures[structure.x * MapSize + structure.y].remainingRound = structure.remainingRound;
+        structures[structure.x * MapSize + structure.y].value = structure.value;
         if (structure.characters == null)
         {
             return;
         }
 
-        _structures[structure.x * MapSize + structure.y].characters = new Character[structure.characters.Length];
+        structures[structure.x * MapSize + structure.y].characters = new Character[structure.characters.Length];
         for (var i = 0; i < structure.characters.Length; i++)
         {
-            _structures[structure.x * MapSize + structure.y].characters[i] = new Character();
-            _structures[structure.x * MapSize + structure.y].characters[i].id = structure.characters[i].id;
-            _structures[structure.x * MapSize + structure.y].characters[i].name = structure.characters[i].name;
-            _structures[structure.x * MapSize + structure.y].characters[i].actionRange =
+            structures[structure.x * MapSize + structure.y].characters[i] = new Character();
+            structures[structure.x * MapSize + structure.y].characters[i].id = structure.characters[i].id;
+            structures[structure.x * MapSize + structure.y].characters[i].name = structure.characters[i].name;
+            structures[structure.x * MapSize + structure.y].characters[i].actionRange =
                 structure.characters[i].actionRange;
-            _structures[structure.x * MapSize + structure.y].characters[i].attack = structure.characters[i].attack;
-            _structures[structure.x * MapSize + structure.y].characters[i].defense = structure.characters[i].defense;
-            _structures[structure.x * MapSize + structure.y].characters[i].hp = structure.characters[i].hp;
-            _structures[structure.x * MapSize + structure.y].characters[i].level = structure.characters[i].level;
+            structures[structure.x * MapSize + structure.y].characters[i].attack = structure.characters[i].attack;
+            structures[structure.x * MapSize + structure.y].characters[i].defense = structure.characters[i].defense;
+            structures[structure.x * MapSize + structure.y].characters[i].hp = structure.characters[i].hp;
+            structures[structure.x * MapSize + structure.y].characters[i].level = structure.characters[i].level;
         }
     }
 
     private void UpdateStructurePlayer(Model.Structure structure)
     {
-        if (_structures[structure.x * MapSize + structure.y] == null) return;
-        _structures[structure.x * MapSize + structure.y].player = currentPlayer;
+        if (structures[structure.x * MapSize + structure.y] == null) return;
+        structures[structure.x * MapSize + structure.y].player = currentPlayer;
     }
 
     private void SetStructure(Model.Structure[] structure, Model.Structure structure1, Model.Structure structure2)
@@ -776,8 +785,8 @@ public class DataManager : MonoBehaviour
 
         UpdateStructureAttribute(structure1);
         UpdateStructureAttribute(structure2);
-        _structures[structure1.x * MapSize + structure1.y].player = player1;
-        _structures[structure2.x * MapSize + structure2.y].player = player2;
+        structures[structure1.x * MapSize + structure1.y].player = player1;
+        structures[structure2.x * MapSize + structure2.y].player = player2;
     }
 
     private void SetPlayer(Player destinationPlayer, Model.Player sourcePlayer)

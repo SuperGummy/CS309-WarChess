@@ -5,7 +5,7 @@ public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
     private AsyncOperation _asyncOperation = null;
-    private static string[] scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "shop"};
+    private static readonly string[] Scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "Shop", "Upgrade Building", "Equips"};
     // Start is called before the first frame update
 
     private void Awake()
@@ -32,51 +32,71 @@ public class SceneController : MonoBehaviour
 
     public void LoadBackPack()
     {
-       SceneManager.LoadSceneAsync(scene[0], LoadSceneMode.Additive);
+       SceneManager.LoadSceneAsync(Scene[0], LoadSceneMode.Additive);
     }
 
     public void UnloadBackPack()
     {
-        SceneManager.UnloadSceneAsync(scene[0]);
+        SceneManager.UnloadSceneAsync(Scene[0]);
     }
     
     public void LoadCamp()
     {
-        SceneManager.LoadSceneAsync(scene[1], LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(Scene[1], LoadSceneMode.Additive);
     }
 
     public void UnloadCamp()
     {
-        SceneManager.UnloadSceneAsync(scene[1]);
+        SceneManager.UnloadSceneAsync(Scene[1]);
     }
     
     public void LoadRecruit()
     {
-        SceneManager.LoadSceneAsync(scene[2], LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(Scene[2], LoadSceneMode.Additive);
     }
 
     public void UnloadRecruit()
     {
-        SceneManager.UnloadSceneAsync(scene[2]);
+        SceneManager.UnloadSceneAsync(Scene[2]);
     }
     
     public void LoadTechTree()
     {
-        SceneManager.LoadSceneAsync(scene[3], LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(Scene[3], LoadSceneMode.Additive);
     }
 
     public void UnloadTechTree()
     {
-        SceneManager.UnloadSceneAsync(scene[3]);
+        SceneManager.UnloadSceneAsync(Scene[3]);
     }
 
     public void LoadShop()
     {
-        SceneManager.LoadSceneAsync(scene[4]);
+        SceneManager.LoadSceneAsync(Scene[4], LoadSceneMode.Additive);
     }
     
     public void UnloadShop()
     {
-        SceneManager.UnloadSceneAsync(scene[4]);
+        SceneManager.UnloadSceneAsync(Scene[4]);
+    }
+    
+    public void LoadUpgrade()
+    {
+        SceneManager.LoadSceneAsync(Scene[5], LoadSceneMode.Additive);
+    }
+    
+    public void UnloadUpgrade()
+    {
+        SceneManager.UnloadSceneAsync(Scene[5]);
+    }
+    
+    public void LoadEquip()
+    {
+        SceneManager.LoadSceneAsync(Scene[6], LoadSceneMode.Additive);
+    }
+    
+    public void UnloadEquip()
+    {
+        SceneManager.UnloadSceneAsync(Scene[6]);
     }
 }
