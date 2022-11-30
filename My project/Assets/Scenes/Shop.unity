@@ -282,13 +282,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1507079121}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1507079125}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: CloseShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6212,6 +6212,7 @@ MonoBehaviour:
   - {fileID: 2109525208}
   - {fileID: 1212579126}
   - {fileID: 1921660715}
+  closeBtn: {fileID: 0}
 --- !u!224 &1509061536 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
