@@ -1,28 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 using static EquipManager;
 public class EquipConfirm : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void removeEquip()
-    {
-        
-    }
     public void yesClicked()
     {
-        removeEquip();
+        equipManager.confirmed = true;
+        equipManager.confirmedEquip();
         //changeEquip();
+    }
+
+    public void noClicked()
+    {
+        equipManager.confirmed = false;
     }
 }

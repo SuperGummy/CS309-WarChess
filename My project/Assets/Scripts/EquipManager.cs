@@ -10,7 +10,8 @@ public class EquipManager : MonoBehaviour
     public Equipment equipment;
     public Mount mount;
     public int curTy, curId;
-    public equipScript[] equips, mounts, items; 
+    public equipScript[] equips, mounts, items;
+    public bool confirmed;
     public static EquipManager equipManager;
     
     void Start()
@@ -21,28 +22,42 @@ public class EquipManager : MonoBehaviour
     public void loadCharacter()
     {
         //load character;
-        //equipment = ch.equipment;
-        //mount = ch.mount;
-        equipment = new Equipment();
-        mount = new Mount();
-
+        equipment = ch.equipment;
+        mount = ch.mount;
+        //equipment = new Equipment();
+        //mount = new Mount();
+        //TODO: load data 
         for (int i = 0; i < equips.Length; i++)
         {
-            equips[i].id = i;
-            equips[i].ty = 0;
+            equips[i].number = 0;
+            for (int j = 0; j < DataManager.Instance.currentPlayer.equipments.Length; j++)
+            {
+                if (DataManager.Instance.currentPlayer.equipments[j].name == equips[i].name) equips[i].number++;
+            }
         }
-
         for (int i = 0; i < mounts.Length; i++)
         {
-            mounts[i].id = i;
-            mounts[i].ty = 1;
+            mounts[i].number = 0;
+            for (int j = 0; j < DataManager.Instance.currentPlayer.mounts.Length; j++)
+            {
+                if (DataManager.Instance.currentPlayer.mounts[j].name == mounts[i].name) mounts[i].number++;
+            }
         }
-
-        for (int i = 1; i < items.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
-            items[i].id = i;
-            items[i].ty = 2;
+            items[i].number = 0;
+            for (int j = 0; j < DataManager.Instance.currentPlayer.items.Length; j++)
+            {
+                if (DataManager.Instance.currentPlayer.items[j].name == items[i].name) items[i].number++;
+            }
         }
+    }
+
+    public void confirmedEquip()
+    {
+        if(curTy==0) equips[curId].confirmedEquip();
+        if(curTy==1) mounts[curId].confirmedEquip();
+        if(curTy==2) items[curId].confirmedEquip();
     }
     // Update is called once per frame
     void Update()
