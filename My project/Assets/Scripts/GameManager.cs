@@ -209,6 +209,14 @@ public class GameManager : MonoBehaviour
         SceneController.Instance.UnloadTechTree();
         EnableBackground();
     }
+    
+    public void OpenEquip()
+    {
+        if (func) return;
+        func = true;
+        SceneController.Instance.LoadEquip();
+        DisableBackground();
+    }
 
     public void OpenUpgrade()
     {

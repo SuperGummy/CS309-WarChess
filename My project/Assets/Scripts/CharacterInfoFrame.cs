@@ -16,11 +16,14 @@ public class CharacterInfoFrame : MonoBehaviour
     public TextMeshProUGUI actionRange;
     public Image equipment;
     public Image mount;
+    public Button equip;
+    public Button discharge;
     private Vector3Int _position;
 
     private void OnEnable()
     {
         RenderData(_position);
+        equip.onClick.AddListener(GameManager.Instance.OpenEquip);
     }
 
     public void Inform(Vector3Int position)
