@@ -201,6 +201,22 @@ public class GameManager : MonoBehaviour
         enableBackground();
     }
 
+    public void OpenUpgrade()
+    {
+        if (func) return;
+        func = true;
+        SceneController.Instance.LoadUpgrade();
+        disableBackground();
+    }
+
+    public void CloseUpgrade()
+    {
+        if (!func) return;
+        func = false;
+        SceneController.Instance.UnloadUpgrade();
+        enableBackground();
+    }
+
     public void OpenCamp()
     {
         if (func) return;
@@ -429,8 +445,9 @@ public class GameManager : MonoBehaviour
     public async void UpgradeStructure(int type = 0)
     {
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
-
-        //render    may change structure
+        var structure = DataManager.Instance.GetStructureByPosition(_previousPosition);
+        GridController.Instance.SetStructure(_previousPosition, structure.structureClass,
+            DataManager.Instance.CheckStructureSide(structure) == -1 ? "blue" : "red");
     }
 
     private bool CheckAccessible(Vector3Int position)

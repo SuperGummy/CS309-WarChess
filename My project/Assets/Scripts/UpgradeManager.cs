@@ -7,6 +7,7 @@ public class UpgradeManager: MonoBehaviour
 {
     public Button[] upgradeBtn;
     public GameObject upgradeFrame;
+    public Button closeButton;
 
     public void Start()
     {
@@ -15,6 +16,7 @@ public class UpgradeManager: MonoBehaviour
         {
             btn.onClick.AddListener(delegate { OnClickUpgrade(btn); });
         }
+        closeButton.onClick.AddListener(GameManager.Instance.CloseUpgrade);
     }
 
     public void OnClickUpgrade(Button btn)
@@ -36,7 +38,7 @@ public class UpgradeManager: MonoBehaviour
         }
         
         upgradeFrame.SetActive(false);
-        
+        closeButton.onClick.Invoke();
         GameManager.Instance.UpgradeStructure(type);
     }
 }

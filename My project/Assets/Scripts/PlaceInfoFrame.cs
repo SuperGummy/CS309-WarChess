@@ -47,16 +47,23 @@ public class PlaceInfoFrame : MonoBehaviour
                 function.onClick.AddListener(GameManager.Instance.OpenCamp);
                 break;
             case StructureClass.MARKET:
-                function.GetComponentInChildren<TextMeshProUGUI>().text = "trade";
-                function.onClick.AddListener(GameManager.Instance.OpenShop);
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "earn";
                 break;
             case StructureClass.INSTITUTE:
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
                 function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
                 break;
             case StructureClass.VILLAGE:
-                function.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
-                function.interactable = false;
+                if (side == "middle")
+                {
+                    function.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
+                    function.interactable = false;
+                }
+                else
+                {
+                    function.GetComponentInChildren<TextMeshProUGUI>().text = "evolve";
+                    function.onClick.AddListener(GameManager.Instance.OpenUpgrade);
+                }
                 break;
         }
     }
