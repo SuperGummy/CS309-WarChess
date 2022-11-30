@@ -152,12 +152,21 @@ public class GameManager : MonoBehaviour
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
+    public async void NextRound()
+    {
+        if (nextRound) return;
+        nextRound = true;
+        await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        nextRound = false;
+    }
+
     public void OpenBackPack()
     {
         if (backpack) return;
         backpack = true;
         SceneController.Instance.LoadBackPack();
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseBackPack()
@@ -165,7 +174,7 @@ public class GameManager : MonoBehaviour
         if (!backpack) return;
         backpack = false;
         SceneController.Instance.UnloadBackPack();
-        enableBackground();
+        EnableBackground();
     }
 
     public void OpenShop()
@@ -173,7 +182,7 @@ public class GameManager : MonoBehaviour
         if (func) return;
         func = true;
         SceneController.Instance.LoadShop();
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseShop()
@@ -181,7 +190,7 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadShop();
-        enableBackground();
+        EnableBackground();
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
     }
 
@@ -190,7 +199,7 @@ public class GameManager : MonoBehaviour
         if (func) return;
         func = true;
         SceneController.Instance.LoadTechTree();
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseTechnologies()
@@ -198,7 +207,7 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadTechTree();
-        enableBackground();
+        EnableBackground();
     }
 
     public void OpenUpgrade()
@@ -206,7 +215,7 @@ public class GameManager : MonoBehaviour
         if (func) return;
         func = true;
         SceneController.Instance.LoadUpgrade();
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseUpgrade()
@@ -214,7 +223,7 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadUpgrade();
-        enableBackground();
+        EnableBackground();
     }
 
     public void OpenCamp()
@@ -223,7 +232,7 @@ public class GameManager : MonoBehaviour
         func = true;
         CampManager.position = _previousPosition;
         SceneController.Instance.LoadCamp();
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseCamp()
@@ -231,7 +240,7 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadCamp();
-        enableBackground();
+        EnableBackground();
     }
 
     public void OpenRecruit()
@@ -242,7 +251,7 @@ public class GameManager : MonoBehaviour
         GetComponent<RecruitManager>().Inform(_previousPosition, _characterAvailablePosition != null);
         SceneController.Instance.LoadRecruit();
         placeInfoFrame.SetActive(false);
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseRecruit()
@@ -250,7 +259,7 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadRecruit();
-        enableBackground();
+        EnableBackground();
     }
 
     public void ShowCharacterInfo()
@@ -258,12 +267,13 @@ public class GameManager : MonoBehaviour
         if (!characterInfo) return;
         characterInfoFrame.GetComponent<CharacterInfoFrame>().Inform(_previousPosition);
         characterInfoFrame.SetActive(true);
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseCharacterInfo()
     {
-        enableBackground();
+        characterInfoFrame.SetActive(false);
+        EnableBackground();
     }
 
     public void ShowStructureInfo()
@@ -271,15 +281,16 @@ public class GameManager : MonoBehaviour
         if (!structureInfo) return;
         placeInfoFrame.GetComponent<PlaceInfoFrame>().Inform(_previousPosition);
         placeInfoFrame.SetActive(true);
-        disableBackground();
+        DisableBackground();
     }
 
     public void CloseStructureInfo()
     {
-        enableBackground();
+        placeInfoFrame.SetActive(false);
+        EnableBackground();
     }
 
-    private void enableBackground()
+    private void EnableBackground()
     {
         GridController.Instance.gridEnable = true;
         ShowCharacterInfoButton(_previousPosition);
@@ -288,7 +299,7 @@ public class GameManager : MonoBehaviour
         backpackButton.enabled = true;
     }
 
-    private void disableBackground()
+    private void DisableBackground()
     {
         GridController.Instance.gridEnable = false;
         CloseCharacterInfoButton();
