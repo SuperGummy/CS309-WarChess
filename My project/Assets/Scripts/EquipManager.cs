@@ -22,10 +22,10 @@ public class EquipManager : MonoBehaviour
     public void loadCharacter()
     {
         //load character;
-        //equipment = ch.equipment;
-        //mount = ch.mount;
-        equipment = new Equipment();
-        mount = new Mount();
+        equipment = ch.equipment;
+        mount = ch.mount;
+        //equipment = new Equipment();
+        //mount = new Mount();
         //TODO: load data 
         for (int i = 0; i < equips.Length; i++)
         {

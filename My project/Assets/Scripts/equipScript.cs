@@ -85,10 +85,10 @@ public class equipScript : MonoBehaviour
     }
     public void equip()
     {
-//        equipManager.curTy = ty;
-//        equipManager.curId = id;
-        confirmationPop();
- /*       if (equipManager.equipment.name =="")
+        equipManager.curTy = ty;
+        equipManager.curId = id;
+        //confirmationPop();
+        if (equipManager.equipment.name =="")
         {
             Debug.Log("null");
             //confirmationPop();
@@ -98,7 +98,7 @@ public class equipScript : MonoBehaviour
         {
             Debug.Log("not null");
             confirmationPop();
-        }*/
+        }
     }
 
     public Equipment getEquipment()

@@ -8,7 +8,7 @@ public class EquipConfirm : MonoBehaviour
     public void yesClicked()
     {
         equipManager.confirmed = true;
-        
+        equipManager.confirmedEquip();
         //changeEquip();
     }
 
