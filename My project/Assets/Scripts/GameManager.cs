@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviour
         SceneController.Instance.UnloadTechTree();
         EnableBackground();
     }
-    
+
     public void OpenEquip()
     {
         if (func) return;
@@ -256,7 +256,9 @@ public class GameManager : MonoBehaviour
         if (func) return;
         func = true;
         _characterAvailablePosition = GetEmptyPosition(_previousPosition);
-        GetComponent<RecruitManager>().Inform(_previousPosition, _characterAvailablePosition != null);
+        // GetComponent<RecruitManager>().Inform(_previousPosition, _characterAvailablePosition != null);
+        RecruitManager.Position = _previousPosition;
+        RecruitManager.Place = _characterAvailablePosition != null;
         SceneController.Instance.LoadRecruit();
         placeInfoFrame.SetActive(false);
         DisableBackground();
@@ -812,7 +814,8 @@ public class GameManager : MonoBehaviour
     private List<Vector3Int> GetEmptyPosition(Vector3Int position)
     {
         var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure?.player?.id != DataManager.Instance.currentPlayer.id) return default;
+        if (structure?.player == null || structure.player.id != DataManager.Instance.currentPlayer.id)
+            return default;
 
         var res = new List<Vector3Int>();
         var i = position.x;
