@@ -779,7 +779,7 @@ public class DataManager : MonoBehaviour
         foreach (var s in structure)
         {
             UpdateStructureAttribute(s);
-            GridController.Instance.AddStructure(new Vector3Int(s.x - 8, s.y - 8, 0),
+            GridController.Instance.AddVillageAndRelic(new Vector3Int(s.x - 8, s.y - 8, 0),
                 s.structureClass == StructureClass.VILLAGE ? 0 : 1);
         }
 
@@ -787,6 +787,8 @@ public class DataManager : MonoBehaviour
         UpdateStructureAttribute(structure2);
         structures[structure1.x * MapSize + structure1.y].player = player1;
         structures[structure2.x * MapSize + structure2.y].player = player2;
+        GridController.Instance.SetStructure(new Vector3Int(structure1.x, structure1.y, 0));
+        GridController.Instance.SetStructure(new Vector3Int(structure2.x, structure2.y, 0));
     }
 
     private void SetPlayer(Player destinationPlayer, Model.Player sourcePlayer)

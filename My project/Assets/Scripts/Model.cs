@@ -94,6 +94,7 @@ namespace Model
 
     public enum ItemClass
     {
+        BASIC,
         BEER,
         POTION,
         FISH,
@@ -113,6 +114,7 @@ namespace Model
 
     public enum MountClass
     {
+        BASIC,
         FOX,
         HORSE,
         ELEPHANT,
@@ -133,6 +135,7 @@ namespace Model
     [Serializable]
     public enum EquipmentClass
     {
+        BASIC,
         SWORD,
         ARROW,
         CANNON,
@@ -156,7 +159,7 @@ namespace Model
     [Serializable]
     public enum StructureClass
     {
-        VILLAGE,
+        VILLAGE = 1,
         CAMP,
         MARKET,
         INSTITUTE,

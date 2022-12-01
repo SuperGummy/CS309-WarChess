@@ -11,7 +11,11 @@ using Random = System.Random;
 
 public enum AnimatedTextType
 {
-    HEALTH, STRENGTH, DAMAGE, LEVEL_UP, CONQUER
+    HEALTH,
+    STRENGTH,
+    DAMAGE,
+    LEVEL_UP,
+    CONQUER
 }
 
 public class GridController : MonoBehaviour
@@ -102,7 +106,7 @@ public class GridController : MonoBehaviour
         }
     }
 
-    public void AddStructure(Vector3Int position, int type)
+    public void AddVillageAndRelic(Vector3Int position, int type)
     {
         var random = new Random();
         if (type == 0)
@@ -111,21 +115,31 @@ public class GridController : MonoBehaviour
             buildingMap.SetTile(position, random.Next(2) == 0 ? relic1 : relic2);
     }
 
-    public void SetStructure(Vector3Int position, StructureClass structureClass, string side)
+    public void SetStructure(Vector3Int position)
     {
-        switch (structureClass)
+        var structure = DataManager.Instance.GetStructureByPosition(position);
+        if (structure == null) return;
+        string side;
+        if (DataManager.Instance.CheckStructureSide(structure) == -1)
+            side = "blue";
+        else if (DataManager.Instance.CheckStructureSide(structure) == 1)
+            side = "red";
+        else
+            side = "middle";
+        var newPosition = new Vector3Int(position.x - 8, position.y - 8, 0);
+        switch (structure.structureClass)
         {
             case StructureClass.CAMP:
-                buildingMap.SetTile(position, side == "blue" ? blueCamp : redCamp);
+                buildingMap.SetTile(newPosition, side == "blue" ? blueCamp : redCamp);
                 break;
             case StructureClass.MARKET:
-                buildingMap.SetTile(position, side == "blue" ? blueMarket : redMarket);
+                buildingMap.SetTile(newPosition, side == "blue" ? blueMarket : redMarket);
                 break;
             case StructureClass.INSTITUTE:
-                buildingMap.SetTile(position, side == "blue" ? blueInstitute : redInstitute);
+                buildingMap.SetTile(newPosition, side == "blue" ? blueInstitute : redInstitute);
                 break;
             case StructureClass.VILLAGE:
-                buildingMap.SetTile(position, side == "blue" ? blueVillage : redVillage);
+                buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : redVillage);
                 break;
             default:
                 Tile tile = null;
@@ -133,7 +147,7 @@ public class GridController : MonoBehaviour
                     tile = side == "blue" ? blueLeftCastle : redLeftCastle;
                 if (position.x == DataManager.MapSize - 1 && position.y == 0)
                     tile = side == "blue" ? blueRightCastle : redRightCastle;
-                buildingMap.SetTile(position, tile);
+                buildingMap.SetTile(newPosition, tile);
                 break;
         }
     }
@@ -203,7 +217,7 @@ public class GridController : MonoBehaviour
         var stringBuilder = "-" + damage;
         CreateText(mapPosition, stringBuilder, AnimatedTextType.DAMAGE);
     }
-    
+
     public void ShowCharacterAddHealthText(Vector3Int position, int health)
     {
         var mapPosition = GetMapPosition(position);
@@ -211,7 +225,7 @@ public class GridController : MonoBehaviour
         var stringBuilder = "+" + health;
         CreateText(mapPosition, stringBuilder, AnimatedTextType.HEALTH);
     }
-    
+
     public void ShowCharacterAddStrengthText(Vector3Int position, int strength)
     {
         var mapPosition = GetMapPosition(position);
@@ -219,7 +233,7 @@ public class GridController : MonoBehaviour
         var stringBuilder = "+" + strength;
         CreateText(mapPosition, stringBuilder, AnimatedTextType.STRENGTH);
     }
-    
+
     public void ShowConquerText(Vector3Int position)
     {
         var mapPosition = GetMapPosition(position);
@@ -245,7 +259,7 @@ public class GridController : MonoBehaviour
         //character.Concrete(CharacterClass.SCHOLAR, "blue");
         _characters[arrayPosition] = character;
     }
-    
+
     public void CreateText(Vector3 position, String text, AnimatedTextType type)
     {
         var animatedTextObject = Instantiate(animatedTextPrefab, position, Quaternion.identity);
@@ -271,6 +285,5 @@ public class GridController : MonoBehaviour
                 animatedText.color = Color.red;
                 break;
         }
-        
     }
 }

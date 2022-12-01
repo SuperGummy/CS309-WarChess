@@ -16,12 +16,12 @@ public class RecruitManager : MonoBehaviour
     public GameObject noPlace;
     public Button[] nextBtn;
     private int _id;
-    private Vector3Int _pos;
+    public static Vector3Int Position;
     private Character[] _characters;
     public GameObject[] members;
     public Button[] recruitBtn;
     public Button[] closeBtn;
-    private bool _place;
+    public static bool Place;
     private Button _chosenBtn;
 
 
@@ -77,13 +77,6 @@ public class RecruitManager : MonoBehaviour
         choose.SetActive(false);
         
     }
-    
-    // Get info about characters by structure position
-    public void Inform(Vector3Int pos, bool place)
-    {
-        _pos = pos;
-        _place = place;
-    }
 
     void RenderInitial(Vector3Int pos)
     {
@@ -127,7 +120,7 @@ public class RecruitManager : MonoBehaviour
         // _pos = new Vector3Int(1, 1, 0);
         // nextBtn[2].enabled = false;
         
-        RenderInitial(_pos);
+        RenderInitial(Position);
         // _place = false;
     }
 
@@ -139,7 +132,7 @@ public class RecruitManager : MonoBehaviour
         {
             btn.onClick.AddListener(OnClickClose);
         }
-        if (_place)
+        if (Place)
         {
             confirm.SetActive(true);
             choose.SetActive(false);

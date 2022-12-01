@@ -256,7 +256,6 @@ public class GameManager : MonoBehaviour
         if (func) return;
         func = true;
         _characterAvailablePosition = GetEmptyPosition(_previousPosition);
-        // GetComponent<RecruitManager>().Inform(_previousPosition, _characterAvailablePosition != null);
         RecruitManager.Position = _previousPosition;
         RecruitManager.Place = _characterAvailablePosition != null;
         SceneController.Instance.LoadRecruit();
@@ -363,11 +362,7 @@ public class GameManager : MonoBehaviour
             if (DataManager.Instance.GetStructureByPosition(positionAttacked).player?.id ==
                 DataManager.Instance.currentPlayer.id)
             {
-                var structureAttacked = DataManager.Instance.GetStructureByPosition(positionAttacked);
-                if (DataManager.Instance.CheckStructureSide(structureAttacked) == -1)
-                    GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "blue");
-                else
-                    GridController.Instance.SetStructure(positionAttacked, structureAttacked.structureClass, "red");
+                GridController.Instance.SetStructure(positionAttacked);
                 GridController.Instance.ShowConquerText(positionAttacked);
             }
         }
@@ -466,9 +461,8 @@ public class GameManager : MonoBehaviour
     public async void UpgradeStructure(int type = 0)
     {
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
-        var structure = DataManager.Instance.GetStructureByPosition(_previousPosition);
-        GridController.Instance.SetStructure(_previousPosition, structure.structureClass,
-            DataManager.Instance.CheckStructureSide(structure) == -1 ? "blue" : "red");
+        GridController.Instance.SetStructure(_previousPosition);
+        placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
     }
 
     private bool CheckAccessible(Vector3Int position)
