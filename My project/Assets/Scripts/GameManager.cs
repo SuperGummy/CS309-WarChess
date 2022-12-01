@@ -465,7 +465,7 @@ public class GameManager : MonoBehaviour
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
     }
 
-    private bool CheckAccessible(Vector3Int position)
+    private bool CheckAccessible(Vector3Int position,bool type)
     {
         var x = position.x;
         var y = position.y;
@@ -480,6 +480,12 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
+        var pos = new Vector3Int(position.y, position.x);
+        if (DataManager.Instance.GetMapByPosition(pos) == 1 ||
+                              (DataManager.Instance.GetMapByPosition(pos) == 2 && (!type)))
+        {
+            return false;
+        }
         if (DataManager.Instance.GetCharacterByPosition(position) != null)
         {
             return false;
@@ -525,7 +531,8 @@ public class GameManager : MonoBehaviour
     private List<Vector3Int> GetActionPath(Vector3Int position, Vector3Int target)
     {
         var character = DataManager.Instance.GetCharacterByPosition(position);
-        if (!CheckAccessible(target))
+        bool type = character.characterClass == CharacterClass.EXPLORER;
+        if (!CheckAccessible(target,type))
         {
             return default;
         }
@@ -551,7 +558,7 @@ public class GameManager : MonoBehaviour
                 var op = 1;
                 if (j % 2 == 0) op = -1;
                 var temp = new Vector3Int(i + op, j + 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + op, j + 1] == 0)
                     {
@@ -560,7 +567,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + 1, j] == 0)
                     {
@@ -569,7 +576,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i + op, j - 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + op, j - 1] == 0)
                     {
@@ -578,7 +585,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i, j + 1] == 0)
                     {
@@ -587,7 +594,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i, j - 1] == 0)
                     {
@@ -596,7 +603,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i - 1, j] == 0)
                     {
@@ -619,7 +626,7 @@ public class GameManager : MonoBehaviour
             var op = 1;
             if (y % 2 == 0) op = -1;
             var temp = new Vector3Int(x + op, y + 1);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x + op, y + 1] == t)
                 {
@@ -631,7 +638,7 @@ public class GameManager : MonoBehaviour
             }
 
             temp = new Vector3Int(x + 1, y);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x + 1, y] == t)
                 {
@@ -642,7 +649,7 @@ public class GameManager : MonoBehaviour
             }
 
             temp = new Vector3Int(x + op, y - 1);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x + op, y - 1] == t)
                 {
@@ -654,7 +661,7 @@ public class GameManager : MonoBehaviour
             }
 
             temp = new Vector3Int(x, y + 1);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x, y + 1] == t)
                 {
@@ -665,7 +672,7 @@ public class GameManager : MonoBehaviour
             }
 
             temp = new Vector3Int(x, y - 1);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x, y - 1] == t)
                 {
@@ -676,7 +683,7 @@ public class GameManager : MonoBehaviour
             }
 
             temp = new Vector3Int(x - 1, y);
-            if (CheckAccessible(temp))
+            if (CheckAccessible(temp,type))
             {
                 if (dis[x - 1, y] == t)
                 {
@@ -703,7 +710,7 @@ public class GameManager : MonoBehaviour
         {
             return default;
         }
-
+        bool type = character.characterClass == CharacterClass.EXPLORER;
         if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
         {
             return default;
@@ -736,7 +743,7 @@ public class GameManager : MonoBehaviour
                 var op = 1;
                 if (j % 2 == 0) op = -1;
                 var temp = new Vector3Int(i + op, j + 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + op, j + 1] == 0)
                     {
@@ -745,7 +752,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + 1, j] == 0)
                     {
@@ -754,7 +761,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i + op, j - 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i + op, j - 1] == 0)
                     {
@@ -763,7 +770,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i, j + 1] == 0)
                     {
@@ -772,7 +779,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i, j - 1] == 0)
                     {
@@ -781,7 +788,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp))
+                if (CheckAccessible(temp,type))
                 {
                     if (dis[i - 1, j] == 0)
                     {
@@ -810,6 +817,7 @@ public class GameManager : MonoBehaviour
         var structure = DataManager.Instance.GetStructureByPosition(position);
         if (structure?.player == null || structure.player.id != DataManager.Instance.currentPlayer.id)
             return default;
+        var type = false;
 
         var res = new List<Vector3Int>();
         var i = position.x;
@@ -817,47 +825,47 @@ public class GameManager : MonoBehaviour
         var op = 1;
         if (j % 2 == 0) op = -1;
         var temp = new Vector3Int(i, j);
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i + op, j + 1);
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i + 1, j);
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i + op, j - 1);
 
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i, j + 1);
 
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i, j - 1);
 
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
 
         temp = new Vector3Int(i - 1, j);
 
-        if (CheckAccessible(temp))
+        if (CheckAccessible(temp,type))
         {
             res.Add(temp);
         }
