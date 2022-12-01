@@ -26,7 +26,7 @@ public class ShopManager : MonoBehaviour
             shopItemList.Add(new ShopItem());
             shopItemList[i].id = i;
         }
-        closeBtn.onClick.AddListener(CloseShop);
+//        closeBtn.onClick.AddListener(CloseShop);
         loadPanels();
         updateUI();
     }

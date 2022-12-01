@@ -624,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -9552,14 +9552,14 @@ MonoBehaviour:
   buildingMap: {fileID: 1125306398}
   movableMap: {fileID: 1539419382}
   hoverTile: {fileID: 11400000, guid: a1204487e13e6bb40a4b43a44b35fa5d, type: 2}
-  blueLeftCastle: {fileID: 0}
-  redLeftCastle: {fileID: 0}
-  blueRightCastle: {fileID: 0}
-  redRightCastle: {fileID: 0}
+  blueLeftCastle: {fileID: 11400000, guid: 68ca8a20b422c87458b3fffa21d59662, type: 2}
+  redLeftCastle: {fileID: 11400000, guid: d03ddbacf78a3dd4699feedef505227e, type: 2}
+  blueRightCastle: {fileID: 11400000, guid: 195ae520a530f054188dfff05bba3a59, type: 2}
+  redRightCastle: {fileID: 11400000, guid: cdf4fad0c00f2f3479915bf55174ae3e, type: 2}
   village1: {fileID: 11400000, guid: a1471f5d418fbbc4883f5678cc25922e, type: 2}
   village2: {fileID: 11400000, guid: 68951b092c1d33d4798a801e070e0e7a, type: 2}
-  blueVillage: {fileID: 0}
-  redVillage: {fileID: 0}
+  blueVillage: {fileID: 11400000, guid: 84b3e99339f4757448d641645b74894b, type: 2}
+  redVillage: {fileID: 11400000, guid: f66a3e68055d6e5438e6956ab9057334, type: 2}
   relic1: {fileID: 11400000, guid: 15ad7f52a28d8c846bd2b69bb54f9938, type: 2}
   relic2: {fileID: 11400000, guid: fc09e88204d3b1b4eb47d0ffc1f5bf3a, type: 2}
   blueCamp: {fileID: 11400000, guid: d66c2ab98b046b048a05932c5b2ed23c, type: 2}

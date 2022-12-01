@@ -1650,6 +1650,7 @@ MonoBehaviour:
   - {fileID: 133406252}
   - {fileID: 579690406}
   upgradeFrame: {fileID: 1562399888}
+  closeButton: {fileID: 764806566}
 --- !u!4 &1853937710
 Transform:
   m_ObjectHideFlags: 0

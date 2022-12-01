@@ -28,4 +28,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Camp.unity
     guid: f333be1792a469347b33c691b7310d5d
+  - enabled: 1
+    path: Assets/Scenes/Shop.unity
+    guid: 205d9bc5690b7c74b864b61d49640d1c
   m_configObjects: {}
