@@ -976,6 +976,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 946317715}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1060,6 +1064,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (1)
@@ -1799,6 +1807,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1880045307}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Cannon
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1883,10 +1895,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 24776abadd1cf6f438eb9d514bc0031a, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8050416362660048835, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 00131504b74d09cb5a7f6d424c6a59d7, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
 --- !u!1001 &531971993
@@ -2069,6 +2089,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 946317715}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2153,6 +2177,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (3)
@@ -3127,6 +3155,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1880045307}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3211,6 +3243,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2ee9fdea04b216b4ab8dbe2c5f5b74fa, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (4)
@@ -3337,6 +3373,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 946317715}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3421,6 +3461,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem
@@ -3596,6 +3640,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 816976270}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Horse
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3680,6 +3728,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 18c41f8dc5cb6574a995c84d7a360b54, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem
@@ -3693,6 +3745,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 946317715}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3777,6 +3833,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (4)
@@ -3983,7 +4043,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 59
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bd506abec339e3343912aab19f69f947, type: 2}
   m_sharedMaterial: {fileID: -186517934808929769, guid: bd506abec339e3343912aab19f69f947, type: 2}
@@ -4309,6 +4369,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1880045307}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Arrow
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4393,6 +4457,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 55de15a5d05916b489d7fa945ab4c872, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (3)
@@ -4519,6 +4587,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 816976270}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Horse
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4603,6 +4675,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 18c41f8dc5cb6574a995c84d7a360b54, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (1)
@@ -4810,6 +4886,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1880045307}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4894,10 +4974,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2ee9fdea04b216b4ab8dbe2c5f5b74fa, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8050416362660048835, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 00131504b74d09cb5a7f6d424c6a59d7, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
 --- !u!114 &1076768049 stripped
@@ -5053,6 +5141,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 816976270}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Horse
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5137,6 +5229,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 18c41f8dc5cb6574a995c84d7a360b54, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (2)
@@ -5522,6 +5618,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1880045307}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Helmet
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5606,6 +5706,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bf49c7cf6b0cca349a046c84b6b03f3e, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem
@@ -6015,7 +6119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   star: 0
-  tot: 0
   startext: {fileID: 949878892}
   shopItemList: []
   ShopTemplate0:
@@ -6202,6 +6305,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 946317715}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Apple
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6286,6 +6393,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (2)
@@ -7347,6 +7458,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 816976270}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Dragon
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7431,6 +7546,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a25d3be73e802f142a663d983ea43c55, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (4)
@@ -7884,6 +8003,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 816976270}
     m_Modifications:
+    - target: {fileID: 817094964006820073, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_text
+      value: Fox
+      objectReference: {fileID: 0}
     - target: {fileID: 1334114210319712299, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7968,6 +8091,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6338587889989908673, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 11d8cdc42cbf84249910aba0f8c9af8d, type: 3}
     - target: {fileID: 7990558782377820416, guid: c6d70b3f7c295e145b71ecb1832fb78d, type: 3}
       propertyPath: m_Name
       value: ShopItem (3)

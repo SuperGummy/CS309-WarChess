@@ -216,9 +216,18 @@ public class GameManager : MonoBehaviour
     {
         if (func) return;
         func = true;
+        EquipManager.position = _previousPosition;
         SceneController.Instance.LoadEquip();
         DisableBackground();
     }
+    public void CloseEquip()
+    {
+        if (!func) return;
+        func = false;
+        SceneController.Instance.UnloadEquip();
+    } 
+
+    
 
     public void OpenUpgrade()
     {

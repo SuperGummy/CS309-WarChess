@@ -62,12 +62,12 @@ public class SceneController : MonoBehaviour
     
     public void LoadTechTree()
     {
-        SceneManager.LoadSceneAsync(Scene[3], LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(Scene[6], LoadSceneMode.Additive);
     }
 
     public void UnloadTechTree()
     {
-        SceneManager.UnloadSceneAsync(Scene[3]);
+        SceneManager.UnloadSceneAsync(Scene[6]);
     }
 
     public void LoadShop()

@@ -29,6 +29,7 @@ public class equipScript : MonoBehaviour
     {
         if (ty == 0)
         {
+            //image = RenderManager.Instance.GetEquipmentImage();
             //name.text = DataManager.Instance.currentPlayer.equipments[id].name;
             //image
         }
@@ -125,18 +126,24 @@ public class equipScript : MonoBehaviour
     {
         if (ty == 0)
         {
+            GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,false);
+            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
+
             equipManager.ch.equipment = getEquipment();
             number--;
         }
 
         if (ty == 1)
         {
+            GameManager.Instance.ChangeEquipment(equipManager.ch.mount.id,false);
+            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
             equipManager.ch.mount = getMount();
             number--;
         }
 
         if (ty == 2)
         {
+            GameManager.Instance.UseItem(id);
             number--;
             //TODO: consume Item
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Skilltree : MonoBehaviour
@@ -15,6 +16,7 @@ public class Skilltree : MonoBehaviour
     public int[] SkillStars;
     public string[] SkillNames;
     public string[] SkillDescriptions;
+    public int[] techStatus;
     
     public List<Skill> skillList;
     public GameObject skillHolder;
@@ -24,14 +26,22 @@ public class Skilltree : MonoBehaviour
 
     public int stars;
 
+    public void CloseTechTree()
+    {
+        GameManager.Instance.CloseTechnologies();
+    }
     public void Start()
     {
-        stars = 30;
+        stars = 50;
+        //stars = (int)DataManager.Instance.currentPlayer.stars;
+        techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};
+        techStatus = DataManager.Instance._tech;
         SkillLevels = new int[11];
         SkillCaps = new[] {1, 1, 1, 1, 1, 1,1,1,1,1,1};
         SkillNames = new[] {"Life", "Horse", "Fish", "Sword", "Elephant", "Fox","Beer","Potion","Arrow","Shield","Cannon"};
         SkillRounds = new[] {0, 2, 2, 2, 3, 3,3,3,3,3,5};
         SkillStars = new[] {0, 4, 4, 4, 10, 10,10,10,10,10,20};
+        
         SkillDescriptions = new[]
         {
             "",

@@ -10,9 +10,8 @@ using UnityEngine.UI;
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager shopManager;
-    public int star,tot;
+    public int star;
     public TMP_Text startext;
-    public List<ShopItem> shopItemList;
     public ShopTemplate1[] ShopTemplate0,ShopTemplate1,ShopTemplate2;
     private void Awake() => shopManager = this;
     public Button closeBtn;
@@ -20,12 +19,12 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         star = getStar();
-        tot = getTot();
-        for (int i = 0; i < tot; i++)
+        //tot = getTot();
+        /*for (int i = 0; i < tot; i++)
         {
             shopItemList.Add(new ShopItem());
             shopItemList[i].id = i;
-        }
+        }*/
 //        closeBtn.onClick.AddListener(CloseShop);
         loadPanels();
         updateUI();
@@ -49,6 +48,7 @@ public class ShopManager : MonoBehaviour
         if (x == 0) return DataManager.Instance.currentPlayer.shop.equipments.Length;
         if (x == 1) return DataManager.Instance.currentPlayer.shop.mounts.Length;
         if (x == 2) return DataManager.Instance.currentPlayer.shop.items.Length;
+        Debug.Log("error");
          return 0;
     }
     public int getStar()
@@ -58,40 +58,47 @@ public class ShopManager : MonoBehaviour
     }
     public void updateUI()
     {
+        star = getStar();
         startext.text = $"{star}";
-        foreach (var shopItem in shopItemList) shopItem.update();
+        foreach (var shopItem in ShopTemplate0) shopItem.updateUI();
+        foreach (var shopItem in ShopTemplate1) shopItem.updateUI();
+        foreach (var shopItem in ShopTemplate2) shopItem.updateUI();
     }
 
     public void loadPanels()
     {
         int t = Math.Max(gettotal(0), Math.Max(gettotal(1), gettotal(2)));
-        Debug.Log(t);
-        for (int j = 0; j < Math.Max(gettotal(0), Math.Max(gettotal(1), gettotal(2))); j++)
+        Debug.Log("shopManager.loadpanel: total0="+gettotal(0));
+        for (int j = 0; j < gettotal(0); j++)
         {
-            {
-                Equipment a = DataManager.Instance.currentPlayer.equipments[j];
-                ShopTemplate0[j].titleText.text = a.name;
-                ShopTemplate0[j].costText.text = "7";
-                ShopTemplate0[j].id = a.id;
-                ShopTemplate0[j].ty = 0;
-                
-
-                {
-                    Mount b = DataManager.Instance.currentPlayer.mounts[j];
-                    ShopTemplate1[j].titleText.text = b.name;
-                    ShopTemplate1[j].costText.text = "7";
-                    ShopTemplate1[j].id = b.id;
-                    ShopTemplate1[j].ty = 1;
-                }
-
-                {
-                    var c = DataManager.Instance.currentPlayer.items[j];
-                    ShopTemplate2[j].titleText.text = c.name;
-                    ShopTemplate2[j].costText.text = "7";
-                    ShopTemplate2[j].id = c.id;
-                    ShopTemplate2[j].ty = 2;
-                }
-            }
+            Equipment a = DataManager.Instance.currentPlayer.shop.equipments[j];
+            Debug.Log("----------shop in equipment-----------"+a.name);
+            ShopTemplate0[j].titleText.text = a.name;
+            ShopTemplate0[j].costText.text = "7";
+            ShopTemplate0[j].id = a.id;
+            ShopTemplate0[j].name = a.name;
+            ShopTemplate0[j].ec = a.equipmentClass;
+            ShopTemplate0[j].ty = 0;
+        }
+        for (int j = 0; j <gettotal(1); j++)
+        {
+            Mount b = DataManager.Instance.currentPlayer.shop.mounts[j];
+            ShopTemplate1[j].titleText.text = b.name;
+            ShopTemplate1[j].costText.text = "7";
+            ShopTemplate1[j].id = b.id;
+            ShopTemplate1[j].name = b.name;
+            ShopTemplate1[j].mc = b.mountClass;
+            ShopTemplate1[j].ty = 1;
+        }
+        for (int j = 0; j < gettotal(2); j++)
+        {
+            var c = DataManager.Instance.currentPlayer.shop.items[j];
+            ShopTemplate2[j].titleText.text = c.name;
+            ShopTemplate2[j].costText.text = "7";
+            ShopTemplate2[j].id = c.id;
+            ShopTemplate2[j].name = c.name;
+            ShopTemplate2[j].ic = c.itemClass;
+            ShopTemplate2[j].ty = 2;
         }
 
         for (int j = gettotal(0); j < ShopTemplate0.Length; j++)
