@@ -45,6 +45,9 @@ public class RenderManager : MonoBehaviour
     
     [SerializeField] private Sprite healthIcon;
     [SerializeField] private Sprite strengthIcon;
+    [SerializeField] private Sprite trans32;
+    [SerializeField] private Sprite trans144;
+    [SerializeField] private Sprite empty32;
     
     public RuntimeAnimatorController scholarBlueController;
     public RuntimeAnimatorController scholarRedController;
@@ -144,5 +147,20 @@ public class RenderManager : MonoBehaviour
         route.RemoveAt(0);
         currentCharacter.SetDestinations(route);
         currentCharacter.SetSpeed(characterSpeed);
+    }
+    
+    public Sprite GetTrans32()
+    {
+        return trans32;
+    }
+    
+    public Sprite GetTrans144()
+    {
+        return trans144;
+    }
+    
+    public Sprite GetEmpty32()
+    {
+        return empty32;
     }
 }

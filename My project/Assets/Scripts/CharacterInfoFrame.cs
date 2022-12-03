@@ -41,10 +41,10 @@ public class CharacterInfoFrame : MonoBehaviour
         hp.text = character.hp.ToString();
         actionRange.text = character.actionRange.ToString();
         equipment.sprite = character.equipment == null
-            ? null
+            ? RenderManager.Instance.GetEmpty32()
             : RenderManager.Instance.GetEquipmentImage(character.equipment.equipmentClass);
         mount.sprite = character.mount == null
-            ? null
+            ? RenderManager.Instance.GetEmpty32()
             : RenderManager.Instance.GetMountImage(character.mount.mountClass);
         characterImage.sprite = RenderManager.Instance.GetCharacterImage(character.characterClass,
             character.player.id == DataManager.Instance.player1.id ? "blue" : "red");
