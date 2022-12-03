@@ -1,3 +1,4 @@
+using Audio;
 using UnityEngine;
 
 namespace Options
@@ -18,7 +19,9 @@ namespace Options
 
         public void SetFloat(float volume)
         {
+            volume = (75 + volume) / 80;
             Debug.Log("Current volume: " + volume);
+            AudioManager.Instance.ChangeVolume(volume);
         }
     }
 }

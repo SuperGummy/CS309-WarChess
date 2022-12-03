@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
+using Audio;
 using Cinemachine.Utility;
 using Model;
 using Unity.VisualScripting;
@@ -154,6 +155,7 @@ public class GameManager : MonoBehaviour
 
     public async void NextRound()
     {
+        AudioManager.Instance.Play(2);
         if (nextRound) return;
         nextRound = true;
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
@@ -366,6 +368,8 @@ public class GameManager : MonoBehaviour
                 GridController.Instance.ShowConquerText(positionAttacked);
             }
         }
+        
+        AudioManager.Instance.Play(1);
     }
 
     public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
