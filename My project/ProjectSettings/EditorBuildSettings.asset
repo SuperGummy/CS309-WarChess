@@ -32,6 +32,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Shop.unity
     guid: 205d9bc5690b7c74b864b61d49640d1c
   - enabled: 1
+    path: Assets/Scenes/Tech Tree.unity
+    guid: 157ee621268329542a5f9ffe5cb2743c
+  - enabled: 1
+    path: Assets/Scenes/Options.unity
+    guid: a7ad61805df19504f8c37414eb7fa42b
+  - enabled: 1
+    path: Assets/Scenes/Equips.unity
+    guid: dff75d26f911e99449578d441f2e8afe
+  - enabled: 1
     path: Assets/Scenes/Upgrade Building.unity
     guid: 49b5dd5edab6fbb4f8a68416581b358b
   m_configObjects: {}
