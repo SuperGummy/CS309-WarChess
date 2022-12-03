@@ -35,6 +35,8 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tile village2;
     [SerializeField] private Tile blueVillage;
     [SerializeField] private Tile redVillage;
+    [SerializeField] private Tile blueVillage2;
+    [SerializeField] private Tile redVillage2;
     [SerializeField] private Tile relic1;
     [SerializeField] private Tile relic2;
     [SerializeField] private Tile blueCamp;
@@ -139,7 +141,9 @@ public class GridController : MonoBehaviour
                 buildingMap.SetTile(newPosition, side == "blue" ? blueInstitute : redInstitute);
                 break;
             case StructureClass.VILLAGE:
-                buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : redVillage);
+                if(buildingMap.GetTile(newPosition) == village1)
+                    buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : redVillage);
+                else buildingMap.SetTile(newPosition, side == "blue" ? blueVillage2 : redVillage2);
                 break;
             default:
                 Tile tile = null;

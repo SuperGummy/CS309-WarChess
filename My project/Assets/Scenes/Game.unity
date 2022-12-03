@@ -10099,6 +10099,8 @@ MonoBehaviour:
   village2: {fileID: 11400000, guid: 68951b092c1d33d4798a801e070e0e7a, type: 2}
   blueVillage: {fileID: 11400000, guid: 84b3e99339f4757448d641645b74894b, type: 2}
   redVillage: {fileID: 11400000, guid: f66a3e68055d6e5438e6956ab9057334, type: 2}
+  blueVillage2: {fileID: 11400000, guid: 15ff35d98028fc34aa03537bc34f6f20, type: 2}
+  redVillage2: {fileID: 11400000, guid: 9354370b75f8343438aa6a474755d35c, type: 2}
   relic1: {fileID: 11400000, guid: 15ad7f52a28d8c846bd2b69bb54f9938, type: 2}
   relic2: {fileID: 11400000, guid: fc09e88204d3b1b4eb47d0ffc1f5bf3a, type: 2}
   blueCamp: {fileID: 11400000, guid: d66c2ab98b046b048a05932c5b2ed23c, type: 2}
