@@ -29,7 +29,7 @@ namespace BackPack
         void UpdateInfo()
         {
             _slotDictionary.Clear();
-            //var equipments = DataManager.Instance.currentPlayer.equipments;
+            equipments = DataManager.Instance.currentPlayer.equipments;
             int maxId = 0;
             for (int i = 0; i < equipments.Length; i++)
             {
@@ -48,7 +48,7 @@ namespace BackPack
                 }
             }
 
-            //var mounts = DataManager.Instance.currentPlayer.mounts;
+            mounts = DataManager.Instance.currentPlayer.mounts;
             for (int i = 0; i < mounts.Length; i++)
             {
                 string mountName = mounts[i].name;
@@ -66,7 +66,7 @@ namespace BackPack
                 }
             }
             
-            //var items = DataManager.Instance.currentPlayer.items;
+            items = DataManager.Instance.currentPlayer.items;
             for (int i = 0; i < items.Length; i++)
             {
                 string itemName = items[i].name;

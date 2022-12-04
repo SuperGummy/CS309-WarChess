@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class LoginMenu : MonoBehaviour
+public class OptionsCloseButton : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -16,8 +15,9 @@ public class LoginMenu : MonoBehaviour
     {
         
     }
-
-    public void Login()
+    
+    public void CloseOptions()
     {
+        GameManager.Instance.CloseOptions();
     }
 }

@@ -787,7 +787,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 321903732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5615d43c0655c6c498ed11f7e48f8870, type: 3}
+  m_Script: {fileID: 11500000, guid: cdf88cb22a571f44fa641a012af2bddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &464274786
@@ -892,7 +892,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 321903734}
+        m_TargetAssemblyTypeName: LoginManager, Assembly-CSharp
+        m_MethodName: GetPasswordInput
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1069,7 +1081,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 321903734}
+        m_TargetAssemblyTypeName: LoginManager, Assembly-CSharp
+        m_MethodName: GetUserNameInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1864,9 +1888,37 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 20.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 321903734}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickRegister
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoginManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7983014409973439390, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
       propertyPath: m_Name
-      value: Login (1)
+      value: Register
       objectReference: {fileID: 0}
     - target: {fileID: 7983014409973439391, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
       propertyPath: m_Pivot.x
@@ -2019,6 +2071,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 211271776}
     m_Modifications:
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 321903734}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickLogin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoginManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983014409973439384, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7983014409973439390, guid: 823fa6a08efe69e48a3f5466e3b8f3b1, type: 3}
       propertyPath: m_Name
       value: Login

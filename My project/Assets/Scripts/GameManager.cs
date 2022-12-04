@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public bool error;
     public bool backpack;
     public bool func;
+    public bool options;
     public bool recruit;
     public bool characterInfo;
     public bool structureInfo;
@@ -161,6 +162,22 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         nextRound = false;
+    }
+
+    public void OpenOptions()
+    {
+        if (options) return;
+        options = true;
+        SceneController.Instance.LoadOptions();
+        DisableBackground();
+    }
+
+    public void CloseOptions()
+    {
+        if (!options) return;
+        options = false;
+        SceneController.Instance.UnloadOptions();
+        EnableBackground();
     }
 
     public void OpenBackPack()
