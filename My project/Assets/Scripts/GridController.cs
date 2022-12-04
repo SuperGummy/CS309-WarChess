@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using Model;
 using TMPro;
 using UnityEngine;
@@ -97,6 +98,7 @@ public class GridController : MonoBehaviour
             Vector3Int mousePos = GetMousePosition();
             if (!mousePos.Equals(previousMousePos))
             {
+                AudioManager.Instance.Play(4);
                 interactiveMap.SetTile(previousMousePos, null); // Remove old hoverTile
                 if (Math.Abs(mousePos.x) <= 8 && Math.Abs(mousePos.y) <= 8)
                 {

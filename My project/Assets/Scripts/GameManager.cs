@@ -403,6 +403,7 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.MoveCharacter(position, newPosition);
         var path = GetActionPath(_previousPosition, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
+        AudioManager.Instance.Play(3);
     }
 
     public async void DismissCharacter(Vector3Int position)

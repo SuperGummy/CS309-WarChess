@@ -19,7 +19,7 @@ namespace Options
 
         public void SetFloat(float volume)
         {
-            volume = (80 + volume) / 80;
+            volume = (80 + volume) / 90;
             Debug.Log("Current volume: " + volume);
             AudioManager.Instance.ChangeVolume(volume);
         }

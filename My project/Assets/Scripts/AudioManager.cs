@@ -11,12 +11,14 @@ namespace Audio
         public AudioSource bgm;
         public AudioSource hit;
         public AudioSource clickBtn;
+        public AudioSource footstep;
+        public AudioSource gridMove;
         public static AudioManager Instance;
 
         public void Awake()
         {
             Instance = this;
-            bgm.volume = 0.9F;
+            bgm.volume = 0.8F;
         }
 
 
@@ -37,6 +39,10 @@ namespace Audio
                     break;
                 case 2: clickBtn.Stop();
                     break;
+                case 3: footstep.Stop();
+                    break;
+                case 4: gridMove.Stop();
+                    break;
                 default:
                     throw new Exception("No such audio");
             }
@@ -51,6 +57,10 @@ namespace Audio
                 case 1: hit.Play();
                     break;
                 case 2: clickBtn.Play();
+                    break;
+                case 3: footstep.Play();
+                    break;
+                case 4: gridMove.Play();
                     break;
                 default:
                     throw new Exception("No such audio");
