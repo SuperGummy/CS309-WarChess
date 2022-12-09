@@ -29,6 +29,7 @@ namespace API
         private const string BaseGame = BaseApi + "/" + "game";
         public const string Archive = BaseGame + "/" + "archive";
         public const string Play = BaseGame + "/" + "play";
+        public const string Back = BaseGame + "/" + "back";
 
         // player
         public const string Player = BaseApi + "/" + "player";
@@ -48,6 +49,7 @@ namespace API
 
         public static Task<HttpResponseMessage> GET(string url, Dictionary<string, string> param)
         {
+            var http = Client();
             if (param != null)
             {
                 url += "?";
@@ -57,13 +59,12 @@ namespace API
                 }
             }
 
-            return Client().GetAsync(url);
+            return http.GetAsync(url);
         }
 
         public static Task<HttpResponseMessage> POST(string url, Dictionary<string, string> param)
         {
             var http = Client();
-
             if (param != null)
             {
                 var keyValuePairs = new List<KeyValuePair<string, string>>();
@@ -77,11 +78,10 @@ namespace API
 
             return http.PostAsync(url, null);
         }
-        
+
         public static Task<HttpResponseMessage> PUT(string url, Dictionary<string, string> param)
         {
             var http = Client();
-
             if (param != null)
             {
                 var keyValuePairs = new List<KeyValuePair<string, string>>();
@@ -94,6 +94,21 @@ namespace API
             }
 
             return http.PutAsync(url, null);
+        }
+
+        public static Task<HttpResponseMessage> DELETE(string url, Dictionary<string, string> param)
+        {
+            var http = Client();
+            if (param != null)
+            {
+                url += "?";
+                foreach (var item in param)
+                {
+                    url += item.Key + "=" + item.Value + "&";
+                }
+            }
+
+            return http.DeleteAsync(url);
         }
     }
 }

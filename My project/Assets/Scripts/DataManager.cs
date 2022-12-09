@@ -173,6 +173,25 @@ public class DataManager : MonoBehaviour
         UpdateData(game);
     }
 
+    public async Task StepBack(bool current)
+    {
+        var res = await api.DELETE(
+            url: api.Back,
+            param: new Dictionary<string, string>
+            {
+                { "playerid", currentPlayer.id.ToString() },
+                { "current", current.ToString() }
+            });
+
+        var game = GetModel<Game>(res);
+        if (game == null)
+        {
+            return;
+        }
+
+        UpdateData(game);
+    }
+
     /* Player Controller */
     public async Task GetAll(int playerId)
     {

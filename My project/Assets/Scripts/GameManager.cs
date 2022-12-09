@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.Net.Http;
 using Audio;
-using Cinemachine.Utility;
 using Model;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +27,8 @@ public class GameManager : MonoBehaviour
     public bool characterInfo;
     public bool structureInfo;
     public bool nextRound;
+    public bool stepBack;
+    public bool current;
 
     private Vector3Int _previousPosition = Vector3Int.back;
     private List<Vector3Int> _characterActionRange;
@@ -162,6 +161,17 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         nextRound = false;
+        current = false;
+    }
+
+    public async void StepBack()
+    {
+        if (stepBack) return;
+        stepBack = true;
+        await DataManager.Instance.StepBack(current);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        stepBack = false;
+        current = false;
     }
 
     public void OpenOptions()
@@ -237,15 +247,14 @@ public class GameManager : MonoBehaviour
         SceneController.Instance.LoadEquip();
         DisableBackground();
     }
+    
     public void CloseEquip()
     {
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadEquip();
     } 
-
     
-
     public void OpenUpgrade()
     {
         if (func) return;
@@ -259,7 +268,6 @@ public class GameManager : MonoBehaviour
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadUpgrade();
-        EnableBackground();
     }
 
     public void OpenCamp()
@@ -381,6 +389,8 @@ public class GameManager : MonoBehaviour
                 DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
                 DataManager.Instance.GetCharacterByPosition(positionAttacked).defense);
             await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
+            AudioManager.Instance.Play(1);
+            current = true;
         }
         else if (DataManager.Instance.GetStructureByPosition(positionAttacked) != null)
         {
@@ -393,9 +403,10 @@ public class GameManager : MonoBehaviour
                 GridController.Instance.SetStructure(positionAttacked);
                 GridController.Instance.ShowConquerText(positionAttacked);
             }
+            AudioManager.Instance.Play(1);
+            current = true;
         }
         
-        AudioManager.Instance.Play(1);
     }
 
     public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
@@ -404,6 +415,7 @@ public class GameManager : MonoBehaviour
         var path = GetActionPath(_previousPosition, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
         AudioManager.Instance.Play(3);
+        current = true;
     }
 
     public async void DismissCharacter(Vector3Int position)
@@ -415,6 +427,7 @@ public class GameManager : MonoBehaviour
 
         // render 
         // update position character
+        current = true;
     }
 
     public void UpdateTech(int t)
@@ -424,11 +437,13 @@ public class GameManager : MonoBehaviour
 
         //render
         //scene back to main scene 
+        current = true;
     }
 
     public void UpdateCharacterAtCamp(int option)
     {
         DataManager.Instance.UpdateCharacter(_previousPosition, option);
+        current = true;
     }
 
     public async void BuyEquipment(int shopId)
@@ -437,6 +452,7 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.BuyEquipments(shopId);
 
         //render     refresh shop frame (delete one equipment)
+        current = true;
     }
 
     public async void BuyMount(int shopId)
@@ -445,6 +461,7 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.BuyMounts(shopId);
 
         //render     refresh shop frame (delete one mount)
+        current = true;
     }
 
     public async void BuyItem(int shopId)
@@ -453,6 +470,7 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.BuyItems(shopId);
 
         //render    refresh shop frame
+        current = true;
     }
 
     public void chooseNewCharacterposition(int id, int type)
@@ -471,22 +489,25 @@ public class GameManager : MonoBehaviour
             position.y, DataManager.Instance.purchasingType);
         GridController.Instance.CreateCharacter(position);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        current = true;
     }
 
     public void UseItem(int itemid)
     {
         DataManager.Instance.UpdateItem(_previousPosition, itemid);
+        current = true;
     }
 
     public void ChangeEquipment(int equipmentid, bool off)
     {
         DataManager.Instance.UpdateEquipment(_previousPosition, equipmentid, off);
-        //no need to render
+        current = true;
     }
 
     public void ChangeMount(int mountid, bool off)
     {
         DataManager.Instance.UpdateMount(_previousPosition, mountid, off);
+        current = true;
     }
 
     public async void UpgradeStructure(int type = 0)
@@ -494,6 +515,7 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
         GridController.Instance.SetStructure(_previousPosition);
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
+        current = true;
     }
 
     private bool CheckAccessible(Vector3Int position,bool type)
