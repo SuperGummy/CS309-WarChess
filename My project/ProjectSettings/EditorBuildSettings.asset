@@ -14,7 +14,7 @@ EditorBuildSettings:
       RPG.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/StartAfterLogin.unity
+    path: Assets/Scenes/Start After Login.unity
     guid: 94f0c3be4c24b294d9e1da270ca63f91
   - enabled: 1
     path: Assets/Scenes/Game.unity
@@ -43,4 +43,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Upgrade Building.unity
     guid: 49b5dd5edab6fbb4f8a68416581b358b
+  - enabled: 1
+    path: Assets/Scenes/Preference Shop.unity
+    guid: c8b55d5d967237141b5b26c4036a3e9d
   m_configObjects: {}

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartAfterLoginManager : MonoBehaviour
@@ -30,5 +31,10 @@ public class StartAfterLoginManager : MonoBehaviour
         isOn = singlePlayerButton.isOn;
         if(isOn) levelPanel.SetActive(true);
         else levelPanel.SetActive(false);
+    }
+
+    public void OpenPreferenceShop()
+    {
+        SceneManager.LoadScene("Preference Shop");
     }
 }
