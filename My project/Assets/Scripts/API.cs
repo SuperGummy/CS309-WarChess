@@ -11,9 +11,9 @@ namespace API
         private const string Protocol = "http";
 
         // local
-        // private const string IPAddress = "127.0.0.1";
+        private const string IPAddress = "127.0.0.1";
         // LAN
-        private const string IPAddress = "172.26.59.173";
+        // private const string IPAddress = "172.26.59.173";
 
         // port
         private const string Port = "2333";

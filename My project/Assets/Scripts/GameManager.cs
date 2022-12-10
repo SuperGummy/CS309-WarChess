@@ -298,7 +298,7 @@ public class GameManager : MonoBehaviour
         placeInfoFrame.SetActive(false);
         DisableBackground();
     }
-
+    
     public void CloseRecruit()
     {
         if (!func) return;
@@ -412,7 +412,7 @@ public class GameManager : MonoBehaviour
     public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
     {
         DataManager.Instance.MoveCharacter(position, newPosition);
-        var path = GetActionPath(_previousPosition, newPosition);
+        var path = GetActionPath(position, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
         AudioManager.Instance.Play(3);
         current = true;
@@ -510,11 +510,19 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public async void UpgradeStructure(int type = 0)
+    public async void UpgradeStructure(int type = -1)
     {
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
         GridController.Instance.SetStructure(_previousPosition);
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
+        current = true;
+    }
+    
+    public async void UpgradeStructure(Vector3Int position, int type = -1)
+    {
+        await DataManager.Instance.UpdateStructure(position, type);
+        GridController.Instance.SetStructure(position);
+        placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(position);
         current = true;
     }
 
@@ -756,7 +764,7 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-    private List<Vector3Int> GetActionRange(Vector3Int position)
+    internal List<Vector3Int> GetActionRange(Vector3Int position)
     {
         var character = DataManager.Instance.GetCharacterByPosition(position);
         if (character == null)
@@ -926,7 +934,7 @@ public class GameManager : MonoBehaviour
         return res;
     }
 
-    private List<Vector3Int> GetAttackRange(Vector3Int position)
+    internal List<Vector3Int> GetAttackRange(Vector3Int position)
     {
         var character = DataManager.Instance.GetCharacterByPosition(position);
         if (character == null)

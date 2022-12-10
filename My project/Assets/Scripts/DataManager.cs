@@ -43,6 +43,65 @@ public class DataManager : MonoBehaviour
     {
     }
 
+    public List<Character> CharactersOfPlayer(int id)
+    {
+        List<Character> ch = new List<Character>();
+        for (int i = 0; i < MapSize * MapSize; i++)
+        {
+            Character character = characters[i];
+            if (character.player != null && id == character.player.id)
+            {
+                ch.Add(character);
+            }
+        }
+
+        return ch;
+    }
+
+    public List<Vector3Int> GetCharacterPosByPlayer(int id)
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        for (int i = 0; i < MapSize * MapSize; i++)
+        {
+            if (characters[i].player != null && characters[i].player.id == id)
+            {
+                Vector3Int pos = new Vector3Int(i / MapSize, i % MapSize);
+                positions.Add(pos);
+            }
+        }
+
+        return positions;
+    }
+
+    public List<Vector3Int> GetStructurePosByPlayer(int id)
+    {
+        List<Vector3Int> positions = new List<Vector3Int>();
+        for (int i = 0; i < MapSize * MapSize; i++)
+        {
+            if (structures[i].player != null && structures[i].player.id == id)
+            {
+                Vector3Int pos = new Vector3Int(i / MapSize, i % MapSize);
+                positions.Add(pos);
+            }
+        }
+
+        return positions;
+    }
+
+    public List<Structure> GetStructureByPlayer(int id)
+    {
+        List<Structure> structs = new List<Structure>();
+        foreach (Structure structure in structures)
+        {
+            if (id == structure.player.id)
+            {
+                structs.Add(structure);
+            }
+        }
+
+        return structs;
+    }
+
     public int GetMapByPosition(Vector3Int vector3Int)
     {
         return _map[vector3Int.x * MapSize + vector3Int.y];
@@ -838,6 +897,7 @@ public class DataManager : MonoBehaviour
         }
     }
 }
+
 
 [Serializable]
 public class Player
