@@ -420,20 +420,16 @@ public class GameManager : MonoBehaviour
 
     public async void DismissCharacter(Vector3Int position)
     {
-        // api
-        var character = DataManager.Instance.GetCharacterByPosition(position);
         await DataManager.Instance.DismissCharacter(position);
-        //need new data to render
-
-        // render 
-        // update position character
+        GridController.Instance.DeleteCharacter(position);
+        CloseCharacterInfo();
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         current = true;
     }
 
     public void UpdateTech(int t)
     {
         DataManager.Instance.UpdateTechnologies(_previousPosition, t);
-        //do not need data to render
 
         //render
         //scene back to main scene 
@@ -446,30 +442,21 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public async void BuyEquipment(int shopId)
+    public void BuyEquipment(int shopId)
     {
-        //api
-        await DataManager.Instance.BuyEquipments(shopId);
-
-        //render     refresh shop frame (delete one equipment)
+        DataManager.Instance.BuyEquipments(shopId);
         current = true;
     }
 
-    public async void BuyMount(int shopId)
+    public void BuyMount(int shopId)
     {
-        //api
-        await DataManager.Instance.BuyMounts(shopId);
-
-        //render     refresh shop frame (delete one mount)
+        DataManager.Instance.BuyMounts(shopId);
         current = true;
     }
 
-    public async void BuyItem(int shopId)
+    public void BuyItem(int shopId)
     {
-        //api
-        await DataManager.Instance.BuyItems(shopId);
-
-        //render    refresh shop frame
+        DataManager.Instance.BuyItems(shopId);
         current = true;
     }
 
@@ -492,21 +479,24 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void UseItem(int itemid)
+    public async void UseItem(int itemid)
     {
-        DataManager.Instance.UpdateItem(_previousPosition, itemid);
+        await DataManager.Instance.UpdateItem(_previousPosition, itemid);
+        characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
 
-    public void ChangeEquipment(int equipmentid, bool off)
+    public async void ChangeEquipment(int equipmentid, bool off)
     {
-        DataManager.Instance.UpdateEquipment(_previousPosition, equipmentid, off);
+        await DataManager.Instance.UpdateEquipment(_previousPosition, equipmentid, off);
+        characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
 
-    public void ChangeMount(int mountid, bool off)
+    public async void ChangeMount(int mountid, bool off)
     {
-        DataManager.Instance.UpdateMount(_previousPosition, mountid, off);
+        await DataManager.Instance.UpdateMount(_previousPosition, mountid, off);
+        characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
 
