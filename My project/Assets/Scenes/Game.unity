@@ -4839,7 +4839,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 764328141}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OpenOptions
+        m_MethodName: StepBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

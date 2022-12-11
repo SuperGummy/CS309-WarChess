@@ -53,7 +53,7 @@ public class GridController : MonoBehaviour
     private Vector3Int previousMousePos;
     public const int MapSize = 17;
     private CharacterObject[] _characters = new CharacterObject[MapSize * MapSize];
-    private GameObject[] characterObjects = new GameObject[MapSize * MapSize];
+    public GameObject[] characterObjects = new GameObject[MapSize * MapSize];
 
     [SerializeField] private CharacterRenderer explorerBlue;
     [SerializeField] private CharacterRenderer explorerRed;

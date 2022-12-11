@@ -189,7 +189,44 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        UpdateData(game);
+        InitiateData(game);
+        foreach (var structure in game.structures)
+            UpdateStructureAttribute(structure);
+        foreach (var structure in game.player1.structures)
+        {
+            UpdateStructureAttribute(structure);
+            structures[structure.x * MapSize + structure.y].player = player1;
+        }
+
+        foreach (var structure in game.player2.structures)
+        {
+            UpdateStructureAttribute(structure);
+            structures[structure.x * MapSize + structure.y].player = player2;
+        }
+        
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                if (GridController.Instance.characterObjects[i * MapSize + j] != null)
+                    GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
+            }
+        }
+
+        characters = new Character[MapSize * MapSize];
+        foreach (var character in game.player1.characters)
+        {
+            UpdateCharacterAttribute(character, false);
+            characters[character.x * MapSize + character.y].player = player1;
+            GridController.Instance.CreateCharacter(new Vector3Int(character.x, character.y));
+        }
+
+        foreach (var character in game.player2.characters)
+        {
+            UpdateCharacterAttribute(character, false);
+            characters[character.x * MapSize + character.y].player = player2;
+            GridController.Instance.CreateCharacter(new Vector3Int(character.x, character.y));
+        }
     }
 
     /* Player Controller */
@@ -708,11 +745,19 @@ public class DataManager : MonoBehaviour
         foreach (var structure in game.structures)
             UpdateStructureAttribute(structure);
         if (game.currentPlayer)
+        {
             foreach (var character in game.player1.characters)
                 UpdateCharacterAttribute(character, false);
+            foreach (var structure in game.player1.structures)
+                UpdateStructureAttribute(structure);
+        }
         else
+        {
             foreach (var character in game.player2.characters)
                 UpdateCharacterAttribute(character, false);
+            foreach (var structure in game.player2.structures)
+                UpdateStructureAttribute(structure);
+        }
     }
 
     private void UpdateCharacterAttribute(Model.Character character, bool flag)
