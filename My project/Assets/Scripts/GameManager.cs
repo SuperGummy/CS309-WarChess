@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
         if (stepBack) return;
         stepBack = true;
         await DataManager.Instance.StepBack(current);
+        
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         stepBack = false;
         current = false;
