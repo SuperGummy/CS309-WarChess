@@ -8,7 +8,7 @@ public class CharacterRenderer : MonoBehaviour
 {
 
     [SerializeField] public Animator animator;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] public SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update
     void Start()
@@ -27,12 +27,13 @@ public class CharacterRenderer : MonoBehaviour
 
     public void SetSprite(Sprite spriteToSet)
     {
+        Debug.Log("Set sprite! " + spriteToSet);
         spriteRenderer.sprite = spriteToSet;
+        Debug.Log("Sprite settled? " + spriteRenderer.sprite);
     }
 
     public void SetController(RuntimeAnimatorController controllerToSet)
     {
-        Debug.Log("Set controller " + controllerToSet);
         animator.runtimeAnimatorController = controllerToSet;
     }
 

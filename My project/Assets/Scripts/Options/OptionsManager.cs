@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Options
 {
@@ -16,6 +17,12 @@ namespace Options
         void Update()
         {
 
+        }
+
+        public void OpenPreferenceShop()
+        {
+            SkinShopManager.calledFromGame = true;
+            SceneManager.LoadSceneAsync("Preference Shop", LoadSceneMode.Additive);
         }
     }
 }

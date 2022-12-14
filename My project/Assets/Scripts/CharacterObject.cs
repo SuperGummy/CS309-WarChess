@@ -9,7 +9,7 @@ public class CharacterObject : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private List<Vector3> destinations;
     [SerializeField] private int destinationId;
-    [SerializeField] private GameObject characterRenderer;
+    [SerializeField] public GameObject characterRenderer;
     public Grid grid;
 
     private CharacterRenderer _characterRenderer;

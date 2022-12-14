@@ -13,12 +13,12 @@ public enum StatType{
 public class RenderManager : MonoBehaviour
 {
     public static RenderManager Instance;
-    [SerializeField] private Sprite scholarBlueImage;
-    [SerializeField] private Sprite scholarRedImage;
-    [SerializeField] private Sprite explorerBlueImage;
-    [SerializeField] private Sprite explorerRedImage;
-    [SerializeField] private Sprite fighterBlueImage;
-    [SerializeField] private Sprite fighterRedImage;
+    [SerializeField] public Sprite scholarBlueImage;
+    [SerializeField] public Sprite scholarRedImage;
+    [SerializeField] public Sprite explorerBlueImage;
+    [SerializeField] public Sprite explorerRedImage;
+    [SerializeField] public Sprite fighterBlueImage;
+    [SerializeField] public Sprite fighterRedImage;
 
     [SerializeField] private Sprite foxMount;
     [SerializeField] private Sprite elephantMount;

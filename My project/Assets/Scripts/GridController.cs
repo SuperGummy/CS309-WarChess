@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Audio;
 using Model;
 using TMPro;
@@ -8,7 +9,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using Quaternion = UnityEngine.Quaternion;
 using Random = System.Random;
+using Vector3 = UnityEngine.Vector3;
 
 public enum AnimatedTextType
 {
@@ -55,12 +58,16 @@ public class GridController : MonoBehaviour
     private CharacterObject[] _characters = new CharacterObject[MapSize * MapSize];
     public GameObject[] characterObjects = new GameObject[MapSize * MapSize];
 
-    [SerializeField] private CharacterRenderer explorerBlue;
-    [SerializeField] private CharacterRenderer explorerRed;
-    [SerializeField] private CharacterRenderer scholarBlue;
-    [SerializeField] private CharacterRenderer scholarRed;
-    [SerializeField] private CharacterRenderer fighterBlue;
-    [SerializeField] private CharacterRenderer fighterRed;
+    public static int explorerBluePickedId, explorerRedPickedId;
+    public static int scholarBluePickedId, scholarRedPickedId;
+    public static int fighterBluePickedId, fighterRedPickedId;
+    
+    [SerializeField] private CharacterRenderer[] explorerBlue;
+    [SerializeField] private CharacterRenderer[] explorerRed;
+    [SerializeField] private CharacterRenderer[] scholarBlue;
+    [SerializeField] private CharacterRenderer[] scholarRed;
+    [SerializeField] private CharacterRenderer[] fighterBlue;
+    [SerializeField] private CharacterRenderer[] fighterRed;
     [SerializeField] private GameObject animatedTextPrefab;
     [SerializeField] private GameObject textHolder;
 
@@ -68,14 +75,54 @@ public class GridController : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("I woke up!");
         gridEnable = true;
         Instance = this;
-        RenderManager.Instance.explorerBlueController = explorerBlue.animator.runtimeAnimatorController;
-        RenderManager.Instance.explorerRedController = explorerRed.animator.runtimeAnimatorController;
-        RenderManager.Instance.scholarBlueController = scholarBlue.animator.runtimeAnimatorController;
-        RenderManager.Instance.scholarRedController = scholarRed.animator.runtimeAnimatorController;
-        RenderManager.Instance.fighterBlueController = fighterBlue.animator.runtimeAnimatorController;
-        RenderManager.Instance.fighterRedController = fighterRed.animator.runtimeAnimatorController;
+        UpdateRenderManager(false);
+    }
+
+    public void RefreshGameCharacters()
+    {
+        int cnt = 0;
+        for (int i = 0; i < MapSize; i++)
+            for(int j = 0; j < MapSize; j ++)
+            {
+                if (characterObjects[cnt] != null)
+                {
+                    Vector3Int position = new Vector3Int(i, j, 0);
+                    DeleteCharacter(position);
+                    CreateCharacter(position);
+                }
+
+                cnt++;
+            }
+    }
+
+    public void UpdateRenderManager(bool refreshGame)
+    {
+        RenderManager renderManager = RenderManager.Instance;
+        renderManager.explorerBlueController = explorerBlue[explorerBluePickedId].animator.runtimeAnimatorController;
+        renderManager.explorerBlueImage = explorerBlue[explorerBluePickedId].spriteRenderer.sprite;
+        
+        renderManager.explorerRedController = explorerRed[explorerRedPickedId].animator.runtimeAnimatorController;
+        renderManager.explorerRedImage = explorerRed[explorerRedPickedId].spriteRenderer.sprite;
+        
+        renderManager.scholarBlueController = scholarBlue[scholarBluePickedId].animator.runtimeAnimatorController;
+        renderManager.scholarBlueImage = scholarBlue[scholarBluePickedId].spriteRenderer.sprite;
+        
+        renderManager.scholarRedController = scholarRed[scholarRedPickedId].animator.runtimeAnimatorController;
+        renderManager.scholarRedImage = scholarRed[scholarRedPickedId].spriteRenderer.sprite;
+        
+        renderManager.fighterBlueController = fighterBlue[fighterBluePickedId].animator.runtimeAnimatorController;
+        renderManager.fighterBlueImage = fighterBlue[fighterBluePickedId].spriteRenderer.sprite;
+        
+        renderManager.fighterRedController = fighterRed[fighterRedPickedId].animator.runtimeAnimatorController;
+        renderManager.fighterRedImage = fighterRed[fighterRedPickedId].spriteRenderer.sprite;
+
+        if (refreshGame)
+        {
+            RefreshGameCharacters();
+        }
     }
 
     // Start is called before the first frame update
