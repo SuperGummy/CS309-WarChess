@@ -13,11 +13,11 @@ public class StartAfterLoginManager : MonoBehaviour
 
     [SerializeField] private Toggle singlePlayerButton;
 
-    private static string _username;
+    private string _username;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _username = PlayerPrefs.GetString("username");
     }
 
     // Update is called once per frame

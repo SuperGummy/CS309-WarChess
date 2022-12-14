@@ -117,62 +117,6 @@ public class DataManager : MonoBehaviour
         return structures[vector3Int.x * MapSize + vector3Int.y];
     }
 
-    public async Task Register(string username, string password)
-    {
-        var res = await api.POST(
-            url: api.Register,
-            param: new Dictionary<string, string>
-            {
-                { "username", username },
-                { "password", password }
-            });
-
-        var account = GetModel<Account>(res);
-        if (account == null)
-        {
-            EditorUtility.DisplayDialog("Errors", "Register failed", "ok");
-        }
-        else
-        {
-            EditorUtility.DisplayDialog("Congratulations", "Register successfully", "ok");
-        }
-    }
-
-    public async Task Login(string username, string password)
-    {
-        var res = await api.POST(
-            url: api.Login,
-            param: new Dictionary<string, string>
-            {
-                { "username", username },
-                { "password", password }
-            });
-
-        if (res == null)
-        {
-            EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
-            return;
-        }
-
-        if (res.StatusCode != HttpStatusCode.OK)
-        {
-            EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
-            return;
-        }
-
-        var token = res.Content.ReadAsStringAsync().Result;
-
-        if (token == null)
-        {
-            EditorUtility.DisplayDialog("Errors", "Login failed", "ok");
-            return;
-        }
-
-        EditorUtility.DisplayDialog("Congratulations", "Login successfully", "ok");
-        PlayerPrefs.SetString("username", username);
-        PlayerPrefs.SetString("token", token);
-    }
-
     public async Task UpdatePassword(string username, string oldPassword, string newPassword)
     {
         var res = await api.POST(
