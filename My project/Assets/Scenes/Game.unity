@@ -624,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -11115,6 +11115,11 @@ MonoBehaviour:
   interactiveMap: {fileID: 422301513}
   buildingMap: {fileID: 1125306398}
   movableMap: {fileID: 1539419382}
+  landMap: {fileID: 1810889896}
+  colorLandMap: {fileID: 746149782}
+  landObjectMap: {fileID: 493438563}
+  mountainMap: {fileID: 320170243}
+  borderMap: {fileID: 1126002713}
   hoverTile: {fileID: 11400000, guid: a1204487e13e6bb40a4b43a44b35fa5d, type: 2}
   blueLeftCastle: {fileID: 11400000, guid: 68ca8a20b422c87458b3fffa21d59662, type: 2}
   redLeftCastle: {fileID: 11400000, guid: d03ddbacf78a3dd4699feedef505227e, type: 2}
@@ -11136,6 +11141,20 @@ MonoBehaviour:
   redInstitute: {fileID: 11400000, guid: 35b986d9adf4eb9449c649c35dc9584e, type: 2}
   movableTile: {fileID: 11400000, guid: 7073186cae01596438bd47d5749060d2, type: 2}
   attackableTile: {fileID: 11400000, guid: 93ed0f3fa31f4d244b94b5c1f6a5e3b0, type: 2}
+  normalLand: {fileID: 11400000, guid: 5786d937b0769d5458f5dcb629f50a6c, type: 2}
+  greenLand: {fileID: 11400000, guid: dbdf469934931694785840d6fee4fc3c, type: 2}
+  lightGreenLand: {fileID: 11400000, guid: 7b87bb615a872e24d9d7cc773033788c, type: 2}
+  yellowLand: {fileID: 11400000, guid: f5f9297825cbc0f4fac42c264b38060a, type: 2}
+  greenTree: {fileID: 11400000, guid: 257e4b2f4e3bada48b956f227c02bc79, type: 2}
+  greenTrees: {fileID: 11400000, guid: 0a2c434901468df47937a3d7ae91f584, type: 2}
+  pinkTree: {fileID: 11400000, guid: 08b45d96f6b84c44b935e3e3a2c2fa26, type: 2}
+  pinkTrees: {fileID: 11400000, guid: 8ea29786c06863741b819221618c326b, type: 2}
+  redTree: {fileID: 11400000, guid: ca449f9461a55514e88b2a0fa14c45f5, type: 2}
+  redTrees: {fileID: 11400000, guid: edb8cfd7146bc1b4ea80d8de23674219, type: 2}
+  highMountain: {fileID: 11400000, guid: 5d65717405bb4404ba21fddcab99d752, type: 2}
+  lowMountain: {fileID: 11400000, guid: 077f2da4c7bfd7847b56f19b8cf3d14e, type: 2}
+  emptyTile: {fileID: 0}
+  borderTile: {fileID: 11400000, guid: 7ee57afda1748d045ab1d7f1039ea1f5, type: 2}
   characterHolder: {fileID: 231159039}
   characterPrefab: {fileID: 2135280262522088900, guid: c6b557faf8d576f43bf98195fe8b3bae, type: 3}
   characterObjects:
