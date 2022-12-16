@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using api = API.Service;
 using Model;
 using Newtonsoft.Json;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
+using Random = System.Random;
 
 public class DataManager : MonoBehaviour
 {
@@ -875,12 +878,166 @@ public class DataManager : MonoBehaviour
         player.shop = shop;
     }
 
+    private static bool CheckBound(int x,int y)
+    {
+        return !(x < 0 || x >= MapSize || y < 0 || y >= MapSize);
+    }
+
+    private int[,] ColorTree(int[,] sourceMap)
+    {
+        var random = new Random();
+        var treeColor = new int[MapSize,MapSize];
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                if (sourceMap[i, j] == 3 && treeColor[i,j]==0)
+                {
+                    //tree
+                    var result = new List<Vector3Int>();
+                    treeColor[i, j] = random.Next(3) + 1;
+                    result.Add(new Vector3Int(i,j));
+                    for (var k = 0; k < result.Count; k++)
+                    {
+                        var x = result[k].x;
+                        var y = result[k].y;
+                        var op = 1;
+                        if (y % 2 == 0) op = -1;
+
+                        var dx = op;
+                        var dy = 1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+
+                        dx = 1;
+                        dy = 0;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+
+                        dx = op;
+                        dy = -1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+
+                        
+                        dx = 0;
+                        dy = 1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        
+                        dx = 0;
+                        dy = -1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        
+                        dx = -1;
+                        dy = 0;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] == 3 && treeColor[x+dx,y+dy]==0){
+                            treeColor[x+dx, y + dy] = treeColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                treeColor[i, j] = math.max(treeColor[i, j] - 1, 0);
+            }
+        }
+
+        return treeColor;
+    }
+    
+    private int[,] ColorLand(int[,] sourceMap)
+    {
+        var random = new Random();
+        var landColor = new int[MapSize,MapSize];
+        for (int t = 0; t < MapSize*MapSize/5; t++)
+        {
+            var i = random.Next(MapSize);
+            var j = random.Next(MapSize);
+            if (CheckBound(i,j))
+            {
+                if (sourceMap[i, j] != 2 && landColor[i,j]==0)
+                {
+                    var result = new List<Vector3Int>();
+                    landColor[i, j] = random.Next(3) + 1;
+                    result.Add(new Vector3Int(i,j));
+                    var lim = random.Next(MapSize-6) + 2;
+                    for (var k = 0; k < result.Count&& result.Count<lim; k++)
+                    {
+                        var x = result[k].x;
+                        var y = result[k].y;
+                        var op = 1;
+                        if (y % 2 == 0) op = -1;
+                        
+                        var dx = op;
+                        var dy = 1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        dx = 1;
+                        dy = 0;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        dx = op;
+                        dy = -1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        dx = 0;
+                        dy = 1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        dx = 0;
+                        dy = -1;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                        dx = -1;
+                        dy = 0;
+                        if (CheckBound(x+dx, y + dy)&&sourceMap[x+dx, y + dy] != 2 && landColor[x+dx,y+dy]==0 ){
+                            landColor[x+dx, y + dy] = landColor[x, y];
+                            result.Add(new Vector3Int(x+dx,y+dy));
+                        }
+                    }
+                }
+            
+            }
+        }
+        return landColor;
+    }
+
     private void SetMap(int[,] sourceMap)
     {
+        var treeColor = ColorTree(sourceMap);
+        var landColor = ColorLand(sourceMap);
         for (int i = 0; i < sourceMap.GetLength(0); i++)
         {
             for (int j = 0; j < sourceMap.GetLength(1); j++)
             {
+                GridController.Instance.SetMap(new Vector3Int(j,i),sourceMap[i,j],landColor[i,j],treeColor[i,j]);
                 _map[i * MapSize + j] = sourceMap[i, j] == 3 ? 0 : sourceMap[i, j];
             }
         }

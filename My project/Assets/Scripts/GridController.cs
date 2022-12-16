@@ -30,6 +30,11 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tilemap interactiveMap;
     [SerializeField] private Tilemap buildingMap;
     [SerializeField] private Tilemap movableMap;
+    [SerializeField] private Tilemap landMap;
+    [SerializeField] private Tilemap colorLandMap;
+    [SerializeField] private Tilemap landObjectMap;
+    [SerializeField] private Tilemap mountainMap;
+    [SerializeField] private Tilemap borderMap;
     [SerializeField] private Tile hoverTile;
     [SerializeField] private Tile blueLeftCastle;
     [SerializeField] private Tile redLeftCastle;
@@ -51,6 +56,20 @@ public class GridController : MonoBehaviour
     [SerializeField] private Tile redInstitute;
     [SerializeField] private Tile movableTile;
     [SerializeField] private Tile attackableTile;
+    [SerializeField] private Tile normalLand;
+    [SerializeField] private Tile greenLand;
+    [SerializeField] private Tile lightGreenLand;
+    [SerializeField] private Tile yellowLand;
+    [SerializeField] private Tile greenTree;
+    [SerializeField] private Tile greenTrees;
+    [SerializeField] private Tile pinkTree;
+    [SerializeField] private Tile pinkTrees;
+    [SerializeField] private Tile redTree;
+    [SerializeField] private Tile redTrees;
+    [SerializeField] private Tile highMountain;
+    [SerializeField] private Tile lowMountain;
+    [SerializeField] private Tile emptyTile;
+    [SerializeField] private Tile borderTile;
     [SerializeField] private GameObject characterHolder;
     [SerializeField] private GameObject characterPrefab;
     private Vector3Int previousMousePos;
@@ -168,6 +187,90 @@ public class GridController : MonoBehaviour
             buildingMap.SetTile(position, random.Next(2) == 0 ? relic1 : relic2);
     }
 
+    public void SetMap(Vector3Int position, int value,int landColor=0,int treeColor=0)
+    {
+        var random = new Random();
+        position.x -= 8;
+        position.y -= 8;
+        landMap.SetTile(position,emptyTile);
+        colorLandMap.SetTile(position,emptyTile);
+        landObjectMap.SetTile(position,emptyTile);
+        mountainMap.SetTile(position,emptyTile);
+        borderMap.SetTile(position,borderTile);
+        switch (value)
+        {
+            case 0:
+                landMap.SetTile(position, normalLand);
+                switch (landColor)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        colorLandMap.SetTile(position,greenLand);
+                        break;
+                    case 2:
+                        colorLandMap.SetTile(position,lightGreenLand);
+                        break;
+                    case 3:
+                        colorLandMap.SetTile(position,yellowLand);
+                        break;
+                }
+                break;
+            case 1:
+                landMap.SetTile(position, normalLand);
+                switch (landColor)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        colorLandMap.SetTile(position,greenLand);
+                        break;
+                    case 2:
+                        colorLandMap.SetTile(position,lightGreenLand);
+                        break;
+                    case 3:
+                        colorLandMap.SetTile(position,yellowLand);
+                        break;
+                }
+                mountainMap.SetTile(position,random.Next(2)==0 ? lowMountain : highMountain);
+                break;
+            case 2:
+                borderMap.SetTile(position,emptyTile);
+                break;
+            case 3:
+                landMap.SetTile(position, normalLand);
+                switch (landColor)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        colorLandMap.SetTile(position,greenLand);
+                        break;
+                    case 2:
+                        colorLandMap.SetTile(position,lightGreenLand);
+                        break;
+                    case 3:
+                        colorLandMap.SetTile(position, yellowLand);
+                        break;
+                }
+                
+                switch (treeColor)
+                {
+                    case 0:
+                        landObjectMap.SetTile(position,random.Next(2)==0?greenTree:greenTrees);
+                        break;
+                    case 1:
+                        landObjectMap.SetTile(position,random.Next(2)==0?pinkTree:pinkTrees);
+                        break;
+                    case 2:
+                        landObjectMap.SetTile(position,random.Next(2)==0?redTree:redTrees);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
     public void SetStructure(Vector3Int position)
     {
         var structure = DataManager.Instance.GetStructureByPosition(position);
