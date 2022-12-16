@@ -3054,6 +3054,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FighterTopPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 3050599399218100662, guid: 841a3038b5e76014e96df1c7fa2e0e56, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3197634795152723448, guid: 841a3038b5e76014e96df1c7fa2e0e56, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0

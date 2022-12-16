@@ -17,15 +17,19 @@ public class TestButton : MonoBehaviour
     [SerializeField] private Vector3Int position;
     [SerializeField] private Image image;
     [SerializeField] public RuntimeAnimatorController controller;
-
+    [SerializeField] private GameObject switchRoundAnimationPrefab;
+    [SerializeField] private string sideString;
+    [SerializeField] private GameObject canvas;
+    [SerializeField] private GameObject test;
+    
     public int forTest;
     // Start is called before the first frame update
     void Start()
     {
-        characterObject = _characterObject.GetComponent<CharacterObject>();
-        RuntimeAnimatorController controller2 = RenderManager.Instance.GetCharacterController(CharacterClass.SCHOLAR, "blue");
-        //controller = controller2;
-        Debug.Log("Where? " + controller);
+        // characterObject = _characterObject.GetComponent<CharacterObject>();
+        // RuntimeAnimatorController controller2 = RenderManager.Instance.GetCharacterController(CharacterClass.SCHOLAR, "blue");
+        // //controller = controller2;
+        // Debug.Log("Where? " + controller);
     }
 
     // Update is called once per frame
@@ -36,6 +40,8 @@ public class TestButton : MonoBehaviour
 
     public void OnClick()
     {
+        UIManager.Instance.ShowRoundChange(-1);
+        //gridController.CreateMoneyAnimation(position);
         // gridController.CreateCharacter(position);
         // switch (forTest)
         // {
@@ -52,7 +58,7 @@ public class TestButton : MonoBehaviour
         //         gridController.ShowConquerText(position);
         //         break;
         // }
-        CampManager.position = new Vector3Int(0, 0, 0);
-        SceneManager.LoadSceneAsync("Camp", LoadSceneMode.Additive);
+        // CampManager.position = new Vector3Int(0, 0, 0);
+        // SceneManager.LoadSceneAsync("Camp", LoadSceneMode.Additive);
     }
 }

@@ -70,6 +70,8 @@ public class GridController : MonoBehaviour
     [SerializeField] private CharacterRenderer[] fighterRed;
     [SerializeField] private GameObject animatedTextPrefab;
     [SerializeField] private GameObject textHolder;
+    [SerializeField] private GameObject animatedMoneyPrefab;
+    [SerializeField] private GameObject animatedMoneyHolder;
 
     [SerializeField] private float textShift;
 
@@ -338,5 +340,11 @@ public class GridController : MonoBehaviour
                 animatedText.color = Color.red;
                 break;
         }
+    }
+    
+    public void CreateMoneyAnimation(Vector3 position)
+    {
+        var animatedObject = Instantiate(animatedMoneyPrefab, position, Quaternion.identity);
+        animatedObject.transform.parent = animatedMoneyHolder.transform;
     }
 }
