@@ -22,12 +22,16 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void ShowRoundChange(int side)
+    public void ShowRoundChange()
     {
         var animatedObject = Instantiate(switchRoundAnimationPrefab, position, Quaternion.identity);
         animatedObject.transform.SetParent(canvas.transform, false);
         Debug.Log(animatedObject.transform.position);
-        string sideString = side == -1 ? "blue" : "red";
+        string sideString;
+        if (DataManager.Instance.currentPlayer.id == DataManager.Instance.player1.id)
+            sideString = "blue";
+        else
+            sideString = "red";
         animatedObject.GetComponent<SwitchRoundAnimation>().SetText(sideString);
     }
 }

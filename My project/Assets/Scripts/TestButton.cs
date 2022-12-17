@@ -40,7 +40,7 @@ public class TestButton : MonoBehaviour
 
     public void OnClick()
     {
-        UIManager.Instance.ShowRoundChange(-1);
+        UIManager.Instance.ShowRoundChange();
         //gridController.CreateMoneyAnimation(position);
         // gridController.CreateCharacter(position);
         // switch (forTest)

@@ -160,6 +160,7 @@ public class GameManager : MonoBehaviour
         nextRound = true;
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        UIManager.Instance.ShowRoundChange();
         nextRound = false;
         current = false;
     }
