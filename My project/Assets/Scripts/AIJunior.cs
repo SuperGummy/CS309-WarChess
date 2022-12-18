@@ -57,77 +57,43 @@ public class AIJunior: AI
             }
 
             int personNum = 3 - (structures[i].characters).Length;
-            personNum = Math.Min(personNum, structures[i].remainingRound);
         }
 
         bool flag = true;
-        while (flag)
+        while (flag && player.stars > 3)
         {
-            int action = _random.Next(0, 5);
+            int action = _random.Next(0, 9);
             switch (action)
             {
                 case 0:
-                    flag = Recruit();
+                    GetCharactersPos();
+                    Recruit(chPositions);
                     break;
                 case 1:
-                    flag = BuyEquipment();
+                    BuyEquipment();
                     break;
                 case 2:
-                    flag = BuyMount();
+                    BuyMount();
                     break;
                 case 3:
-                    flag = UpgradeTechTree();
+                    UpgradeTechTree();
                     break;
                 case 4:
-                    flag = UpgradeStructure();
+                    UpgradeStructure();
+                    break;
+                case 5:
+                    BuyItems();
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                    flag = false;
                     break;
             }
         }
     }
     
-    private bool Recruit()
-    {
-        if (player.stars < 3)
-        {
-            return false;
-        }
-        else
-        {
-            // GameManager.Instance.BuyCharacter();
-        }
 
-        return true;
-    }
 
-    private bool UpgradeStructure()
-    {
-        return true;
-    }
-
-    private bool UpgradeTechTree()
-    {
-        return true;
-    }
-
-    private bool BuyEquipment()
-    {
-        if (player.stars < 7)
-        {
-            return false;
-        }
-
-        return true;
-    }
-    
-
-    private bool BuyMount()
-    {
-        if (player.stars < 7)
-        {
-            return false;
-        }
-
-        return true;
-    }
 
 }
