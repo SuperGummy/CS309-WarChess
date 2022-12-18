@@ -624,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4118,7 +4118,7 @@ MonoBehaviour:
   image: {fileID: 542589698}
   controller: {fileID: 0}
   switchRoundAnimationPrefab: {fileID: 5328876463939333781, guid: 459ddba16a0206c49804d5707d92eaf3, type: 3}
-  side: 0
+  sideString: 
   canvas: {fileID: 735889640}
   test: {fileID: 0}
   forTest: 0

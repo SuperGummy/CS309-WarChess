@@ -142,8 +142,9 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public async Task Play(string username1, string username2)
+    public async Task Play(string username1, string username2, IProgress<ProgressReportModel> progress = null)
     {
+        ProgressReportModel report = new ProgressReportModel();
         var res = await api.POST(
             url: api.Play,
             param: new Dictionary<string, string>
@@ -151,14 +152,19 @@ public class DataManager : MonoBehaviour
                 { "username1", username1 },
                 { "username2", username2 }
             });
-
-        var game = GetModel<Game>(res);
+        report.progressValue = 15;
+        if(progress is not  null)
+            progress.Report(report);
+        var game = GetModel<Game>(res, progress);
         if (game == null)
         {
             return;
         }
 
-        SetData(game);
+        SetData(game, progress);
+        report.progressValue = 100;
+        if(progress is not  null)
+            progress.Report(report);
     }
 
     public async Task Update(int playerId)
@@ -694,7 +700,7 @@ public class DataManager : MonoBehaviour
         currentPlayer.stars -= hpNew - hpOld;
     }
 
-    private T GetModel<T>(HttpResponseMessage res)
+    private T GetModel<T>(HttpResponseMessage res, IProgress<ProgressReportModel> progress = null)
     {
         if (res == null)
         {
@@ -726,6 +732,12 @@ public class DataManager : MonoBehaviour
             return default;
         }
 
+        if (progress is not null)
+        {
+            ProgressReportModel report = new ProgressReportModel();
+            report.progressValue = 30;
+            progress.Report(report);
+        }
         return model.data;
     }
 
@@ -743,13 +755,34 @@ public class DataManager : MonoBehaviour
         return 1;
     }
 
-    private void SetData(Game game)
+    private void SetData(Game game, IProgress<ProgressReportModel> progress = null)
     {
+        ProgressReportModel report = new ProgressReportModel();
         gameID = game.id;
         InitiateData(game);
+        if (progress is not null)
+        {
+            report.progressValue = 50;
+            progress.Report(report);
+        }
         SetMap(game.map);
+        if (progress is not null)
+        {
+            report.progressValue = 65;
+            progress.Report(report);
+        }
         SetStructure(game.structures, game.player1.structures[0], game.player2.structures[0]);
+        if (progress is not null)
+        {
+            report.progressValue = 80;
+            progress.Report(report);
+        }
         SetCharacter(game.player1.characters[0], game.player2.characters[0]);
+        if (progress is not null)
+        {
+            report.progressValue = 90;
+            progress.Report(report);
+        }
     }
 
     private void InitiateData(Game game)

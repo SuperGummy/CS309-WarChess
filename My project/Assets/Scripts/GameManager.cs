@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Audio;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -145,12 +147,20 @@ public class GameManager : MonoBehaviour
 
     private async void Initiate()
     {
-        await DataManager.Instance.Play("123", _username2);
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
+        progress.ProgressChanged += ReportProgress;
+        await DataManager.Instance.Play("123", _username2, progress);
         var pos1 = new Vector3Int(0, 16, 0);
         var pos2 = new Vector3Int(16, 0, 0);
         GridController.Instance.CreateCharacter(pos1);
         GridController.Instance.CreateCharacter(pos2);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+    }
+
+    private void ReportProgress(object sender, ProgressReportModel report)
+    {
+        ProgressRenderer.Instance.SetSliderValue(report.progressValue);
     }
 
     public async void NextRound()
