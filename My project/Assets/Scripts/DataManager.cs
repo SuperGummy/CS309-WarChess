@@ -1222,12 +1222,12 @@ public class DataManager : MonoBehaviour
         destinationPlayer.equipments = sourcePlayer.equipments;
         destinationPlayer.mounts = sourcePlayer.mounts;
         destinationPlayer.items = sourcePlayer.items;
-        destinationPlayer.tech = new int[2 * sourcePlayer.tech.GetLength(1)];
-        for (int i = 0; i < sourcePlayer.tech.GetLength(0); i++)
+        destinationPlayer.tech = new int[2 * sourcePlayer.technologyTree.GetLength(1)];
+        for (int i = 0; i < sourcePlayer.technologyTree.GetLength(0); i++)
         {
-            for (int j = 0; j < sourcePlayer.tech.GetLength(1); j++)
+            for (int j = 0; j < sourcePlayer.technologyTree.GetLength(1); j++)
             {
-                destinationPlayer.tech[i * sourcePlayer.tech.GetLength(1) + j] = sourcePlayer.tech[i, j];
+                destinationPlayer.tech[i * sourcePlayer.technologyTree.GetLength(1) + j] = sourcePlayer.technologyTree[i, j];
             }
         }
     }
