@@ -313,7 +313,7 @@ public class DataManager : MonoBehaviour
         for (int i = 0; i < MapSize * MapSize; i++)
         {
             Character character = characters[i];
-            if (character.player != null && id == character.player.id)
+            if (character != null && character.player != null && id == character.player.id)
             {
                 ch.Add(character);
             }
@@ -327,7 +327,7 @@ public class DataManager : MonoBehaviour
         List<Vector3Int> positions = new List<Vector3Int>();
         for (int i = 0; i < MapSize * MapSize; i++)
         {
-            if (characters[i].player != null && characters[i].player.id == id)
+            if (characters[i] != null && characters[i].player != null && characters[i].player.id == id)
             {
                 Vector3Int pos = new Vector3Int(i / MapSize, i % MapSize);
                 positions.Add(pos);
@@ -342,7 +342,7 @@ public class DataManager : MonoBehaviour
         List<Vector3Int> positions = new List<Vector3Int>();
         for (int i = 0; i < MapSize * MapSize; i++)
         {
-            if (structures[i].player != null && structures[i].player.id == id)
+            if (structures[i] != null && structures[i].player != null && structures[i].player.id == id)
             {
                 Vector3Int pos = new Vector3Int(i / MapSize, i % MapSize);
                 positions.Add(pos);
@@ -357,7 +357,7 @@ public class DataManager : MonoBehaviour
         List<Structure> structs = new List<Structure>();
         foreach (Structure structure in structures)
         {
-            if (id == structure.player.id)
+            if (structure != null && structure.player != null && id == structure.player.id)
             {
                 structs.Add(structure);
             }
@@ -1073,6 +1073,8 @@ public class DataManager : MonoBehaviour
         SetPlayer(player1, game.player1);
         SetPlayer(player2, game.player2);
         currentPlayer = game.currentPlayer ? player2 : player1;
+        if (AI.player == null)
+            AI.player = game.currentPlayer ? player1 : player2;
         SetPlayerShop(game.currentPlayer ? player1 : player2, game.shop);
     }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,11 +10,17 @@ using Random = System.Random;
 
 public abstract class AI
 {
-    protected Player player;
+    public static Player player;
     protected List<Character> characters = new List<Character>();
     protected List<Vector3Int> chPositions;
     protected int round;
-    private Random _random = new Random();
+
+    public static AI GetAI(bool type)
+    {
+        if (type)
+            return new AISenior();
+        return new AIJunior();
+    }
 
     public void GetCharactersPos()
     {
@@ -25,11 +32,18 @@ public abstract class AI
         characters = DataManager.Instance.CharactersOfPlayer(player.id);
     }
 
+    // public
     public void getRound()
     {
         round = DataManager.Instance.round;
     }
-    
+
+    public async void Run()
+    {
+        await this.MoveCharacters();
+        await this.AttackCharacters();
+        // this.Buy();
+    }
     
     protected bool Recruit(List<Vector3Int> pos)
     {
@@ -39,8 +53,11 @@ public abstract class AI
         }
         else
         {
-            int i = _random.Next(0, pos.Count);
-            GameManager.Instance.BuyCharacter(pos[i]);
+            if (pos.Count > 0)
+            {
+                int i = new Random().Next(0, pos.Count);
+                GameManager.Instance.BuyCharacter(pos[i]);
+            }
         }
 
         return true;
@@ -52,7 +69,6 @@ public abstract class AI
 
     protected void UpgradeTechTree()
     {
-        GameManager.Instance.OpenTechnologies();
     }
 
     protected void BuyEquipment()
@@ -79,9 +95,9 @@ public abstract class AI
         
     }
 
-    public abstract void MoveCharacters();
+    public abstract Task MoveCharacters();
 
-    public abstract void AttackCharacters();
+    public abstract Task AttackCharacters();
 
     public abstract void Buy();
 

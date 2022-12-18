@@ -32,8 +32,10 @@ public class GameManager : MonoBehaviour
     public bool nextRound;
     public bool stepBack;
     public bool current;
-    private bool _aiTurn;
-    private bool _aiType;
+    private bool _aiTurn = false;
+    private bool _aiType = false;
+    private bool pvp = false;
+    private AI _ai;
 
     private Vector3Int _previousPosition = Vector3Int.back;
     private List<Vector3Int> _characterActionRange;
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Initiate();
+        _ai = AI.GetAI(_aiType);
         backpackButton = backpackButton.GetComponent<Button>();
         finish = finish.GetComponent<Button>();
     }
@@ -58,7 +61,7 @@ public class GameManager : MonoBehaviour
     {
         if (GridController.Instance.gridEnable)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && (!_aiTurn || pvp))
             {
                 var cellPosition = GetMousePosition();
                 var x = cellPosition.x + 8;
@@ -83,21 +86,6 @@ public class GameManager : MonoBehaviour
                 ShowCharacterInfoButton(position);
                 ShowStructureInfoButton(position);
             } 
-            else if (_aiTurn)
-            {
-                AI ai;
-                if (_aiType)
-                {
-                    ai = new AISenior();
-                }
-                else
-                {
-                    ai = new AISenior();
-                }
-                ai.MoveCharacters();
-                ai.AttackCharacters();
-                ai.Buy();
-            }
 
         }
     }
@@ -195,6 +183,21 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.ShowRoundChange();
         nextRound = false;
         current = false;
+        if (!pvp)
+        {
+            _aiTurn = !_aiTurn;
+        }
+        if (_aiTurn)
+        {
+            Debug.Log(DataManager.Instance.currentPlayer.id == AI.player.id);
+            AIMove();
+        }
+    }
+
+    private async void AIMove()
+    {
+        _ai.Run();
+        NextRound();
     }
 
     public async void StepBack()
@@ -415,7 +418,7 @@ public class GameManager : MonoBehaviour
         _characterAttackRange = null;
     }
 
-    public async void AttackPosition(Vector3Int positionAttack, Vector3Int positionAttacked)
+    public async Task AttackPosition(Vector3Int positionAttack, Vector3Int positionAttacked)
     {
         if (DataManager.Instance.GetCharacterByPosition(positionAttacked) != null)
         {
@@ -443,10 +446,10 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void MoveCharacter(Vector3Int position, Vector3Int newPosition)
+    public async Task MoveCharacter(Vector3Int position, Vector3Int newPosition)
     {
-        DataManager.Instance.MoveCharacter(position, newPosition);
         var path = GetActionPath(position, newPosition);
+        await DataManager.Instance.MoveCharacter(position, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
         AudioManager.Instance.Play(3);
         current = true;

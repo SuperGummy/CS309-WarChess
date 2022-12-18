@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using Model;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -149,7 +150,7 @@ public class AISenior: AI
 
         return ret;
     }
-    public override void MoveCharacters()
+    public override async Task MoveCharacters()
     {
         //greedy, get to the nearest village/enemy in terms of rounds
         GetCharactersPos();
@@ -200,7 +201,7 @@ public class AISenior: AI
         if (objectStructure == null) return objectCharacter.hp;
         return objectStructure.hp;
     }
-    public override void AttackCharacters()
+    public override async Task AttackCharacters()
     {
         //attack a thing with the min hp
         GetCharactersPos();

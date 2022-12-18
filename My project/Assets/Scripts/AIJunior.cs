@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using Model;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,32 +10,38 @@ using Vector3 = UnityEngine.Vector3;
 
 public class AIJunior: AI
 {
-    private Random _random = new Random();
-    public override void MoveCharacters()
+    public override async Task MoveCharacters()
     {
         GetCharactersPos();
-        for (int i = 0; i < characters.Count; i++)
+        for (int i = 0; i < chPositions.Count; i++)
         {
             List<Vector3Int> movableList = new List<Vector3Int>();
             Vector3Int pos = chPositions[i]; 
+            // Debug.Log("character pos " + pos);
             movableList = GameManager.Instance.GetActionRange(pos);
-            int rand = _random.Next(0, movableList.Count);
-            Vector3Int destPos = movableList[rand];
-            GameManager.Instance.MoveCharacter(pos, destPos);
+            if (movableList != null && movableList.Count > 0)
+            {
+                int rand = new Random().Next(0, movableList.Count);
+                Vector3Int destPos = movableList[rand];
+                Debug.Log("dest position " + destPos);
+                await GameManager.Instance.MoveCharacter(pos, destPos);
+            }
         }
     }
 
-    public override void AttackCharacters()
+    public override async Task AttackCharacters()
     {
         GetCharactersPos();
         foreach (Vector3Int pos in chPositions)
         {
-            List<Vector3Int> attackPositions = GameManager.Instance.GetActionRange(pos);
-            if (attackPositions.Count != 0)
+            // Debug.Log("current position" + pos);
+            List<Vector3Int> attackPositions = GameManager.Instance.GetAttackRange(pos);
+            if (attackPositions != null && attackPositions.Count != 0)
             {
-                int num = _random.Next(0, attackPositions.Count);
+                int num = new Random().Next(0, attackPositions.Count);
                 Vector3Int attackPos = attackPositions[num];
-                GameManager.Instance.AttackPosition(pos, attackPos);
+                Debug.Log("attack character pos " + pos);
+                await GameManager.Instance.AttackPosition(pos, attackPos);
             }
         }
     }
@@ -52,22 +59,20 @@ public class AIJunior: AI
         {
             if (structures[i].structureClass == StructureClass.VILLAGE)
             {
-                int type = _random.Next(0, 3);
+                int type = new Random().Next(0, 3);
                 GameManager.Instance.UpgradeStructure(structPos[i], type);
             }
 
-            int personNum = 3 - (structures[i].characters).Length;
         }
 
         bool flag = true;
         while (flag && player.stars > 3)
         {
-            int action = _random.Next(0, 9);
+            int action = new Random().Next(0, 9);
             switch (action)
             {
                 case 0:
-                    GetCharactersPos();
-                    Recruit(chPositions);
+                    Recruit(structPos);
                     break;
                 case 1:
                     BuyEquipment();
