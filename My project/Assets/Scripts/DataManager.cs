@@ -27,7 +27,6 @@ public class DataManager : MonoBehaviour
     public Player currentPlayer;
     public Player player1;
     public Player player2;
-    public int[] _tech = new int [2 * TechSize];
     private int[] _map = new int[MapSize * MapSize];
     private int[] _realMap = new int[MapSize * MapSize];
     private Character[] characters = new Character[MapSize * MapSize];
@@ -216,7 +215,6 @@ public class DataManager : MonoBehaviour
         archive.player1 = player1;
         archive.player2 = player2;
         archive.map = _realMap;
-        archive.tech = _tech;
 
         var charactersLength = 0;
         var structuresLength=0;
@@ -641,9 +639,15 @@ public class DataManager : MonoBehaviour
         var res = await api.GET(
             url: api.Player + "/" + currentPlayer.id + "/tech",
             param: null);
-        var tech = GetModel<int[]>(res);
+        var tech = GetModel<int[,]>(res);
         if (tech == null) return;
-        _tech = tech;
+        for (int i = 0; i < tech.GetLength(0); i++)
+        {
+            for (int j = 0; j < tech.GetLength(1); j++)
+            {
+                currentPlayer.tech[i * tech.GetLength(1) + j] = tech[i, j];
+            }
+        }
     }
 
     public async Task GetEquipments()
@@ -1218,6 +1222,14 @@ public class DataManager : MonoBehaviour
         destinationPlayer.equipments = sourcePlayer.equipments;
         destinationPlayer.mounts = sourcePlayer.mounts;
         destinationPlayer.items = sourcePlayer.items;
+        destinationPlayer.tech = new int[2 * sourcePlayer.tech.GetLength(1)];
+        for (int i = 0; i < sourcePlayer.tech.GetLength(0); i++)
+        {
+            for (int j = 0; j < sourcePlayer.tech.GetLength(1); j++)
+            {
+                destinationPlayer.tech[i * sourcePlayer.tech.GetLength(1) + j] = sourcePlayer.tech[i, j];
+            }
+        }
     }
 
     private void SetPlayerShop(Player player, Shop shop)
@@ -1434,6 +1446,7 @@ public class Player
     public Mount[] mounts;
     public Model.Item[] items;
     public Shop shop;
+    public int[] tech;
 }
 
 [Serializable]

@@ -17,7 +17,7 @@ public class Skilltree : MonoBehaviour
     public int[] SkillStars;
     public string[] SkillNames;
     public string[] SkillDescriptions;
-    public int[] techStatus = new int[100];
+    public int[] techStatus;
     public TMP_Text starText;
     
     public List<Skill> skillList;
@@ -45,11 +45,7 @@ public class Skilltree : MonoBehaviour
     public void Start()
     {
         stars = getStars();
-        //stars = (int)DataManager.Instance.currentPlayer.stars;
-        //techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};
-        techStatus = DataManager.Instance._tech;
-        Debug.Log("------------techstatus-------------");
-        for(int i=0;i<techStatus.Length;i++) Debug.Log("i="+i+" number = "+techStatus[i]);
+        techStatus = DataManager.Instance.currentPlayer.tech;
         SkillLevels = new int[11];
         SkillCaps = new[] {1, 1, 1, 1, 1, 1,1,1,1,1,1};
         SkillNames = new[] {"Life", "Horse", "Fish", "Sword", "Elephant", "Fox","Beer","Potion","Arrow","Shield","Cannon"};
