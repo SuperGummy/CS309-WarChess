@@ -1,10 +1,8 @@
-﻿
-
 using System;
 using Model;
 
 [System.Serializable]
-public class Archive
+public class Sl
 {
     public int gameID;
     public int round;

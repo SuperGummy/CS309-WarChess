@@ -159,7 +159,8 @@ public class DataManager : MonoBehaviour
         StreamReader sr = new StreamReader(Application.dataPath + "/JSONData.json");
         string JsonString = await sr.ReadToEndAsync();
         sr.Close();
-        Archive archive = JsonUtility.FromJson<Archive>(JsonString);
+        Sl a = new Sl();
+        Sl archive = JsonUtility.FromJson<Sl>(JsonString);
         Debug.Log("-------LOAD success-------");
         
         Debug.Log("------- create Game object ---------");
@@ -205,9 +206,9 @@ public class DataManager : MonoBehaviour
         SetData(game);
     }
 
-    private Archive CreateArchiveObject()
+    private Sl CreateArchiveObject()
     {
-        var archive = new Archive();
+        var archive = new Sl();
 
         archive.gameID = gameID;
         archive.round = round;
@@ -690,12 +691,16 @@ public class DataManager : MonoBehaviour
         var equipment = GetModel<Model.Equipment>(res);
         if (equipment == null) return;
         currentPlayer.stars -= 7;
-        currentPlayer.equipments.AddRange(new Equipment[] { equipment });
+        var newequip = new Equipment[currentPlayer.equipments.Length + 1];
+        for (int i = 0; i < newequip.Length - 1; i++) newequip[i] = currentPlayer.equipments[i];
+        newequip[newequip.Length - 1] = equipment;
+        currentPlayer.equipments = newequip;
+        //currentPlayer.equipments.AddRange(new Equipment[] { equipment });
         for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
         {
             if (currentPlayer.shop.index[0, i] == shopid)
             {
-                currentPlayer.equipments[i] = null;
+                currentPlayer.shop.equipments[i] = null;
                 break;
             }
         }
@@ -713,12 +718,16 @@ public class DataManager : MonoBehaviour
         var mount = GetModel<Mount>(res);
         if (mount == null) return;
         currentPlayer.stars -= 7;
-        currentPlayer.mounts.AddRange(new Mount[] { mount });
-        for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
+        var newmount = new Mount[currentPlayer.mounts.Length + 1];
+        for (int i = 0; i < newmount.Length - 1; i++) newmount[i] = currentPlayer.mounts[i];
+        newmount[newmount.Length - 1] = mount;
+        currentPlayer.mounts = newmount;
+        //currentPlayer.mounts.AddRange(new Mount[] { mount });
+        for (int i = 0; i < currentPlayer.shop.mounts.Length; i++)
         {
             if (currentPlayer.shop.index[2, i] == shopid)
             {
-                currentPlayer.equipments[i] = null;
+                currentPlayer.shop.mounts[i] = null;
                 break;
             }
         }
@@ -736,13 +745,17 @@ public class DataManager : MonoBehaviour
         );
         var item = GetModel<Model.Item>(res);
         if (item == null) return;
-        currentPlayer.items.AddRange(new Model.Item[] { item });
+        //currentPlayer.items.AddRange(new Model.Item[] { item });
         currentPlayer.stars -= 7;
-        for (int i = 0; i < currentPlayer.shop.equipments.Length; i++)
+        var newitem = new Item[currentPlayer.items.Length + 1];
+        for (int i = 0; i < newitem.Length - 1; i++) newitem[i] = currentPlayer.items[i];
+        newitem[newitem.Length - 1] = item;
+        currentPlayer.items = newitem;
+        for (int i = 0; i < currentPlayer.shop.items.Length; i++)
         {
             if (currentPlayer.shop.index[1, i] == shopid)
             {
-                currentPlayer.equipments[i] = null;
+                currentPlayer.shop.items[i] = null;
                 break;
             }
         }

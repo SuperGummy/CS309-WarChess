@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,7 +17,8 @@ public class Skilltree : MonoBehaviour
     public int[] SkillStars;
     public string[] SkillNames;
     public string[] SkillDescriptions;
-    public int[] techStatus;
+    public int[] techStatus = new int[100];
+    public TMP_Text starText;
     
     public List<Skill> skillList;
     public GameObject skillHolder;
@@ -30,12 +32,24 @@ public class Skilltree : MonoBehaviour
     {
         GameManager.Instance.CloseTechnologies();
     }
+
+    private int getStars()
+    {
+        return (int)DataManager.Instance.currentPlayer.stars;
+    }
+    public void Update()
+    {
+        stars = getStars();
+    }
+
     public void Start()
     {
-        stars = 50;
+        stars = getStars();
         //stars = (int)DataManager.Instance.currentPlayer.stars;
-        techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};
+        //techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};
         techStatus = DataManager.Instance._tech;
+        Debug.Log("------------techstatus-------------");
+        for(int i=0;i<techStatus.Length;i++) Debug.Log("i="+i+" number = "+techStatus[i]);
         SkillLevels = new int[11];
         SkillCaps = new[] {1, 1, 1, 1, 1, 1,1,1,1,1,1};
         SkillNames = new[] {"Life", "Horse", "Fish", "Sword", "Elephant", "Fox","Beer","Potion","Arrow","Shield","Cannon"};
@@ -71,5 +85,6 @@ public class Skilltree : MonoBehaviour
     public void UpdateSkillUI()
     {
         foreach (var skill in skillList) skill.updateUI();
+        starText.text = stars.ToString();
     }
 }

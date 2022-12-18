@@ -818,6 +818,11 @@ MonoBehaviour:
   titleText: {fileID: 817094964006820073}
   costText: {fileID: 3721955571793399380}
   image: {fileID: 6338587889989908673}
+  button: {fileID: 6785572094229030386}
+  name: 
   id: 0
   ty: 0
   cost: 0
+  ec: 0
+  mc: 0
+  ic: 0

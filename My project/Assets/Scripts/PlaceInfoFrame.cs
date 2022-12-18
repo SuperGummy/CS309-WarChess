@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Model;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,14 @@ public class PlaceInfoFrame : MonoBehaviour
     private void OnEnable()
     {
         RenderData(_position);
+    }
+
+    private void OnDisable()
+    {
+        function.onClick.RemoveAllListeners();
+        addHealth.onClick.RemoveAllListeners();
+        recruit.onClick.RemoveAllListeners();
+        
     }
 
     public void Inform(Vector3Int position)

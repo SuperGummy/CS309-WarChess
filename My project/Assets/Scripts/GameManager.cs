@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Audio;
 using Model;
 using UnityEngine;
@@ -460,9 +461,9 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void UpdateTech(int t)
+    public async Task UpdateTech(int t)
     {
-        DataManager.Instance.UpdateTechnologies(_previousPosition, t);
+        await DataManager.Instance.UpdateTechnologies(_previousPosition, t);
 
         //render
         //scene back to main scene 
@@ -475,21 +476,21 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void BuyEquipment(int shopId)
+    public async Task BuyEquipment(int shopId)
     {
-        DataManager.Instance.BuyEquipments(shopId);
+        await DataManager.Instance.BuyEquipments(shopId);
         current = true;
     }
 
-    public void BuyMount(int shopId)
+    public async Task BuyMount(int shopId)
     {
-        DataManager.Instance.BuyMounts(shopId);
+        await DataManager.Instance.BuyMounts(shopId);
         current = true;
     }
 
-    public void BuyItem(int shopId)
+    public async Task BuyItem(int shopId)
     {
-        DataManager.Instance.BuyItems(shopId);
+        await DataManager.Instance.BuyItems(shopId);
         current = true;
     }
 
@@ -545,7 +546,8 @@ public class GameManager : MonoBehaviour
     {
         await DataManager.Instance.UpdateStructure(position, type);
         GridController.Instance.SetStructure(position);
-        placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(position);
+        CloseStructureInfo();
+        //placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(position);
         current = true;
     }
 

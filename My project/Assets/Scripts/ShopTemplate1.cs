@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -14,6 +15,7 @@ public class ShopTemplate1 : MonoBehaviour
     public TMP_Text titleText;
     public TMP_Text costText;
     public Image image;
+    public Button button;
     public string name;
     public int id;
     public int ty;
@@ -23,22 +25,21 @@ public class ShopTemplate1 : MonoBehaviour
     public ItemClass ic;
     public void updateUI()
     {
+        if(name == String.Empty) addChain();
         titleText.text = name;
         if (ty == 0) image.sprite = RenderManager.Instance.GetEquipmentImage(ec);
         if (ty == 1) image.sprite = RenderManager.Instance.GetMountImage(mc);
         if (ty == 2) image.sprite = RenderManager.Instance.GetItemImage(ic);
-
+        if (DataManager.Instance.currentPlayer.stars < 7) button.interactable=false;
+        else button.interactable=true;
+        Debug.Log(name+" "+ty+" "+ec+" "+mc+" "+ic);
     }
-    public void buy()
+    public async void buy()
     {
-        if (shopManager.star < cost)
-        {
-            NotEnoughStar();
-            return;
-        }
-        if(ty==0) GameManager.Instance.BuyEquipment(id);
-        if(ty==1) GameManager.Instance.BuyMount(id);
-        if(ty==2) GameManager.Instance.BuyItem(id);
+        
+        if(ty==0) await GameManager.Instance.BuyEquipment(id);
+        if(ty==1) await GameManager.Instance.BuyMount(id);
+        if(ty==2) await GameManager.Instance.BuyItem(id);
         //Debug.Log("ababa");
         addChain();
         shopManager.updateUI();

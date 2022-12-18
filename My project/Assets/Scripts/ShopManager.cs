@@ -72,20 +72,31 @@ public class ShopManager : MonoBehaviour
         for (int j = 0; j < gettotal(0); j++)
         {
             Equipment a = DataManager.Instance.currentPlayer.shop.equipments[j];
+            if (a == null)
+            {
+                ShopTemplate0[j].addChain();
+                continue;
+            }
             Debug.Log("----------shop in equipment-----------"+a.name);
             ShopTemplate0[j].titleText.text = a.name;
             ShopTemplate0[j].costText.text = "7";
-            ShopTemplate0[j].id = a.id;
+            ShopTemplate0[j].id = DataManager.Instance.currentPlayer.shop.index[0,j];
             ShopTemplate0[j].name = a.name;
             ShopTemplate0[j].ec = a.equipmentClass;
+            Debug.Log("equipmentclass: "+a.equipmentClass);
             ShopTemplate0[j].ty = 0;
         }
         for (int j = 0; j <gettotal(1); j++)
         {
             Mount b = DataManager.Instance.currentPlayer.shop.mounts[j];
+            if (b == null)
+            {
+                ShopTemplate1[j].addChain();
+                continue;
+            }
             ShopTemplate1[j].titleText.text = b.name;
             ShopTemplate1[j].costText.text = "7";
-            ShopTemplate1[j].id = b.id;
+            ShopTemplate1[j].id = DataManager.Instance.currentPlayer.shop.index[2,j];
             ShopTemplate1[j].name = b.name;
             ShopTemplate1[j].mc = b.mountClass;
             ShopTemplate1[j].ty = 1;
@@ -93,9 +104,14 @@ public class ShopManager : MonoBehaviour
         for (int j = 0; j < gettotal(2); j++)
         {
             var c = DataManager.Instance.currentPlayer.shop.items[j];
+            if (c == null)
+            {
+                ShopTemplate2[j].addChain();
+                continue;
+            }
             ShopTemplate2[j].titleText.text = c.name;
             ShopTemplate2[j].costText.text = "7";
-            ShopTemplate2[j].id = c.id;
+            ShopTemplate2[j].id = DataManager.Instance.currentPlayer.shop.index[1,j];
             ShopTemplate2[j].name = c.name;
             ShopTemplate2[j].ic = c.itemClass;
             ShopTemplate2[j].ty = 2;
