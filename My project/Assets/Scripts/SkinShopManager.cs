@@ -59,7 +59,7 @@ public class SkinShopManager : MonoBehaviour
 
     public void Start()
     {
-        PlayerPrefs.GetString("username");
+        userName = PlayerPrefs.GetString("username");
         explorerBlueToggles[_explorerBlueId].isOn = true;
         explorerRedToggles[_explorerRedId].isOn = true;
         fighterBlueToggles[_fighterBlueId].isOn = true;
@@ -128,9 +128,6 @@ public class SkinShopManager : MonoBehaviour
                 break;
             }
 
-        if (calledFromGame)
-        {
-            GridController.Instance.UpdateRenderManager(true);
-        }
+        GridController.Instance.UpdateRenderManager(calledFromGame);
     }
 }

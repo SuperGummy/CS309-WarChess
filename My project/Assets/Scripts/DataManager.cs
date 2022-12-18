@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UIElements;
+using File = UnityEngine.Windows.File;
 using Random = System.Random;
 
 public class DataManager : MonoBehaviour
@@ -25,6 +29,7 @@ public class DataManager : MonoBehaviour
     public Player player2;
     public int[] _tech = new int [2 * TechSize];
     private int[] _map = new int[MapSize * MapSize];
+    private int[] _realMap = new int[MapSize * MapSize];
     private Character[] characters = new Character[MapSize * MapSize];
     private Structure[] structures = new Structure[MapSize * MapSize];
 
@@ -44,6 +49,261 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void SaveArchive()
+    {
+        var archive = CreateArchiveObject();
+        var JsonString = JsonUtility.ToJson(archive,true);
+        Debug.Log("-------save json string--------");
+        Debug.Log(JsonString);
+        StreamWriter sw = new StreamWriter(Application.dataPath + "/JSONData.json");
+        sw.Write(JsonString);
+        sw.Close();
+    }
+
+    private Model.Player ChangePlayerModel(Player player,Model.Character[] character,Model.Structure[] structure)
+    {
+        Model.Player result = new Model.Player();
+        result.id = player.id;
+        result.stars = player.id;
+        result.prosperityDegree = player.prosperityDegree;
+        result.peaceDegree = player.peaceDegree;
+        result.equipments = player.equipments;
+        result.mounts = player.mounts;
+        result.items = player.items;
+        result.characters = character;
+        result.structures = structure;
+        return result;
+    }
+
+    private Model.Character ChangeCharacterModel(Character character,int x=0,int y=0)
+    {
+        var result = new Model.Character();
+        result.id = character.id;
+        result.name = character.name;
+        result.level = character.level;
+        result.attack = character.attack;
+        result.defense = character.defense;
+        result.hp = character.hp;
+        result.x = x;
+        result.y = y;
+        result.equipment = character.equipment;
+        result.mount = character.mount;
+        result.characterClass = character.characterClass;
+        result.actionRange = character.actionRange;
+        result.actionState = character.actionState;
+        return result;
+    }
+    private Model.Character[] UnionCharacters(Model.Character[] character, int[] characterPlayer, int op = -1)
+    {
+        int length = 0;
+        for (int i = 0; i < character.Length; i++)
+        {
+            if (op == -1 || characterPlayer[i] == op)
+            {
+                length++;
+            }
+        }
+        var result = new Model.Character[length];
+        length = 0;
+        for (int i = 0; i < character.Length; i++)
+        {
+            if (op == -1 || characterPlayer[i] == op)
+            {
+                result[length] = character[i];
+                length++;
+            }
+        }
+        return result;
+    }
+    private Model.Structure[] UnionStructures(Model.Structure[] structure,
+        int[] structureCharacterCount, Character[] structureCharacters, int[] structuresPlayer,int op=-1)
+    {
+        int length = 0;
+        for (int i = 0; i < structure.Length; i++)
+        {
+            if (op==-1||structuresPlayer[i] == op)
+            {
+                length++;
+            }   
+        }
+        var result = new Model.Structure[length];
+        var tmp = 0;
+        length = 0;
+        for (int i = 0; i < structure.Length;i++)
+        {
+            if (op==-1||structuresPlayer[i] == op)
+            {
+                var character = new Model.Character[structureCharacterCount[i]];
+                for (int j = 0; j < structureCharacterCount[i]; j++)
+                {
+                    character[j] = ChangeCharacterModel(structureCharacters[tmp]);
+                    tmp++;
+                }
+                result[length] = structure[i];
+                result[length].characters = character;
+                length++;
+            }   
+        }
+        return result;
+    }
+    public async Task LoadArchive()
+    {
+        if (!File.Exists(Application.dataPath + "/JSONData.json"))
+        {
+            Debug.Log("NOT FIND ARCHIVE");
+            return;
+        }
+        Debug.Log("-------LOAD-------");
+        StreamReader sr = new StreamReader(Application.dataPath + "/JSONData.json");
+        string JsonString = await sr.ReadToEndAsync();
+        sr.Close();
+        Archive archive = JsonUtility.FromJson<Archive>(JsonString);
+        Debug.Log("-------LOAD success-------");
+        
+        Debug.Log("------- create Game object ---------");
+        var game = new Game();
+        game.id = archive.gameID;
+        game.round = archive.round;
+        game.currentPlayer = archive.currentPlayer;
+        
+        var structures1 = UnionStructures(archive.structures,archive.structureCharacterCount,
+            archive.structureCharacters,archive.structurePlayer, archive.player1.id);
+        var structures2 = UnionStructures(archive.structures,archive.structureCharacterCount,
+            archive.structureCharacters,archive.structurePlayer, archive.player2.id);
+        var characters1 = UnionCharacters(archive.characters,archive.characterPlayer,archive.player1.id);
+        var characters2 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player2.id);
+
+        game.player1 = ChangePlayerModel(archive.player1, characters1, structures1);
+        game.player2 = ChangePlayerModel(archive.player2, characters1, structures2);
+        game.shop = game.currentPlayer?archive.player2.shop:archive.player1.shop;
+        
+        var allStructure = UnionStructures(archive.structures, archive.structureCharacterCount,
+            archive.structureCharacters, archive.structurePlayer);
+        game.structures = allStructure;
+        int[,] map = new int[MapSize, MapSize];
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                map[i, j] = archive.map[i * MapSize+j];
+            }
+        }
+        game.map = map;
+        Debug.Log("------- create Game object success ---------");
+
+        var res = await api.PUT(
+            url: api.Copy ,
+            param: new Dictionary<string, string>
+            {
+                { "game", JsonUtility.ToJson(game) },
+            }
+        );
+        game = GetModel<Model.Game>(res);
+        if (game == null) return;
+        SetData(game);
+    }
+
+    private Archive CreateArchiveObject()
+    {
+        var archive = new Archive();
+
+        archive.gameID = gameID;
+        archive.round = round;
+        archive.currentPlayer=(player2.id==currentPlayer.id);
+        archive.player1 = player1;
+        archive.player2 = player2;
+        archive.map = _realMap;
+        archive.tech = _tech;
+
+        var charactersLength = 0;
+        var structuresLength=0;
+        var structuresCharactersCount=0;
+        for (int i = 0; i < characters.Length; i++)
+        {
+            if (characters[i] != null && characters[i].id != 0)
+            {
+                charactersLength++;
+            }
+        }
+
+        for (int i = 0; i < structures.Length; i++)
+        {
+            if (structures[i] != null && structures[i].id != 0)
+            {
+                structuresLength++;
+                if (structures[i].characters != null)
+                {
+                    structuresCharactersCount += structures[i].characters.Length;
+                }
+            }
+        }
+        Model.Character[] saveCharacters=new Model.Character[charactersLength];
+        Model.Structure[] saveStructures=new Model.Structure[structuresLength];
+        archive.characterPlayer = new int[charactersLength];
+        archive.structurePlayer = new int[structuresLength];
+        archive.structureCharacterCount = new int[structuresLength];
+        archive.structureCharacters = new Character[structuresCharactersCount];
+        structuresCharactersCount = 0;
+        for (int i = 0; i < characters.Length; i++)
+        {
+            if (characters[i] != null && characters[i].id != 0)
+            {
+                charactersLength--;
+                saveCharacters[charactersLength] = new Model.Character();
+                saveCharacters[charactersLength].id = characters[i].id;
+                saveCharacters[charactersLength].hp = characters[i].hp;
+                saveCharacters[charactersLength].name = characters[i].name;
+                saveCharacters[charactersLength].level = characters[i].level;
+                saveCharacters[charactersLength].mount = characters[i].mount;
+                saveCharacters[charactersLength].attack = characters[i].attack;
+                saveCharacters[charactersLength].defense = characters[i].defense;
+                saveCharacters[charactersLength].equipment = characters[i].equipment; 
+                saveCharacters[charactersLength].actionRange = characters[i].actionRange;
+                saveCharacters[charactersLength].actionState = characters[i].actionState;
+                saveCharacters[charactersLength].characterClass = characters[i].characterClass;
+
+                saveCharacters[charactersLength].x = i / MapSize;
+                saveCharacters[charactersLength].y = i % MapSize;
+
+                archive.characterPlayer[charactersLength] = characters[i].id;
+            }
+        }
+        
+        for (int i = 0; i < structures.Length; i++)
+        {
+            if (structures[i] != null && structures[i].id != 0)
+            {
+                structuresLength--;
+                saveStructures[structuresLength] = new Model.Structure();
+                saveStructures[structuresLength].id = structures[i].id;
+                saveStructures[structuresLength].structureClass = structures[i].structureClass;
+                saveStructures[structuresLength].level = structures[i].level;
+                saveStructures[structuresLength].hp = structures[i].hp;
+                saveStructures[structuresLength].remainingRound = structures[i].remainingRound;
+                saveStructures[structuresLength].value = structures[i].value;
+                saveStructures[structuresLength].characters = null;
+                saveStructures[structuresLength].x = i / MapSize;
+                saveStructures[structuresLength].y = i % MapSize;
+                    
+                archive.structureCharacterCount[structuresLength] = 0;
+                if (structures[i].characters != null)
+                {
+                    archive.structureCharacterCount[structuresLength] = structures[i].characters.Length;
+                    for (int j = 0; j < structures[i].characters.Length; j++)
+                    {
+                        archive.structureCharacters[structuresCharactersCount] = structures[i].characters[j];
+                        structuresCharactersCount++;
+                    }
+                }
+
+                archive.structurePlayer[structuresLength] = structures[i].id;
+            }
+        }
+        archive.characters = saveCharacters;
+        archive.structures = saveStructures;
+        return archive;
     }
 
     public List<Character> CharactersOfPlayer(int id)
@@ -142,8 +402,9 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public async Task Play(string username1, string username2)
+    public async Task Play(string username1, string username2, IProgress<ProgressReportModel> progress = null)
     {
+        ProgressReportModel report = new ProgressReportModel();
         var res = await api.POST(
             url: api.Play,
             param: new Dictionary<string, string>
@@ -151,14 +412,19 @@ public class DataManager : MonoBehaviour
                 { "username1", username1 },
                 { "username2", username2 }
             });
-
-        var game = GetModel<Game>(res);
+        report.progressValue = 15;
+        if(progress is not  null)
+            progress.Report(report);
+        var game = GetModel<Game>(res, progress);
         if (game == null)
         {
             return;
         }
 
-        SetData(game);
+        SetData(game, progress);
+        report.progressValue = 100;
+        if(progress is not  null)
+            progress.Report(report);
     }
 
     public async Task Update(int playerId)
@@ -196,6 +462,15 @@ public class DataManager : MonoBehaviour
         }
 
         InitiateData(game);
+        
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                GridController.Instance.SetStructure(new Vector3Int(i, j));
+            }
+        }
+        
         foreach (var structure in game.structures)
             UpdateStructureAttribute(structure);
         foreach (var structure in game.player1.structures)
@@ -694,7 +969,7 @@ public class DataManager : MonoBehaviour
         currentPlayer.stars -= hpNew - hpOld;
     }
 
-    private T GetModel<T>(HttpResponseMessage res)
+    private T GetModel<T>(HttpResponseMessage res, IProgress<ProgressReportModel> progress = null)
     {
         if (res == null)
         {
@@ -726,6 +1001,12 @@ public class DataManager : MonoBehaviour
             return default;
         }
 
+        if (progress is not null)
+        {
+            ProgressReportModel report = new ProgressReportModel();
+            report.progressValue = 30;
+            progress.Report(report);
+        }
         return model.data;
     }
 
@@ -743,13 +1024,34 @@ public class DataManager : MonoBehaviour
         return 1;
     }
 
-    private void SetData(Game game)
+    private void SetData(Game game, IProgress<ProgressReportModel> progress = null)
     {
+        ProgressReportModel report = new ProgressReportModel();
         gameID = game.id;
         InitiateData(game);
+        if (progress is not null)
+        {
+            report.progressValue = 50;
+            progress.Report(report);
+        }
         SetMap(game.map);
+        if (progress is not null)
+        {
+            report.progressValue = 65;
+            progress.Report(report);
+        }
         SetStructure(game.structures, game.player1.structures[0], game.player2.structures[0]);
+        if (progress is not null)
+        {
+            report.progressValue = 80;
+            progress.Report(report);
+        }
         SetCharacter(game.player1.characters[0], game.player2.characters[0]);
+        if (progress is not null)
+        {
+            report.progressValue = 90;
+            progress.Report(report);
+        }
     }
 
     private void InitiateData(Game game)
@@ -805,8 +1107,23 @@ public class DataManager : MonoBehaviour
         characters[character.x * MapSize + character.y].defense = character.defense;
         characters[character.x * MapSize + character.y].hp = character.hp;
         characters[character.x * MapSize + character.y].level = character.level;
-        characters[character.x * MapSize + character.y].equipment = character.equipment;
-        characters[character.x * MapSize + character.y].mount = character.mount;
+        if (character.equipment == null || character.equipment.id == 0)
+        {
+            characters[character.x * MapSize + character.y].equipment = null;
+        }
+        else
+        {
+            characters[character.x * MapSize + character.y].equipment = character.equipment;
+        }
+        
+        if (character.mount == null || character.mount.id == 0)
+        {
+            characters[character.x * MapSize + character.y].mount = null;
+        }
+        else
+        {
+            characters[character.x * MapSize + character.y].mount = character.mount;
+        }
         if (flag)
         {
             characters[character.x * MapSize + character.y].player = currentPlayer;
@@ -1084,6 +1401,7 @@ public class DataManager : MonoBehaviour
             {
                 GridController.Instance.SetMap(new Vector3Int(j, i), sourceMap[i, j], landColor[i, j], treeColor[i, j]);
                 _map[i * MapSize + j] = sourceMap[i, j] == 3 ? 0 : sourceMap[i, j];
+                _realMap[i * MapSize + j] = sourceMap[i, j];
             }
         }
     }

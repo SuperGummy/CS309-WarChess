@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Audio;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -166,12 +168,20 @@ public class GameManager : MonoBehaviour
 
     private async void Initiate()
     {
-        await DataManager.Instance.Play("123", _username2);
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
+        progress.ProgressChanged += ReportProgress;
+        await DataManager.Instance.Play("123", _username2, progress);
         var pos1 = new Vector3Int(0, 16, 0);
         var pos2 = new Vector3Int(16, 0, 0);
         GridController.Instance.CreateCharacter(pos1);
         GridController.Instance.CreateCharacter(pos2);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+    }
+
+    private void ReportProgress(object sender, ProgressReportModel report)
+    {
+        ProgressRenderer.Instance.SetSliderValue(report.progressValue);
     }
 
     public async void NextRound()
@@ -1068,4 +1078,29 @@ public class GameManager : MonoBehaviour
 
         return result;
     }
+
+    public void SaveArchive()
+    {
+        DataManager.Instance.SaveArchive();
+    }
+
+    public async void LoadArchive()
+    {
+        await DataManager.Instance.LoadArchive();
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        for (int i = 0; i < DataManager.MapSize; i++)
+        {
+            for (int j = 0; j < DataManager.MapSize; j++)
+            {
+                if (GridController.Instance.characterObjects[i * DataManager.MapSize + j] != null)
+                    GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
+                GridController.Instance.SetStructure(new Vector3Int(i,j));
+                if (DataManager.Instance.GetCharacterByPosition(new Vector3Int(i, j)) != null)
+                {
+                    GridController.Instance.CreateCharacter(new Vector3Int(i,j));
+                }
+            }
+        }
+    }
+    
 }
