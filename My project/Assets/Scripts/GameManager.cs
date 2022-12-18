@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Audio;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour
     public bool nextRound;
     public bool stepBack;
     public bool current;
+    private bool _aiTurn;
+    private bool _aiType;
 
     private Vector3Int _previousPosition = Vector3Int.back;
     private List<Vector3Int> _characterActionRange;
@@ -51,30 +55,49 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GridController.Instance.gridEnable && Input.GetMouseButtonDown(0))
+        if (GridController.Instance.gridEnable)
         {
-            var cellPosition = GetMousePosition();
-            var x = cellPosition.x + 8;
-            var y = cellPosition.y + 8;
-            var position = new Vector3Int(x, y, cellPosition.z);
-            if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize) return;
-            Debug.Log(x + " " + y + " " + cellPosition.z);
+            if (Input.GetMouseButtonDown(0))
+            {
+                var cellPosition = GetMousePosition();
+                var x = cellPosition.x + 8;
+                var y = cellPosition.y + 8;
+                var position = new Vector3Int(x, y, cellPosition.z);
+                if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize) return;
+                Debug.Log(x + " " + y + " " + cellPosition.z);
+                
+                if (_characterActionRange != null)
+                    if (_characterActionRange.Exists(c => c.x == x && c.y == y))
+                        MoveCharacter(_previousPosition, position);
+                
+                if (_characterAttackRange != null)
+                    if (_characterAttackRange.Exists(c => c.x == x && c.y == y))
+                        AttackPosition(_previousPosition, position);
+                
+                if (recruit)
+                    if (_characterAvailablePosition.Exists(c => c.x == x && c.y == y))
+                        BuyCharacter(position);
+                
+                UpdatePosition(position);
+                ShowCharacterInfoButton(position);
+                ShowStructureInfoButton(position);
+            } 
+            else if (_aiTurn)
+            {
+                AI ai;
+                if (_aiType)
+                {
+                    ai = new AISenior();
+                }
+                else
+                {
+                    ai = new AISenior();
+                }
+                ai.MoveCharacters();
+                ai.AttackCharacters();
+                ai.Buy();
+            }
 
-            if (_characterActionRange != null)
-                if (_characterActionRange.Exists(c => c.x == x && c.y == y))
-                    MoveCharacter(_previousPosition, position);
-
-            if (_characterAttackRange != null)
-                if (_characterAttackRange.Exists(c => c.x == x && c.y == y))
-                    AttackPosition(_previousPosition, position);
-
-            if (recruit)
-                if (_characterAvailablePosition.Exists(c => c.x == x && c.y == y))
-                    BuyCharacter(position);
-
-            UpdatePosition(position);
-            ShowCharacterInfoButton(position);
-            ShowStructureInfoButton(position);
         }
     }
 
@@ -145,12 +168,20 @@ public class GameManager : MonoBehaviour
 
     private async void Initiate()
     {
-        await DataManager.Instance.Play("123", _username2);
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
+        progress.ProgressChanged += ReportProgress;
+        await DataManager.Instance.Play("123", _username2, progress);
         var pos1 = new Vector3Int(0, 16, 0);
         var pos2 = new Vector3Int(16, 0, 0);
         GridController.Instance.CreateCharacter(pos1);
         GridController.Instance.CreateCharacter(pos2);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+    }
+
+    private void ReportProgress(object sender, ProgressReportModel report)
+    {
+        ProgressRenderer.Instance.SetSliderValue(report.progressValue);
     }
 
     public async void NextRound()
