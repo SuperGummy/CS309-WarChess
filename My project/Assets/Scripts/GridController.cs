@@ -274,7 +274,11 @@ public class GridController : MonoBehaviour
     public void SetStructure(Vector3Int position)
     {
         var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure == null) return;
+        if (structure == null)
+        {
+            buildingMap.SetTile(new Vector3Int(position.x - 8, position.y - 8, 0), emptyTile);
+            return;
+        }
         string side;
         if (DataManager.Instance.CheckStructureSide(structure) == -1)
             side = "blue";

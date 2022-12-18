@@ -30,6 +30,7 @@ namespace API
         public const string Archive = BaseGame + "/" + "archive";
         public const string Play = BaseGame + "/" + "play";
         public const string Back = BaseGame + "/" + "back";
+        public const string Copy = BaseGame + "/" + "copy";
 
         // player
         public const string Player = BaseApi + "/" + "player";

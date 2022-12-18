@@ -20,7 +20,7 @@ namespace Options
 
         public void OnClick()
         {
-            // TODO: Load Save Game Scene
+            GameManager.Instance.SaveArchive();
         }
     }
 }

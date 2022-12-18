@@ -1047,4 +1047,29 @@ public class GameManager : MonoBehaviour
 
         return result;
     }
+
+    public void SaveArchive()
+    {
+        DataManager.Instance.SaveArchive();
+    }
+
+    public async void LoadArchive()
+    {
+        await DataManager.Instance.LoadArchive();
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        for (int i = 0; i < DataManager.MapSize; i++)
+        {
+            for (int j = 0; j < DataManager.MapSize; j++)
+            {
+                if (GridController.Instance.characterObjects[i * DataManager.MapSize + j] != null)
+                    GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
+                GridController.Instance.SetStructure(new Vector3Int(i,j));
+                if (DataManager.Instance.GetCharacterByPosition(new Vector3Int(i, j)) != null)
+                {
+                    GridController.Instance.CreateCharacter(new Vector3Int(i,j));
+                }
+            }
+        }
+    }
+    
 }
