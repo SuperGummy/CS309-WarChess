@@ -35,7 +35,7 @@ public class ProgressRenderer : MonoBehaviour
     void Update()
     {
         float currentScore = Mathf.SmoothDamp(slider.value, _progressValue, ref _currentVelocity, 50 * Time.deltaTime);
-        if (currentScore - slider.value < 1 && slider.value + 3 <= _progressValue)
+        if (currentScore - slider.value < 1 && slider.value <= _progressValue)
         {
             currentScore = slider.value + 4;
         }

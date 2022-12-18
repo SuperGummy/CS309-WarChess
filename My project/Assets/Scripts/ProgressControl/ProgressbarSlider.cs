@@ -25,7 +25,7 @@ public class ProgressbarSlider : MonoBehaviour
     {
         _progress = (int)progress;
         if (_progress >= 99) _progress = 100;
-        progressText.text = (int) _progress + "/100";
+        progressText.text = ((int) _progress >= 100 ? 100 : _progress) + "/100";
         if (_progress >= 100)
         {
             progressRenderer.UnLoad();
