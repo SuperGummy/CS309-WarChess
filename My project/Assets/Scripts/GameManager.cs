@@ -518,6 +518,16 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
+    public async void HealStructure()
+    {
+        var hpOld = DataManager.Instance.GetStructureByPosition(_previousPosition).hp;
+        await DataManager.Instance.HealStructure(_previousPosition);
+        GridController.Instance.ShowAddHealthText(_previousPosition, DataManager.Instance.GetStructureByPosition(_previousPosition).hp - hpOld);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
+        current = true;
+    }
+    
     private bool CheckAccessible(Vector3Int position,bool type)
     {
         var x = position.x;

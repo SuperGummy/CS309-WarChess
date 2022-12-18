@@ -10,6 +10,7 @@ public class PlaceInfoFrame : MonoBehaviour
 {
     public Image structureImage;
     public TextMeshProUGUI structureName;
+    public Button addHealth;
     public Button recruit;
     public Button function;
     public Slider hp;
@@ -24,6 +25,7 @@ public class PlaceInfoFrame : MonoBehaviour
     {
         _position = position;
         recruit.onClick.AddListener(GameManager.Instance.OpenRecruit);
+        addHealth.onClick.AddListener(GameManager.Instance.HealStructure);
     }
 
     public void RenderData(Vector3Int position)
@@ -39,11 +41,16 @@ public class PlaceInfoFrame : MonoBehaviour
         else
             side = "middle";
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
+        recruit.interactable = true;
         function.interactable = true;
+        if (DataManager.Instance.currentPlayer.stars >= 50 - structure.hp)
+            addHealth.interactable = true;
+        else
+            addHealth.interactable = false;
         switch (structure.structureClass)
         {
             case StructureClass.CAMP:
-                function.GetComponentInChildren<TextMeshProUGUI>().text= "train";
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "train";
                 function.onClick.AddListener(GameManager.Instance.OpenCamp);
                 break;
             case StructureClass.MARKET:
@@ -58,12 +65,15 @@ public class PlaceInfoFrame : MonoBehaviour
                 {
                     function.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
                     function.interactable = false;
+                    recruit.interactable = false;
+                    addHealth.interactable = false;
                 }
                 else
                 {
                     function.GetComponentInChildren<TextMeshProUGUI>().text = "evolve";
                     function.onClick.AddListener(GameManager.Instance.OpenUpgrade);
                 }
+
                 break;
         }
     }

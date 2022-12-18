@@ -376,7 +376,7 @@ public class GridController : MonoBehaviour
         CreateText(mapPosition, stringBuilder, AnimatedTextType.DAMAGE);
     }
 
-    public void ShowCharacterAddHealthText(Vector3Int position, int health)
+    public void ShowAddHealthText(Vector3Int position, int health)
     {
         var mapPosition = GetMapPosition(position);
         mapPosition.y += textShift;
