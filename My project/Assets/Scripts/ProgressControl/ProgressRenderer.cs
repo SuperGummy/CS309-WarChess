@@ -39,7 +39,8 @@ public class ProgressRenderer : MonoBehaviour
         {
             currentScore = slider.value + 4;
         }
-        slider.value = (int) currentScore;
+        if(currentScore > slider.value)
+            slider.value = (int) currentScore;
     }
 
     public void UnLoad()
