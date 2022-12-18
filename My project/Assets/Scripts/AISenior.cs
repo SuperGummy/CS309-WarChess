@@ -234,10 +234,12 @@ public class AISenior: AI
         {
             return;
         }
+        //upgrade structure
         for (int i = 0; i < structures.Count; i++)
         {
             if (structures[i].structureClass == StructureClass.VILLAGE)
             {
+                
                 int type = _random.Next(0, 3);
                 GameManager.Instance.UpgradeStructure(structPos[i], type);
             }
