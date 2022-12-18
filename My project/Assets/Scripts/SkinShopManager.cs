@@ -128,9 +128,6 @@ public class SkinShopManager : MonoBehaviour
                 break;
             }
 
-        if (calledFromGame)
-        {
-            GridController.Instance.UpdateRenderManager(true);
-        }
+        GridController.Instance.UpdateRenderManager(calledFromGame);
     }
 }
