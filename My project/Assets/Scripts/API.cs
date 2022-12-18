@@ -43,7 +43,7 @@ namespace API
         private static HttpClient Client()
         {
             var http = new HttpClient();
-            //http.DefaultRequestHeaders.Add("token", PlayerPrefs.GetString("token", ""));
+            http.DefaultRequestHeaders.Add("token", PlayerPrefs.GetString("token", ""));
             return http;
         }
 
