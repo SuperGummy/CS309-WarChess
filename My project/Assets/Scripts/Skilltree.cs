@@ -46,6 +46,9 @@ public class Skilltree : MonoBehaviour
     {
         stars = getStars();
         techStatus = DataManager.Instance.currentPlayer.tech;
+        //stars = (int)DataManager.Instance.currentPlayer.stars;
+        //techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};
+        
         SkillLevels = new int[11];
         SkillCaps = new[] {1, 1, 1, 1, 1, 1,1,1,1,1,1};
         SkillNames = new[] {"Life", "Horse", "Fish", "Sword", "Elephant", "Fox","Beer","Potion","Arrow","Shield","Cannon"};
@@ -80,7 +83,11 @@ public class Skilltree : MonoBehaviour
 
     public void UpdateSkillUI()
     {
-        foreach (var skill in skillList) skill.updateUI();
+        
         starText.text = stars.ToString();
+        techStatus = DataManager.Instance.currentPlayer.tech;
+        Debug.Log("------------techstatus-------------");
+        for(int i=0;i<techStatus.Length;i++) Debug.Log("i="+i+" number = "+techStatus[i]);
+        foreach (var skill in skillList) skill.updateUI();
     }
 }

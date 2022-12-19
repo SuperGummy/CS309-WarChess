@@ -57,10 +57,10 @@ public class Skill : MonoBehaviour
 
     public async void Buy()
     {
-        if (skilltree.stars < skilltree.SkillStars[id] || skilltree.SkillLevels[id] >= skilltree.SkillCaps[id]) return;
-        skilltree.stars -= skilltree.SkillStars[id];
-        skilltree.SkillLevels[id]++;
-        skilltree.UpdateSkillUI();
+        if (skilltree.stars < skilltree.SkillStars[id] || skilltree.techStatus[id]>0) return;
+        //skilltree.stars -= skilltree.SkillStars[id];
+        //skilltree.SkillLevels[id]++;
         await GameManager.Instance.UpdateTech(id);
+        skilltree.UpdateSkillUI();
     }
 }
