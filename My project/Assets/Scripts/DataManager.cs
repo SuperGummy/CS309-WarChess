@@ -147,17 +147,24 @@ public class DataManager : MonoBehaviour
         }
         return result;
     }
-    public async Task LoadArchive()
+    public async Task LoadArchive(IProgress<ProgressReportModel> progress = null)
     {
+        
         if (!File.Exists(Application.dataPath + "/JSONData.json"))
         {
             Debug.Log("NOT FIND ARCHIVE");
             return;
         }
         Debug.Log("-------LOAD-------");
+        ProgressReportModel report = new ProgressReportModel();
         StreamReader sr = new StreamReader(Application.dataPath + "/JSONData.json");
         string JsonString = await sr.ReadToEndAsync();
         sr.Close();
+        
+        report.ProgressValue = 15;
+        if(progress is not  null)
+            progress.Report(report);
+        
         Sl a = new Sl();
         Sl archive = JsonUtility.FromJson<Sl>(JsonString);
         Debug.Log("-------LOAD success-------");
@@ -203,6 +210,9 @@ public class DataManager : MonoBehaviour
         game = GetModel<Model.Game>(res);
         if (game == null) return;
         SetData(game);
+        report.ProgressValue = 100;
+        if (progress is not  null)
+            progress.Report(report);
     }
 
     private Sl CreateArchiveObject()
@@ -403,7 +413,7 @@ public class DataManager : MonoBehaviour
 
     public async Task Play(string username1, string username2, IProgress<ProgressReportModel> progress = null)
     {
-        ProgressReportModel report = new ProgressReportModel();
+        var report = new ProgressReportModel();
         var res = await api.POST(
             url: api.Play,
             param: new Dictionary<string, string>
@@ -411,7 +421,7 @@ public class DataManager : MonoBehaviour
                 { "username1", username1 },
                 { "username2", username2 }
             });
-        report.progressValue = 15;
+        report.ProgressValue = 15;
         if(progress is not  null)
             progress.Report(report);
         var game = GetModel<Game>(res, progress);
@@ -421,8 +431,8 @@ public class DataManager : MonoBehaviour
         }
 
         SetData(game, progress);
-        report.progressValue = 100;
-        if(progress is not  null)
+        report.ProgressValue = 100;
+        if (progress is not  null)
             progress.Report(report);
     }
 
@@ -1021,7 +1031,7 @@ public class DataManager : MonoBehaviour
         if (progress is not null)
         {
             ProgressReportModel report = new ProgressReportModel();
-            report.progressValue = 30;
+            report.ProgressValue = 30;
             progress.Report(report);
         }
         return model.data;
@@ -1048,25 +1058,25 @@ public class DataManager : MonoBehaviour
         InitiateData(game);
         if (progress is not null)
         {
-            report.progressValue = 50;
+            report.ProgressValue = 50;
             progress.Report(report);
         }
         SetMap(game.map);
         if (progress is not null)
         {
-            report.progressValue = 65;
+            report.ProgressValue = 65;
             progress.Report(report);
         }
         SetStructure(game.structures, game.player1.structures[0], game.player2.structures[0]);
         if (progress is not null)
         {
-            report.progressValue = 80;
+            report.ProgressValue = 80;
             progress.Report(report);
         }
         SetCharacter(game.player1.characters[0], game.player2.characters[0]);
         if (progress is not null)
         {
-            report.progressValue = 90;
+            report.ProgressValue = 90;
             progress.Report(report);
         }
     }
@@ -1222,12 +1232,12 @@ public class DataManager : MonoBehaviour
         destinationPlayer.equipments = sourcePlayer.equipments;
         destinationPlayer.mounts = sourcePlayer.mounts;
         destinationPlayer.items = sourcePlayer.items;
-        destinationPlayer.tech = new int[2 * sourcePlayer.tech.GetLength(1)];
-        for (int i = 0; i < sourcePlayer.tech.GetLength(0); i++)
+        destinationPlayer.tech = new int[2 * sourcePlayer.technologyTree.GetLength(1)];
+        for (int i = 0; i < sourcePlayer.technologyTree.GetLength(0); i++)
         {
-            for (int j = 0; j < sourcePlayer.tech.GetLength(1); j++)
+            for (int j = 0; j < sourcePlayer.technologyTree.GetLength(1); j++)
             {
-                destinationPlayer.tech[i * sourcePlayer.tech.GetLength(1) + j] = sourcePlayer.tech[i, j];
+                destinationPlayer.tech[i * sourcePlayer.technologyTree.GetLength(1) + j] = sourcePlayer.technologyTree[i, j];
             }
         }
     }

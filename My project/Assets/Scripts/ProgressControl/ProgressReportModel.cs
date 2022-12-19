@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProgressReportModel : MonoBehaviour
+public class ProgressReportModel
 {
-    public int progressValue;
+    public int ProgressValue;
 }

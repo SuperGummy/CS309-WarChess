@@ -47,7 +47,7 @@ namespace Model
         public long stars;
         public int prosperityDegree;
         public int peaceDegree;
-        public int[,] tech;
+        public int[,] technologyTree;
         public Character[] characters;
         public Equipment[] equipments;
         public Mount[] mounts;

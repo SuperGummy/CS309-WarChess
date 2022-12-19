@@ -209,7 +209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 764328141}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: NextRound
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -624,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 441.5159
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7163,6 +7163,7 @@ GameObject:
   - component: {fileID: 764328139}
   - component: {fileID: 764328143}
   - component: {fileID: 764328144}
+  - component: {fileID: 764328145}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7218,15 +7219,16 @@ MonoBehaviour:
   placeInfoButton: {fileID: 1878142712}
   placeInfoFrame: {fileID: 342910644}
   error: 0
-  backpack: 0
   func: 0
-  options: 0
   recruit: 0
   characterInfo: 0
   structureInfo: 0
   nextRound: 0
   stepBack: 0
   current: 0
+  aiTurn: 0
+  aiType: 0
+  pvp: 0
 --- !u!114 &764328142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7253,6 +7255,7 @@ MonoBehaviour:
       equipments: []
       items: []
       mounts: []
+    tech: 
   player1:
     id: 0
     stars: 0
@@ -7265,6 +7268,7 @@ MonoBehaviour:
       equipments: []
       items: []
       mounts: []
+    tech: 
   player2:
     id: 0
     stars: 0
@@ -7277,7 +7281,7 @@ MonoBehaviour:
       equipments: []
       items: []
       mounts: []
-  _tech: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    tech: 
   purchasingIndex: 0
   purchasingType: 0
 --- !u!114 &764328143
@@ -7344,6 +7348,18 @@ MonoBehaviour:
   switchRoundAnimationPrefab: {fileID: 5328876463939333781, guid: 459ddba16a0206c49804d5707d92eaf3, type: 3}
   canvas: {fileID: 735889640}
   position: {x: 0, y: 0, z: 0}
+--- !u!114 &764328145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764328136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2bfc804c306614cbf668abf2179060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &841388340
 PrefabInstance:
   m_ObjectHideFlags: 0

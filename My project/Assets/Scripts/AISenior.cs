@@ -158,7 +158,7 @@ public class AISenior: AI
         {
             List<Vector3Int> movableList = new List<Vector3Int>();
             Vector3Int pos = chPositions[i]; 
-            movableList = GameManager.Instance.GetActionRange(pos);
+            movableList = GameUtils.Instance.GetActionRange(pos);
             //int rand = _random.Next(0, movableList.Count);
             Vector3Int destPos = pos;
             
@@ -207,7 +207,7 @@ public class AISenior: AI
         GetCharactersPos();
         foreach (Vector3Int pos in chPositions)
         {
-            List<Vector3Int> attackPositions = GameManager.Instance.GetActionRange(pos);
+            List<Vector3Int> attackPositions = GameUtils.Instance.GetActionRange(pos);
             if (attackPositions.Count != 0)
             {
                 Vector3Int attackPos = attackPositions[0];

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,13 +37,14 @@ public abstract class AI
         round = DataManager.Instance.round;
     }
 
-    public async void Run()
+    public async Task Run()
     {
-        await this.MoveCharacters();
-        await this.AttackCharacters();
+        await MoveCharacters();
+        await AttackCharacters();
         // this.Buy();
+        await NextRound();
     }
-    
+
     protected bool Recruit(List<Vector3Int> pos)
     {
         if (player.stars < 3)
@@ -62,9 +62,9 @@ public abstract class AI
 
         return true;
     }
+
     protected void UpgradeStructure()
     {
-        
     }
 
     protected void UpgradeTechTree()
@@ -77,9 +77,8 @@ public abstract class AI
         {
             GameManager.Instance.BuyEquipment(0);
         }
-
     }
-    
+
 
     protected void BuyMount()
     {
@@ -87,18 +86,21 @@ public abstract class AI
         {
             GameManager.Instance.BuyEquipment(0);
         }
-
     }
 
     protected void BuyItems()
     {
-        
     }
 
     public abstract Task MoveCharacters();
 
     public abstract Task AttackCharacters();
 
-    public abstract void Buy();
+    public Task NextRound()
+    {
+        return GameManager.Instance.NextRound();
+    }
 
+
+    public abstract void Buy();
 }
