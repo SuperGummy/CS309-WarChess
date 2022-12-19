@@ -18,7 +18,7 @@ public class AIJunior: AI
             List<Vector3Int> movableList = new List<Vector3Int>();
             Vector3Int pos = chPositions[i]; 
             // Debug.Log("character pos " + pos);
-            movableList = GameManager.Instance.GetActionRange(pos);
+            movableList = GameUtils.Instance.GetActionRange(pos);
             if (movableList != null && movableList.Count > 0)
             {
                 int rand = new Random().Next(0, movableList.Count);
@@ -35,7 +35,7 @@ public class AIJunior: AI
         foreach (Vector3Int pos in chPositions)
         {
             // Debug.Log("current position" + pos);
-            List<Vector3Int> attackPositions = GameManager.Instance.GetAttackRange(pos);
+            List<Vector3Int> attackPositions = GameUtils.Instance.GetAttackRange(pos);
             if (attackPositions != null && attackPositions.Count != 0)
             {
                 int num = new Random().Next(0, attackPositions.Count);

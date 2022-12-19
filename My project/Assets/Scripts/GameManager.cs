@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Audio;
-using Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,19 +22,17 @@ public class GameManager : MonoBehaviour
     public GameObject placeInfoFrame;
 
     public bool error;
-    public bool backpack;
     public bool func;
-    public bool options;
     public bool recruit;
     public bool characterInfo;
     public bool structureInfo;
     public bool nextRound;
     public bool stepBack;
     public bool current;
-    private bool _aiTurn = false;
-    private bool _aiType = false;
-    private bool pvp = false;
-    private AI _ai;
+    public bool aiTurn;
+    public bool aiType;
+    public bool pvp;
+    public AI ai;
 
     private Vector3Int _previousPosition = Vector3Int.back;
     private List<Vector3Int> _characterActionRange;
@@ -50,10 +47,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Initiate();
-        _ai = AI.GetAI(_aiType);
-        backpackButton = backpackButton.GetComponent<Button>();
-        finish = finish.GetComponent<Button>();
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        ai = AI.GetAI(aiType);
     }
 
     // Update is called once per frame
@@ -61,7 +56,7 @@ public class GameManager : MonoBehaviour
     {
         if (GridController.Instance.gridEnable)
         {
-            if (Input.GetMouseButtonDown(0) && (!_aiTurn || pvp))
+            if (Input.GetMouseButtonDown(0) && (!aiTurn || pvp))
             {
                 var cellPosition = GetMousePosition();
                 var x = cellPosition.x + 8;
@@ -69,24 +64,23 @@ public class GameManager : MonoBehaviour
                 var position = new Vector3Int(x, y, cellPosition.z);
                 if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize) return;
                 Debug.Log(x + " " + y + " " + cellPosition.z);
-                
+
                 if (_characterActionRange != null)
                     if (_characterActionRange.Exists(c => c.x == x && c.y == y))
                         MoveCharacter(_previousPosition, position);
-                
+
                 if (_characterAttackRange != null)
                     if (_characterAttackRange.Exists(c => c.x == x && c.y == y))
                         AttackPosition(_previousPosition, position);
-                
+
                 if (recruit)
                     if (_characterAvailablePosition.Exists(c => c.x == x && c.y == y))
                         BuyCharacter(position);
-                
+
                 UpdatePosition(position);
                 ShowCharacterInfoButton(position);
                 ShowStructureInfoButton(position);
-            } 
-
+            }
         }
     }
 
@@ -155,90 +149,34 @@ public class GameManager : MonoBehaviour
         placeInfoButton.SetActive(false);
     }
 
-    private async void Initiate()
-    {
-        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
-        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
-        progress.ProgressChanged += ReportProgress;
-        await DataManager.Instance.Play("123", _username2, progress);
-        var pos1 = new Vector3Int(0, 16, 0);
-        var pos2 = new Vector3Int(16, 0, 0);
-        GridController.Instance.CreateCharacter(pos1);
-        GridController.Instance.CreateCharacter(pos2);
-        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-    }
-
-    private void ReportProgress(object sender, ProgressReportModel report)
-    {
-        ProgressRenderer.Instance.SetSliderValue(report.progressValue);
-    }
-
-    public async void NextRound()
-    {
-        AudioManager.Instance.Play(2);
-        if (nextRound) return;
-        nextRound = true;
-        await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
-        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-        UIManager.Instance.ShowRoundChange();
-        nextRound = false;
-        current = false;
-        if (!pvp)
-        {
-            _aiTurn = !_aiTurn;
-        }
-        if (_aiTurn)
-        {
-            Debug.Log(DataManager.Instance.currentPlayer.id == AI.player.id);
-            AIMove();
-        }
-    }
-
-    private async void AIMove()
-    {
-        _ai.Run();
-        NextRound();
-    }
-
-    public async void StepBack()
-    {
-        if (stepBack) return;
-        stepBack = true;
-        await DataManager.Instance.StepBack(current);
-        
-        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-        stepBack = false;
-        current = false;
-    }
-
     public void OpenOptions()
     {
-        if (options) return;
-        options = true;
+        if (func) return;
+        func = true;
         SceneController.Instance.LoadOptions();
         DisableBackground();
     }
 
     public void CloseOptions()
     {
-        if (!options) return;
-        options = false;
+        if (!func) return;
+        func = false;
         SceneController.Instance.UnloadOptions();
         EnableBackground();
     }
 
     public void OpenBackPack()
     {
-        if (backpack) return;
-        backpack = true;
+        if (func) return;
+        func = true;
         SceneController.Instance.LoadBackPack();
         DisableBackground();
     }
 
     public void CloseBackPack()
     {
-        if (!backpack) return;
-        backpack = false;
+        if (!func) return;
+        func = false;
         SceneController.Instance.UnloadBackPack();
         EnableBackground();
     }
@@ -284,14 +222,14 @@ public class GameManager : MonoBehaviour
         SceneController.Instance.LoadEquip();
         DisableBackground();
     }
-    
+
     public void CloseEquip()
     {
         if (!func) return;
         func = false;
         SceneController.Instance.UnloadEquip();
-    } 
-    
+    }
+
     public void OpenUpgrade()
     {
         if (func) return;
@@ -328,14 +266,14 @@ public class GameManager : MonoBehaviour
     {
         if (func) return;
         func = true;
-        _characterAvailablePosition = GetEmptyPosition(_previousPosition);
+        _characterAvailablePosition = GameUtils.Instance.GetEmptyPosition(_previousPosition);
         RecruitManager.Position = _previousPosition;
         RecruitManager.Place = _characterAvailablePosition != null;
         SceneController.Instance.LoadRecruit();
         placeInfoFrame.SetActive(false);
         DisableBackground();
     }
-    
+
     public void CloseRecruit()
     {
         if (!func) return;
@@ -392,7 +330,7 @@ public class GameManager : MonoBehaviour
 
     private void ShowActionRange(Vector3Int position)
     {
-        _characterActionRange = GetActionRange(position);
+        _characterActionRange = GameUtils.Instance.GetActionRange(position);
         if (_characterActionRange == null) return;
         GridController.Instance.SetMovableHighlight(_characterActionRange, true);
     }
@@ -406,7 +344,7 @@ public class GameManager : MonoBehaviour
 
     private void ShowAttackRange(Vector3Int position)
     {
-        _characterAttackRange = GetAttackRange(position);
+        _characterAttackRange = GameUtils.Instance.GetAttackRange(position);
         if (_characterAttackRange == null) return;
         GridController.Instance.SetAttackableHighlight(_characterAttackRange, true);
     }
@@ -418,37 +356,66 @@ public class GameManager : MonoBehaviour
         _characterAttackRange = null;
     }
 
+    public async void EndTurn()
+    {
+        await NextRound();
+    }
+
+    public async Task NextRound()
+    {
+        AudioManager.Instance.Play(2);
+        if (nextRound) return;
+        nextRound = true;
+        await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        UIManager.Instance.ShowRoundChange();
+        nextRound = false;
+        current = false;
+        if (!pvp) aiTurn = !aiTurn;
+        if (aiTurn) await ai.Run();
+    }
+
+    public async void StepBack()
+    {
+        if (stepBack) return;
+        stepBack = true;
+        await DataManager.Instance.StepBack(current);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        stepBack = false;
+        current = false;
+    }
+
     public async Task AttackPosition(Vector3Int positionAttack, Vector3Int positionAttacked)
     {
         if (DataManager.Instance.GetCharacterByPosition(positionAttacked) != null)
         {
+            await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
             GridController.Instance.ShowDamageText(positionAttacked,
                 DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
                 DataManager.Instance.GetCharacterByPosition(positionAttacked).defense);
-            await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
             AudioManager.Instance.Play(1);
             current = true;
         }
         else if (DataManager.Instance.GetStructureByPosition(positionAttacked) != null)
         {
+            await DataManager.Instance.AttackStructure(positionAttack, positionAttacked);
             GridController.Instance.ShowDamageText(positionAttacked,
                 DataManager.Instance.GetCharacterByPosition(positionAttack).attack);
-            await DataManager.Instance.AttackStructure(positionAttack, positionAttacked);
             if (DataManager.Instance.GetStructureByPosition(positionAttacked).player?.id ==
                 DataManager.Instance.currentPlayer.id)
             {
                 GridController.Instance.SetStructure(positionAttacked);
                 GridController.Instance.ShowConquerText(positionAttacked);
             }
+
             AudioManager.Instance.Play(1);
             current = true;
         }
-        
     }
 
     public async Task MoveCharacter(Vector3Int position, Vector3Int newPosition)
     {
-        var path = GetActionPath(position, newPosition);
+        var path = GameUtils.Instance.GetActionPath(position, newPosition);
         await DataManager.Instance.MoveCharacter(position, newPosition);
         GridController.Instance.PlayCharacterRoute(path);
         AudioManager.Instance.Play(3);
@@ -544,7 +511,7 @@ public class GameManager : MonoBehaviour
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
-    
+
     public async void UpgradeStructure(Vector3Int position, int type = -1)
     {
         await DataManager.Instance.UpdateStructure(position, type);
@@ -558,530 +525,11 @@ public class GameManager : MonoBehaviour
     {
         var hpOld = DataManager.Instance.GetStructureByPosition(_previousPosition).hp;
         await DataManager.Instance.HealStructure(_previousPosition);
-        GridController.Instance.ShowAddHealthText(_previousPosition, DataManager.Instance.GetStructureByPosition(_previousPosition).hp - hpOld);
+        GridController.Instance.ShowAddHealthText(_previousPosition,
+            DataManager.Instance.GetStructureByPosition(_previousPosition).hp - hpOld);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
         current = true;
-    }
-    
-    private bool CheckAccessible(Vector3Int position,bool type)
-    {
-        var x = position.x;
-        var y = position.y;
-
-        if (x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize)
-        {
-            return false;
-        }
-
-        if (y % 2 == 1 && x == DataManager.MapSize - 1)
-        {
-            return false;
-        }
-
-        var pos = new Vector3Int(position.y, position.x);
-        if (DataManager.Instance.GetMapByPosition(pos) == 1 ||
-                              (DataManager.Instance.GetMapByPosition(pos) == 2 && (!type)))
-        {
-            return false;
-        }
-        if (DataManager.Instance.GetCharacterByPosition(position) != null)
-        {
-            return false;
-        }
-
-        var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure != null)
-        {
-            if (structure.player == null) return false;
-            if (structure.player.id != DataManager.Instance.currentPlayer.id) return false;
-        }
-
-        return true;
-    }
-
-    private static bool CheckBound(Vector3Int position)
-    {
-        var x = position.x;
-        var y = position.y;
-        return !(x < 0 || x >= DataManager.MapSize || y < 0 || y >= DataManager.MapSize);
-    }
-
-    private bool CheckAttack(Vector3Int position)
-    {
-        if (DataManager.Instance.GetCharacterByPosition(position) != null)
-        {
-            if (DataManager.Instance.GetCharacterByPosition(position).player.id !=
-                DataManager.Instance.currentPlayer.id)
-            {
-                return true;
-            }
-        }
-
-        var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure != null)
-        {
-            if (structure.player?.id != DataManager.Instance.currentPlayer.id) return true;
-        }
-
-        return false;
-    }
-
-    private List<Vector3Int> GetActionPath(Vector3Int position, Vector3Int target)
-    {
-        var character = DataManager.Instance.GetCharacterByPosition(position);
-        bool type = character.characterClass == CharacterClass.EXPLORER;
-        if (!CheckAccessible(target,type))
-        {
-            return default;
-        }
-
-        var n = DataManager.MapSize;
-        var actionRange = character.actionRange + 1;
-        var result = new List<Vector3Int>();
-        var dis = new int[n, n];
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                dis[i, j] = 0;
-            }
-        }
-
-        dis[position.x, position.y] = 1;
-        for (var t = 1; t < actionRange; t++)
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            if (dis[i, j] == t)
-            {
-                var op = 1;
-                if (j % 2 == 0) op = -1;
-                var temp = new Vector3Int(i + op, j + 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + op, j + 1] == 0)
-                    {
-                        dis[i + op, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + op, j - 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + op, j - 1] == 0)
-                    {
-                        dis[i + op, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i, j + 1] == 0)
-                    {
-                        dis[i, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i, j - 1] == 0)
-                    {
-                        dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-            }
-
-        if (dis[target.x, target.y] == 0)
-        {
-            //can't
-            return default;
-        }
-
-        var x = target.x;
-        var y = target.y;
-        result.Add(target);
-        for (var t = dis[x, y] - 1; t >= 2; t--)
-        {
-            var op = 1;
-            if (y % 2 == 0) op = -1;
-            var temp = new Vector3Int(x + op, y + 1);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x + op, y + 1] == t)
-                {
-                    result.Add(temp);
-                    x += op;
-                    y += 1;
-                    continue;
-                }
-            }
-
-            temp = new Vector3Int(x + 1, y);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x + 1, y] == t)
-                {
-                    result.Add(temp);
-                    x += 1;
-                    continue;
-                }
-            }
-
-            temp = new Vector3Int(x + op, y - 1);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x + op, y - 1] == t)
-                {
-                    result.Add(temp);
-                    x += op;
-                    y -= 1;
-                    continue;
-                }
-            }
-
-            temp = new Vector3Int(x, y + 1);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x, y + 1] == t)
-                {
-                    result.Add(temp);
-                    y += 1;
-                    continue;
-                }
-            }
-
-            temp = new Vector3Int(x, y - 1);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x, y - 1] == t)
-                {
-                    result.Add(temp);
-                    y -= 1;
-                    continue;
-                }
-            }
-
-            temp = new Vector3Int(x - 1, y);
-            if (CheckAccessible(temp,type))
-            {
-                if (dis[x - 1, y] == t)
-                {
-                    result.Add(temp);
-                    x -= 1;
-                }
-            }
-        }
-
-        result.Add(position);
-        result.Reverse();
-        // Debug.Log(result.Count);
-        // for (var i=0;i<result.Count;i+=1)
-        // {
-        //     Debug.Log(result[i].x.ToString()+" "+result[i].y.ToString());
-        // }
-        return result;
-    }
-
-    internal List<Vector3Int> GetActionRange(Vector3Int position)
-    {
-        var character = DataManager.Instance.GetCharacterByPosition(position);
-        if (character == null)
-        {
-            return default;
-        }
-        bool type = character.characterClass == CharacterClass.EXPLORER;
-        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
-        {
-            return default;
-        }
-
-        if (character.actionState >= 1)
-        {
-            // can't move
-            return default;
-        }
-
-        var n = DataManager.MapSize;
-        var actionRange = character.actionRange + 1;
-        var result = new List<Vector3Int>();
-        var dis = new int[n, n];
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                dis[i, j] = 0;
-            }
-        }
-
-        dis[position.x, position.y] = 1;
-        for (var t = 1; t < actionRange; t++)
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            if (dis[i, j] == t)
-            {
-                var op = 1;
-                if (j % 2 == 0) op = -1;
-                var temp = new Vector3Int(i + op, j + 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + op, j + 1] == 0)
-                    {
-                        dis[i + op, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + op, j - 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i + op, j - 1] == 0)
-                    {
-                        dis[i + op, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j + 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i, j + 1] == 0)
-                    {
-                        dis[i, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j - 1);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i, j - 1] == 0)
-                    {
-                        dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j);
-                if (CheckAccessible(temp,type))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-            }
-
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                if (dis[i, j] > 1)
-                {
-                    var temp = new Vector3Int(i, j);
-                    result.Add(temp);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private List<Vector3Int> GetEmptyPosition(Vector3Int position)
-    {
-        var structure = DataManager.Instance.GetStructureByPosition(position);
-        if (structure?.player == null || structure.player.id != DataManager.Instance.currentPlayer.id)
-            return default;
-        var type = false;
-
-        var res = new List<Vector3Int>();
-        var i = position.x;
-        var j = position.y;
-        var op = 1;
-        if (j % 2 == 0) op = -1;
-        var temp = new Vector3Int(i, j);
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i + op, j + 1);
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i + 1, j);
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i + op, j - 1);
-
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i, j + 1);
-
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i, j - 1);
-
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        temp = new Vector3Int(i - 1, j);
-
-        if (CheckAccessible(temp,type))
-        {
-            res.Add(temp);
-        }
-
-        return res;
-    }
-
-    internal List<Vector3Int> GetAttackRange(Vector3Int position)
-    {
-        var character = DataManager.Instance.GetCharacterByPosition(position);
-        if (character == null)
-        {
-            return default;
-        }
-
-        if (character.player.id != DataManager.Instance.currentPlayer.id || character.hp <= 0)
-        {
-            return default;
-        }
-
-        if (character.actionState >= 2)
-        {
-            return default;
-        }
-
-        var n = DataManager.MapSize;
-        var attackRange = character.actionRange;
-        if (character.equipment == null)
-            attackRange += 1;
-        else
-            attackRange += character.equipment.attackRange + 1;
-        var result = new List<Vector3Int>();
-        var dis = new int[n, n];
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                dis[i, j] = 0;
-            }
-        }
-
-        dis[position.x, position.y] = 1;
-        for (var t = 1; t < attackRange; t++)
-        for (var i = 0; i < n; i++)
-        for (var j = 0; j < n; j++)
-            if (dis[i, j] == t)
-            {
-                var op = 1;
-                if (j % 2 == 0) op = -1;
-                var temp = new Vector3Int(i + op, j + 1);
-                if (CheckBound(temp))
-                {
-                    if (dis[i + op, j + 1] == 0)
-                    {
-                        dis[i + op, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + 1, j);
-                if (CheckBound(temp))
-                {
-                    if (dis[i + 1, j] == 0)
-                    {
-                        dis[i + 1, j] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i + op, j - 1);
-                if (CheckBound(temp))
-                {
-                    if (dis[i + op, j - 1] == 0)
-                    {
-                        dis[i + op, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j + 1);
-                if (CheckBound(temp))
-                {
-                    if (dis[i, j + 1] == 0)
-                    {
-                        dis[i, j + 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i, j - 1);
-                if (CheckBound(temp))
-                {
-                    if (dis[i, j - 1] == 0)
-                    {
-                        dis[i, j - 1] = t + 1;
-                    }
-                }
-
-                temp = new Vector3Int(i - 1, j);
-                if (CheckBound(temp))
-                {
-                    if (dis[i - 1, j] == 0)
-                    {
-                        dis[i - 1, j] = t + 1;
-                    }
-                }
-            }
-
-        for (var i = 0; i < n; i++)
-        {
-            for (var j = 0; j < n; j++)
-            {
-                var temp = new Vector3Int(i, j);
-                if (dis[i, j] != 0 && CheckAttack(temp))
-                {
-                    result.Add(temp);
-                }
-            }
-        }
-
-        return result;
     }
 
     public void SaveArchive()
@@ -1089,23 +537,4 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.SaveArchive();
     }
 
-    public async void LoadArchive()
-    {
-        await DataManager.Instance.LoadArchive();
-        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-        for (int i = 0; i < DataManager.MapSize; i++)
-        {
-            for (int j = 0; j < DataManager.MapSize; j++)
-            {
-                if (GridController.Instance.characterObjects[i * DataManager.MapSize + j] != null)
-                    GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
-                GridController.Instance.SetStructure(new Vector3Int(i,j));
-                if (DataManager.Instance.GetCharacterByPosition(new Vector3Int(i, j)) != null)
-                {
-                    GridController.Instance.CreateCharacter(new Vector3Int(i,j));
-                }
-            }
-        }
-    }
-    
 }
