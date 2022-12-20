@@ -13,11 +13,11 @@ public class EquipConfirm : MonoBehaviour
     {
         if (equipManager.curId == 0)
         {
-            replace.text = $"Replace {equipManager.equipment.name}?";
+            replace.text = $"Replace {equipManager.ch.equipment.name}?";
         }
         else
         {
-            replace.text = $"Replace {equipManager.mount.name}?";
+            replace.text = $"Replace {equipManager.ch.mount.name}?";
         }
     }
 

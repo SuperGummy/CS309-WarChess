@@ -7,19 +7,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static  EquipManager;
-using Button = UnityEngine.UIElements.Button;
 using Color = System.Drawing.Color;
 
 public class equipScript : MonoBehaviour
 {
     public GameObject conf;
     public int id;
+    public int index;
     public int ty;
     public string name;
     public TMP_Text nameText;
     public Image image;
     public int number;
     public TMP_Text numberText;
+    public Button button,imageButton;
     void Start()
     {
         updateUI();
@@ -53,43 +54,34 @@ public class equipScript : MonoBehaviour
         {
             nameText.color=new UnityEngine.Color(1, 1, 1);
             image.color = new UnityEngine.Color(1, 1, 1);
+            imageButton.interactable = true;
         }
-
         numberText.text = $"{number}";
         nameText.text = $"{name}";
-        equipManager.loadCharacter();
-    }
-    public void addChain()
-    {
-        //Debug.Log("addChain");
-        Transform[] father = GetComponentsInChildren<Transform>(true);
-
-        foreach (var child in father)
-        {
-            if(child.name=="Button") child.gameObject.SetActive(false);
-            if(child.name=="chain1"||child.name=="chain2") child.gameObject.SetActive(true);
-            //Debug.Log(child.name);
-        }
     }
 
     public void imageClicked()
     {
+        Debug.Log("Image clicked! name:"+name+" number: "+number);
+        
         if (number > 0)
         {
-            Transform[] father = GetComponentsInChildren<Transform>(true);
+            button.gameObject.SetActive(true);
+            /*Transform[] father = GetComponentsInChildren<Transform>(true);
 
             foreach (var child in father)
             {
                 if(child.name=="EquipButton") child.gameObject.SetActive(true);
-            }
+            }*/
         }
+        equipManager.loadCharacter();
     }
     public void equip()
     {
         equipManager.curTy = ty;
-        equipManager.curId = id;
+        equipManager.curId = index;
         //confirmationPop();
-        if (equipManager.equipment.name =="")
+        if ((ty==0&&equipManager.ch.equipment == null)||(ty==1&&equipManager.ch.mount==null)||ty==2)
         {
             Debug.Log("null");
             //confirmationPop();
@@ -126,8 +118,8 @@ public class equipScript : MonoBehaviour
     {
         if (ty == 0)
         {
-            GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,false);
-            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
+            if(equipManager.ch.equipment!=null) GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,true);
+            GameManager.Instance.ChangeEquipment(getEquipment().id, false);
 
             equipManager.ch.equipment = getEquipment();
             number--;
@@ -135,8 +127,12 @@ public class equipScript : MonoBehaviour
 
         if (ty == 1)
         {
-            GameManager.Instance.ChangeEquipment(equipManager.ch.mount.id,false);
-            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
+            if (equipManager.ch.mount != null)
+            {
+                Debug.Log("off:"+equipManager.ch.mount.name);
+                GameManager.Instance.ChangeMount(equipManager.ch.mount.id,true);
+            }
+            GameManager.Instance.ChangeMount(getMount().id,false);
             equipManager.ch.mount = getMount();
             number--;
         }

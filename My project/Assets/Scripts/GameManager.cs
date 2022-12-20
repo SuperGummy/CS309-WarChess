@@ -202,6 +202,7 @@ public class GameManager : MonoBehaviour
     {
         if (func) return;
         func = true;
+        Skilltree.position = _previousPosition;
         SceneController.Instance.LoadTechTree();
         DisableBackground();
     }
