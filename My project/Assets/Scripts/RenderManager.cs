@@ -23,15 +23,18 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite foxMount;
     [SerializeField] private Sprite elephantMount;
     [SerializeField] private Sprite horseMount;
+    [SerializeField] private Sprite rabbitMount;
 
     [SerializeField] private Sprite potionProperty;
     [SerializeField] private Sprite beerProperty;
     [SerializeField] private Sprite fishProperty;
+    [SerializeField] private Sprite appleProperty;
 
     [SerializeField] private Sprite arrowEquipment;
     [SerializeField] private Sprite cannonEquipment;
     [SerializeField] private Sprite swordEquipment;
     [SerializeField] private Sprite shieldEquipment;
+    [SerializeField] private Sprite stickEquipment;
     
     [SerializeField] private Sprite villageImage;
     [SerializeField] private Sprite villageBlueImage;
@@ -92,6 +95,7 @@ public class RenderManager : MonoBehaviour
             ItemClass.BEER => beerProperty,
             ItemClass.POTION => potionProperty,
             ItemClass.FISH => fishProperty,
+            ItemClass.BASIC => appleProperty,
             _ => null
         };
     }
@@ -103,6 +107,7 @@ public class RenderManager : MonoBehaviour
             MountClass.FOX => foxMount,
             MountClass.HORSE => horseMount,
             MountClass.ELEPHANT => elephantMount,
+            MountClass.BASIC => rabbitMount,
             _ => null
         };
     }
@@ -115,6 +120,7 @@ public class RenderManager : MonoBehaviour
             EquipmentClass.SWORD => swordEquipment,
             EquipmentClass.SHIELD => shieldEquipment,
             EquipmentClass.CANNON => cannonEquipment,
+            EquipmentClass.BASIC => stickEquipment,
             _ => null
         };
     }
