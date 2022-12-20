@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 using TMPro;
 
 
@@ -27,7 +28,8 @@ public class RecruitManager : MonoBehaviour
 
     private void OnClickNext(Button btn)
     {
-        string characterName = btn.transform.GetComponentInChildren<TextMeshProUGUI>().text.Split(" ")[1];
+        string btnName = btn.transform.GetComponentInChildren<TextMeshProUGUI>().text;
+        string characterName = btnName.Split(" ")[1];
         foreach (Character character in _characters)
         {
             if ((character.name).Equals(characterName))
@@ -37,8 +39,7 @@ public class RecruitManager : MonoBehaviour
             }
         }
         
-        btn.enabled = false;
-        _chosenBtn = btn;
+        // btn.enabled = false;
         
         confirm.SetActive(false);
         choose.SetActive(true);
@@ -70,8 +71,6 @@ public class RecruitManager : MonoBehaviour
                 throw new NameNotFound("Cannot find " + btn.name);
         }
         
-        Debug.Log(type);
-        
         GameManager.Instance.ChooseNewCharacterPosition(_id, type);
         
         choose.SetActive(false);
@@ -99,19 +98,23 @@ public class RecruitManager : MonoBehaviour
         // _characters[2].defense = 65;
         // _characters[2].name = "aaaa";
 
-        int idx = 0;
         for (int i = 0; i < 3; i++)
         {
-            Debug.Log(i + " " + nextBtn[i].enabled);
-            if (!nextBtn[i].enabled)
+            // Debug.Log("character " + i + ": " + _characters[i]);
+            if (_characters[i] == null)
+            {
+                Button btn = nextBtn[i];
+                btn.enabled = false;
+                btn.GetComponentInChildren<TextMeshProUGUI>().text = "sold out!";
+                btn.GetComponentInChildren<Image>().color = Color.gray;
                 continue;
+            }
             RecruitInfoFrame member = members[i].GetComponent<RecruitInfoFrame>();
-            (member.defend).text = "defend: " + (_characters[idx].defense);
-            (member.life).text = "life: " + (_characters[idx].hp);
-            (member.naming).text = "name: " + (_characters[idx].name);
-            (member.strength).text = "attack: " + (_characters[idx].attack);
-            nextBtn[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = "Get " + _characters[idx].name;
-            idx++;  
+            (member.defend).text = "defend: " + (_characters[i].defense);
+            (member.life).text = "life: " + (_characters[i].hp);
+            (member.naming).text = "name: " + (_characters[i].name);
+            (member.strength).text = "attack: " + (_characters[i].attack);
+            nextBtn[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = "Get " + _characters[i].name;
         } 
     }
 
@@ -136,18 +139,10 @@ public class RecruitManager : MonoBehaviour
         {
             confirm.SetActive(true);
             choose.SetActive(false);
-            foreach (Button btn in nextBtn)
+            for(int i = 0; i < 3; i++)
             {
-                if (btn.enabled)
-                {
-                    btn.onClick.AddListener(delegate { OnClickNext(btn); });
-                }
-                else
-                {
-                    btn.GetComponentInChildren<TextMeshProUGUI>().text = "sold out!";
-                    btn.GetComponentInChildren<Image>().color = Color.gray;
-                }
-
+                Button btn = nextBtn[i];
+                btn.onClick.AddListener(delegate { OnClickNext(btn); });
             }
 
             foreach (Button btn in recruitBtn)

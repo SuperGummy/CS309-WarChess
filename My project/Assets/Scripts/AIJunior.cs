@@ -46,14 +46,14 @@ public class AIJunior: AI
         }
     }
 
-    public override void Buy()
+    public override Task Buy()
     {
         List<Structure> structures = DataManager.Instance.GetStructureByPlayer(player.id);
         List<Vector3Int> structPos = DataManager.Instance.GetStructurePosByPlayer(player.id);
         List<Vector3Int> recruitPos = new List<Vector3Int>();
         if (structures.Count == 0)
         {
-            return;
+            return default;
         }
         for (int i = 0; i < structures.Count; i++)
         {
@@ -96,6 +96,8 @@ public class AIJunior: AI
                     break;
             }
         }
+
+        return default;
     }
     
 
