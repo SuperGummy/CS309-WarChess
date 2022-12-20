@@ -24,6 +24,13 @@ public class CharacterInfoFrame : MonoBehaviour
     {
         RenderData(_position);
         equip.onClick.AddListener(GameManager.Instance.OpenEquip);
+        discharge.onClick.AddListener(GameManager.Instance.Discharge);
+    }
+
+    private void OnDisable()
+    {
+        equip.onClick.RemoveAllListeners();
+        discharge.onClick.RemoveAllListeners();
     }
 
     public void Inform(Vector3Int position)

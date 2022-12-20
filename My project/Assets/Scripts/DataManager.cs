@@ -975,8 +975,8 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
-        UpdateStructureAttribute(structure);
         currentPlayer.stars -= structureOld.level * 10;
+        UpdateStructureAttribute(structure);
     }
 
     public async Task HealStructure(Vector3Int position)

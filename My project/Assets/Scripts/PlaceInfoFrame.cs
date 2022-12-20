@@ -52,6 +52,7 @@ public class PlaceInfoFrame : MonoBehaviour
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
         recruit.interactable = true;
         function.interactable = true;
+        function.onClick.RemoveAllListeners();
         if (DataManager.Instance.currentPlayer.stars >= 50 - structure.hp)
             addHealth.interactable = true;
         else
