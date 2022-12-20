@@ -226,14 +226,14 @@ public class AISenior: AI
         }
     }
 
-    public override void Buy()
+    public override Task Buy()
     {
         List<Structure> structures = DataManager.Instance.GetStructureByPlayer(player.id);
         List<Vector3Int> structPos = DataManager.Instance.GetStructurePosByPlayer(player.id);
         List<Vector3Int> recruitPos = new List<Vector3Int>();
         if (structures.Count == 0)
         {
-            return;
+            return default;
         }
         //upgrade structure
         for (int i = 0; i < structures.Count; i++)
@@ -259,19 +259,21 @@ public class AISenior: AI
                     flag = Recruit();
                     break;
                 case 1:
-                    flag = BuyEquipment();
+                    BuyEquipment();
                     break;
                 case 2:
-                    flag = BuyMount();
+                    BuyMount();
                     break;
                 case 3:
-                    flag = UpgradeTechTree();
+                    UpgradeTechTree();
                     break;
                 case 4:
-                    flag = UpgradeStructure();
+                    UpgradeStructure();
                     break;
             }
         }
+
+        return default;
     }
     
     private bool Recruit()
@@ -288,35 +290,6 @@ public class AISenior: AI
         return true;
     }
 
-    private bool UpgradeStructure()
-    {
-        return true;
-    }
 
-    private bool UpgradeTechTree()
-    {
-        return true;
-    }
-
-    private bool BuyEquipment()
-    {
-        if (player.stars < 7)
-        {
-            return false;
-        }
-
-        return true;
-    }
-    
-
-    private bool BuyMount()
-    {
-        if (player.stars < 7)
-        {
-            return false;
-        }
-
-        return true;
-    }
 
 }
