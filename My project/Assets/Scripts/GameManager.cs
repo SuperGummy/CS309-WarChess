@@ -366,6 +366,12 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.Play(2);
         if (nextRound) return;
         nextRound = true;
+        CloseCharacterInfo();
+        CloseCharacterInfoButton();
+        CloseStructureInfo();
+        CloseStructureInfoButton();
+        CloseActionRange();
+        CloseAttackRange();
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         nextRound = false;
@@ -459,6 +465,11 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
+    public void Discharge()
+    {
+        DismissCharacter(_previousPosition);
+    }
+
     public async void DismissCharacter(Vector3Int position)
     {
         await DataManager.Instance.DismissCharacter(position);
@@ -501,7 +512,7 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void chooseNewCharacterposition(int id, int type)
+    public void ChooseNewCharacterPosition(int id, int type)
     {
         if (recruit) return;
         recruit = true;
