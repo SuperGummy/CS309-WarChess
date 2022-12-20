@@ -53,7 +53,7 @@ public class DataManager : MonoBehaviour
     public void SaveArchive()
     {
         var archive = CreateArchiveObject();
-        var JsonString = JsonUtility.ToJson(archive,true);
+        var JsonString = JsonUtility.ToJson(archive, true);
         Debug.Log("-------save json string--------");
         Debug.Log(JsonString);
         StreamWriter sw = new StreamWriter(Application.dataPath + "/JSONData.json");
@@ -61,7 +61,7 @@ public class DataManager : MonoBehaviour
         sw.Close();
     }
 
-    private Model.Player ChangePlayerModel(Player player,Model.Character[] character,Model.Structure[] structure)
+    private Model.Player ChangePlayerModel(Player player, Model.Character[] character, Model.Structure[] structure)
     {
         Model.Player result = new Model.Player();
         result.id = player.id;
@@ -76,7 +76,7 @@ public class DataManager : MonoBehaviour
         return result;
     }
 
-    private Model.Character ChangeCharacterModel(Character character,int x=0,int y=0)
+    private Model.Character ChangeCharacterModel(Character character, int x = 0, int y = 0)
     {
         var result = new Model.Character();
         result.id = character.id;
@@ -94,6 +94,7 @@ public class DataManager : MonoBehaviour
         result.actionState = character.actionState;
         return result;
     }
+
     private Model.Character[] UnionCharacters(Model.Character[] character, int[] characterPlayer, int op = -1)
     {
         int length = 0;
@@ -104,6 +105,7 @@ public class DataManager : MonoBehaviour
                 length++;
             }
         }
+
         var result = new Model.Character[length];
         length = 0;
         for (int i = 0; i < character.Length; i++)
@@ -114,25 +116,28 @@ public class DataManager : MonoBehaviour
                 length++;
             }
         }
+
         return result;
     }
+
     private Model.Structure[] UnionStructures(Model.Structure[] structure,
-        int[] structureCharacterCount, Character[] structureCharacters, int[] structuresPlayer,int op=-1)
+        int[] structureCharacterCount, Character[] structureCharacters, int[] structuresPlayer, int op = -1)
     {
         int length = 0;
         for (int i = 0; i < structure.Length; i++)
         {
-            if (op==-1||structuresPlayer[i] == op)
+            if (op == -1 || structuresPlayer[i] == op)
             {
                 length++;
-            }   
+            }
         }
+
         var result = new Model.Structure[length];
         var tmp = 0;
         length = 0;
-        for (int i = 0; i < structure.Length;i++)
+        for (int i = 0; i < structure.Length; i++)
         {
-            if (op==-1||structuresPlayer[i] == op)
+            if (op == -1 || structuresPlayer[i] == op)
             {
                 var character = new Model.Character[structureCharacterCount[i]];
                 for (int j = 0; j < structureCharacterCount[i]; j++)
@@ -140,13 +145,16 @@ public class DataManager : MonoBehaviour
                     character[j] = ChangeCharacterModel(structureCharacters[tmp]);
                     tmp++;
                 }
+
                 result[length] = structure[i];
                 result[length].characters = character;
                 length++;
-            }   
+            }
         }
+
         return result;
     }
+
     public async Task LoadArchive(string path, IProgress<ProgressReportModel> progress = null)
     {
         if (!File.Exists(path))
@@ -154,37 +162,38 @@ public class DataManager : MonoBehaviour
             Debug.Log("NOT FIND ARCHIVE");
             return;
         }
+
         Debug.Log("-------LOAD-------");
         ProgressReportModel report = new ProgressReportModel();
         StreamReader sr = new StreamReader(Application.dataPath + "/JSONData.json");
         string JsonString = await sr.ReadToEndAsync();
         sr.Close();
-        
+
         report.ProgressValue = 15;
-        if(progress is not  null)
+        if (progress is not null)
             progress.Report(report);
-        
+
         Sl a = new Sl();
         Sl archive = JsonUtility.FromJson<Sl>(JsonString);
         Debug.Log("-------LOAD success-------");
-        
+
         Debug.Log("------- create Game object ---------");
         var game = new Game();
         game.id = archive.gameID;
         game.round = archive.round;
         game.currentPlayer = archive.currentPlayer;
-        
-        var structures1 = UnionStructures(archive.structures,archive.structureCharacterCount,
-            archive.structureCharacters,archive.structurePlayer, archive.player1.id);
-        var structures2 = UnionStructures(archive.structures,archive.structureCharacterCount,
-            archive.structureCharacters,archive.structurePlayer, archive.player2.id);
-        var characters1 = UnionCharacters(archive.characters,archive.characterPlayer,archive.player1.id);
+
+        var structures1 = UnionStructures(archive.structures, archive.structureCharacterCount,
+            archive.structureCharacters, archive.structurePlayer, archive.player1.id);
+        var structures2 = UnionStructures(archive.structures, archive.structureCharacterCount,
+            archive.structureCharacters, archive.structurePlayer, archive.player2.id);
+        var characters1 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player1.id);
         var characters2 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player2.id);
 
         game.player1 = ChangePlayerModel(archive.player1, characters1, structures1);
         game.player2 = ChangePlayerModel(archive.player2, characters1, structures2);
-        game.shop = game.currentPlayer?archive.player2.shop:archive.player1.shop;
-        
+        game.shop = game.currentPlayer ? archive.player2.shop : archive.player1.shop;
+
         var allStructure = UnionStructures(archive.structures, archive.structureCharacterCount,
             archive.structureCharacters, archive.structurePlayer);
         game.structures = allStructure;
@@ -193,14 +202,15 @@ public class DataManager : MonoBehaviour
         {
             for (int j = 0; j < MapSize; j++)
             {
-                map[i, j] = archive.map[i * MapSize+j];
+                map[i, j] = archive.map[i * MapSize + j];
             }
         }
+
         game.map = map;
         Debug.Log("------- create Game object success ---------");
 
         var res = await api.PUT(
-            url: api.Copy ,
+            url: api.Copy,
             param: new Dictionary<string, string>
             {
                 { "game", JsonUtility.ToJson(game) },
@@ -210,7 +220,7 @@ public class DataManager : MonoBehaviour
         if (game == null) return;
         SetData(game);
         report.ProgressValue = 100;
-        if (progress is not  null)
+        if (progress is not null)
             progress.Report(report);
     }
 
@@ -220,14 +230,14 @@ public class DataManager : MonoBehaviour
 
         archive.gameID = gameID;
         archive.round = round;
-        archive.currentPlayer=(player2.id==currentPlayer.id);
+        archive.currentPlayer = (player2.id == currentPlayer.id);
         archive.player1 = player1;
         archive.player2 = player2;
         archive.map = _realMap;
 
         var charactersLength = 0;
-        var structuresLength=0;
-        var structuresCharactersCount=0;
+        var structuresLength = 0;
+        var structuresCharactersCount = 0;
         for (int i = 0; i < characters.Length; i++)
         {
             if (characters[i] != null && characters[i].id != 0)
@@ -247,8 +257,9 @@ public class DataManager : MonoBehaviour
                 }
             }
         }
-        Model.Character[] saveCharacters=new Model.Character[charactersLength];
-        Model.Structure[] saveStructures=new Model.Structure[structuresLength];
+
+        Model.Character[] saveCharacters = new Model.Character[charactersLength];
+        Model.Structure[] saveStructures = new Model.Structure[structuresLength];
         archive.characterPlayer = new int[charactersLength];
         archive.structurePlayer = new int[structuresLength];
         archive.structureCharacterCount = new int[structuresLength];
@@ -267,7 +278,7 @@ public class DataManager : MonoBehaviour
                 saveCharacters[charactersLength].mount = characters[i].mount;
                 saveCharacters[charactersLength].attack = characters[i].attack;
                 saveCharacters[charactersLength].defense = characters[i].defense;
-                saveCharacters[charactersLength].equipment = characters[i].equipment; 
+                saveCharacters[charactersLength].equipment = characters[i].equipment;
                 saveCharacters[charactersLength].actionRange = characters[i].actionRange;
                 saveCharacters[charactersLength].actionState = characters[i].actionState;
                 saveCharacters[charactersLength].characterClass = characters[i].characterClass;
@@ -278,7 +289,7 @@ public class DataManager : MonoBehaviour
                 archive.characterPlayer[charactersLength] = characters[i].id;
             }
         }
-        
+
         for (int i = 0; i < structures.Length; i++)
         {
             if (structures[i] != null && structures[i].id != 0)
@@ -294,7 +305,7 @@ public class DataManager : MonoBehaviour
                 saveStructures[structuresLength].characters = null;
                 saveStructures[structuresLength].x = i / MapSize;
                 saveStructures[structuresLength].y = i % MapSize;
-                    
+
                 archive.structureCharacterCount[structuresLength] = 0;
                 if (structures[i].characters != null)
                 {
@@ -309,6 +320,7 @@ public class DataManager : MonoBehaviour
                 archive.structurePlayer[structuresLength] = structures[i].id;
             }
         }
+
         archive.characters = saveCharacters;
         archive.structures = saveStructures;
         return archive;
@@ -421,7 +433,7 @@ public class DataManager : MonoBehaviour
                 { "username2", username2 }
             });
         report.ProgressValue = 15;
-        if(progress is not  null)
+        if (progress is not null)
             progress.Report(report);
         var game = GetModel<Game>(res, progress);
         if (game == null)
@@ -431,7 +443,7 @@ public class DataManager : MonoBehaviour
 
         SetData(game, progress);
         report.ProgressValue = 100;
-        if (progress is not  null)
+        if (progress is not null)
             progress.Report(report);
     }
 
@@ -470,7 +482,7 @@ public class DataManager : MonoBehaviour
         }
 
         InitiateData(game);
-        
+
         for (int i = 0; i < MapSize; i++)
         {
             for (int j = 0; j < MapSize; j++)
@@ -478,18 +490,18 @@ public class DataManager : MonoBehaviour
                 GridController.Instance.SetStructure(new Vector3Int(i, j));
             }
         }
-        
+
         foreach (var structure in game.structures)
-            UpdateStructureAttribute(structure);
+            UpdateStructureAttribute(structure, false);
         foreach (var structure in game.player1.structures)
         {
-            UpdateStructureAttribute(structure);
+            UpdateStructureAttribute(structure, false);
             structures[structure.x * MapSize + structure.y].player = player1;
         }
 
         foreach (var structure in game.player2.structures)
         {
-            UpdateStructureAttribute(structure);
+            UpdateStructureAttribute(structure, false);
             structures[structure.x * MapSize + structure.y].player = player2;
         }
 
@@ -860,7 +872,7 @@ public class DataManager : MonoBehaviour
             UpdateStructurePlayer(structure);
         }
 
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         characters[oldPosition.x * MapSize + oldPosition.y].actionState = 2;
     }
 
@@ -874,7 +886,7 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
     }
 
     public async Task BuyCharacters(Vector3Int position, int id, int x, int y, int type)
@@ -893,7 +905,7 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         await GetCharacter(id);
         currentPlayer.stars -= 3;
     }
@@ -914,7 +926,7 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         characters[position.x * MapSize + position.y].actionState = 2;
     }
 
@@ -933,7 +945,7 @@ public class DataManager : MonoBehaviour
         );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         characters[position.x * MapSize + position.y].actionState = 2;
     }
 
@@ -958,7 +970,7 @@ public class DataManager : MonoBehaviour
         else if (option <= 9) currentPlayer.stars -= 10;
         else currentPlayer.stars -= 20;
 
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         characters[position.x * MapSize + position.y].actionState = 2;
     }
 
@@ -976,7 +988,7 @@ public class DataManager : MonoBehaviour
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
         currentPlayer.stars -= structureOld.level * 10;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
     }
 
     public async Task HealStructure(Vector3Int position)
@@ -987,11 +999,11 @@ public class DataManager : MonoBehaviour
         var res = await api.PUT(
             url: api.Structure + "/" + structureOld.id + "/heal",
             param: null
-            );
+        );
         var structure = GetModel<Model.Structure>(res);
         if (structure == null) return;
         var hpNew = structure.hp;
-        UpdateStructureAttribute(structure);
+        UpdateStructureAttribute(structure, false);
         currentPlayer.stars -= hpNew - hpOld;
     }
 
@@ -1033,6 +1045,7 @@ public class DataManager : MonoBehaviour
             report.ProgressValue = 30;
             progress.Report(report);
         }
+
         return model.data;
     }
 
@@ -1060,18 +1073,21 @@ public class DataManager : MonoBehaviour
             report.ProgressValue = 50;
             progress.Report(report);
         }
+
         SetMap(game.map);
         if (progress is not null)
         {
             report.ProgressValue = 65;
             progress.Report(report);
         }
+
         SetStructure(game.structures, game.player1.structures[0], game.player2.structures[0]);
         if (progress is not null)
         {
             report.ProgressValue = 80;
             progress.Report(report);
         }
+
         SetCharacter(game.player1.characters[0], game.player2.characters[0]);
         if (progress is not null)
         {
@@ -1095,20 +1111,20 @@ public class DataManager : MonoBehaviour
     {
         InitiateData(game);
         foreach (var structure in game.structures)
-            UpdateStructureAttribute(structure);
+            UpdateStructureAttribute(structure, false);
         if (game.currentPlayer)
         {
             foreach (var character in game.player1.characters)
                 UpdateCharacterAttribute(character, false);
             foreach (var structure in game.player1.structures)
-                UpdateStructureAttribute(structure);
+                UpdateStructureAttribute(structure, false);
         }
         else
         {
             foreach (var character in game.player2.characters)
                 UpdateCharacterAttribute(character, false);
             foreach (var structure in game.player2.structures)
-                UpdateStructureAttribute(structure);
+                UpdateStructureAttribute(structure, false);
         }
     }
 
@@ -1143,7 +1159,7 @@ public class DataManager : MonoBehaviour
         {
             characters[character.x * MapSize + character.y].equipment = character.equipment;
         }
-        
+
         if (character.mount == null || character.mount.id == 0)
         {
             characters[character.x * MapSize + character.y].mount = null;
@@ -1152,6 +1168,7 @@ public class DataManager : MonoBehaviour
         {
             characters[character.x * MapSize + character.y].mount = character.mount;
         }
+
         if (flag)
         {
             characters[character.x * MapSize + character.y].player = currentPlayer;
@@ -1166,7 +1183,7 @@ public class DataManager : MonoBehaviour
         characters[character2.x * MapSize + character2.y].player = player2;
     }
 
-    private void UpdateStructureAttribute(Model.Structure structure)
+    private void UpdateStructureAttribute(Model.Structure structure, bool startIndex)
     {
         if (structures[structure.x * MapSize + structure.y] == null)
         {
@@ -1184,18 +1201,30 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        structures[structure.x * MapSize + structure.y].characters = new Character[structure.characters.Length];
-        for (var i = 0; i < structure.characters.Length; i++)
+        if (startIndex)
         {
-            structures[structure.x * MapSize + structure.y].characters[i] = new Character();
-            structures[structure.x * MapSize + structure.y].characters[i].id = structure.characters[i].id;
-            structures[structure.x * MapSize + structure.y].characters[i].name = structure.characters[i].name;
-            structures[structure.x * MapSize + structure.y].characters[i].actionRange =
-                structure.characters[i].actionRange;
-            structures[structure.x * MapSize + structure.y].characters[i].attack = structure.characters[i].attack;
-            structures[structure.x * MapSize + structure.y].characters[i].defense = structure.characters[i].defense;
-            structures[structure.x * MapSize + structure.y].characters[i].hp = structure.characters[i].hp;
-            structures[structure.x * MapSize + structure.y].characters[i].level = structure.characters[i].level;
+            structures[structure.x * MapSize + structure.y].startIndex = structure.characters[0].id;
+        }
+
+        structures[structure.x * MapSize + structure.y].characters = new Character[3];
+
+        foreach (var character in structure.characters)
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                if (character.id == structures[structure.x * MapSize + structure.y].startIndex + i)
+                {
+                    structures[structure.x * MapSize + structure.y].characters[i] = new Character();
+                    structures[structure.x * MapSize + structure.y].characters[i].id = character.id;
+                    structures[structure.x * MapSize + structure.y].characters[i].name = character.name;
+                    structures[structure.x * MapSize + structure.y].characters[i].actionRange =
+                        character.actionRange;
+                    structures[structure.x * MapSize + structure.y].characters[i].attack = character.attack;
+                    structures[structure.x * MapSize + structure.y].characters[i].defense = character.defense;
+                    structures[structure.x * MapSize + structure.y].characters[i].hp = character.hp;
+                    structures[structure.x * MapSize + structure.y].characters[i].level = character.level;
+                }
+            }
         }
     }
 
@@ -1209,13 +1238,13 @@ public class DataManager : MonoBehaviour
     {
         foreach (var s in structure)
         {
-            UpdateStructureAttribute(s);
+            UpdateStructureAttribute(s, true);
             GridController.Instance.AddVillageAndRelic(new Vector3Int(s.x - 8, s.y - 8, 0),
                 s.structureClass == StructureClass.VILLAGE ? 0 : 1);
         }
 
-        UpdateStructureAttribute(structure1);
-        UpdateStructureAttribute(structure2);
+        UpdateStructureAttribute(structure1, false);
+        UpdateStructureAttribute(structure2, false);
         structures[structure1.x * MapSize + structure1.y].player = player1;
         structures[structure2.x * MapSize + structure2.y].player = player2;
         GridController.Instance.SetStructure(new Vector3Int(structure1.x, structure1.y, 0));
@@ -1236,7 +1265,8 @@ public class DataManager : MonoBehaviour
         {
             for (int j = 0; j < sourcePlayer.technologyTree.GetLength(1); j++)
             {
-                destinationPlayer.tech[i * sourcePlayer.technologyTree.GetLength(1) + j] = sourcePlayer.technologyTree[i, j];
+                destinationPlayer.tech[i * sourcePlayer.technologyTree.GetLength(1) + j] =
+                    sourcePlayer.technologyTree[i, j];
             }
         }
     }
@@ -1486,4 +1516,5 @@ public class Structure
     public int remainingRound;
     public int value;
     public Character[] characters;
+    public int startIndex;
 }
