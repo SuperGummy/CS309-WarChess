@@ -147,10 +147,9 @@ public class DataManager : MonoBehaviour
         }
         return result;
     }
-    public async Task LoadArchive(IProgress<ProgressReportModel> progress = null)
+    public async Task LoadArchive(string path, IProgress<ProgressReportModel> progress = null)
     {
-        
-        if (!File.Exists(Application.dataPath + "/JSONData.json"))
+        if (!File.Exists(path))
         {
             Debug.Log("NOT FIND ARCHIVE");
             return;

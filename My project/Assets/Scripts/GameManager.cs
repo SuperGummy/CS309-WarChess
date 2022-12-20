@@ -30,9 +30,10 @@ public class GameManager : MonoBehaviour
     public bool stepBack;
     public bool current;
     public bool aiTurn;
-    public bool aiType;
-    public bool pvp;
-    public AI ai;
+    public static bool Load;
+    public static String LoadPath;
+    public static bool pvp;
+    public static AI AI;
 
     private Vector3Int _previousPosition = Vector3Int.back;
     private List<Vector3Int> _characterActionRange;
@@ -47,8 +48,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-        ai = AI.GetAI(aiType);
+        Initiate();
     }
 
     // Update is called once per frame
@@ -368,11 +368,48 @@ public class GameManager : MonoBehaviour
         nextRound = true;
         await DataManager.Instance.Update(DataManager.Instance.currentPlayer.id);
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
-        UIManager.Instance.ShowRoundChange();
         nextRound = false;
         current = false;
         if (!pvp) aiTurn = !aiTurn;
-        if (aiTurn) await ai.Run();
+        if (aiTurn) await AI.Run();
+        else UIManager.Instance.ShowRoundChange();
+    }
+
+    public async void Initiate()
+    {
+        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
+        progress.ProgressChanged += ReportProgress;
+        if (!Load)
+        {
+            await DataManager.Instance.Play(PlayerPrefs.GetString("username", "123"), null, progress);
+            var pos1 = new Vector3Int(0, 16, 0);
+            var pos2 = new Vector3Int(16, 0, 0);
+            GridController.Instance.CreateCharacter(pos1);
+            GridController.Instance.CreateCharacter(pos2);
+            playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        }
+        else
+        {
+            await DataManager.Instance.LoadArchive(LoadPath, progress);
+            for (int i = 0; i < DataManager.MapSize; i++)
+            {
+                for (int j = 0; j < DataManager.MapSize; j++)
+                {
+                    if (GridController.Instance.characterObjects[i * DataManager.MapSize + j] != null)
+                        GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
+                    GridController.Instance.SetStructure(new Vector3Int(i, j));
+                    if (DataManager.Instance.GetCharacterByPosition(new Vector3Int(i, j)) != null)
+                    {
+                        GridController.Instance.CreateCharacter(new Vector3Int(i, j));
+                    }
+                }
+            }
+        }
+    }
+    
+    private void ReportProgress(object sender, ProgressReportModel report)
+    {
+        ProgressRenderer.Instance.SetSliderValue(report.ProgressValue);
     }
 
     public async void StepBack()
