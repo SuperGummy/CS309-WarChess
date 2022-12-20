@@ -914,6 +914,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadGame
       objectReference: {fileID: 0}
+    - target: {fileID: 7257925957192953194, guid: 2fc104b129a1f0e4eba9f56aff80fde2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1652311793}
+    - target: {fileID: 7257925957192953194, guid: 2fc104b129a1f0e4eba9f56aff80fde2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenLoadGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7257925957192953194, guid: 2fc104b129a1f0e4eba9f56aff80fde2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: StartAfterLoginManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 7257925957192953195, guid: 2fc104b129a1f0e4eba9f56aff80fde2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1586,6 +1598,7 @@ MonoBehaviour:
   levelPanel: {fileID: 796851781}
   singlePlayerButton: {fileID: 1916528999}
   welcomeText: {fileID: 1063308056}
+  userName: 
 --- !u!1 &1696645442
 GameObject:
   m_ObjectHideFlags: 0

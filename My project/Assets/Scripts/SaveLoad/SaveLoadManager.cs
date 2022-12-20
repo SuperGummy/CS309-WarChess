@@ -8,9 +8,13 @@ using UnityEngine.UI;
 
 namespace SaveLoad
 {
+    public enum SaveOrLoad{
+        SAVE, LOAD
+    }
+
     public class SaveLoadManager : MonoBehaviour
     {
-        public bool saveLoadRender;
+        public static SaveOrLoad saveLoadRender;
         public SaveLoadSlot[] saveLoadSlots;
         public GameObject saveLoadSlotHolder;
         [SerializeField] private TextMeshProUGUI title;
@@ -37,7 +41,7 @@ namespace SaveLoad
 
         private void OnEnable()
         {
-            title.text = saveLoadRender is false ? "Save" : "Load";
+            title.text = saveLoadRender == SaveOrLoad.SAVE ? "SAVE" : "LOAD";
             for (int i = 0; i < saveLoadSlots.Length; i++)
             {
                 saveLoadSlots[i].saveLoadRender = saveLoadRender;

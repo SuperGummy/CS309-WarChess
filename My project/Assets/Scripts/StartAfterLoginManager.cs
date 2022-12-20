@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Model;
+using SaveLoad;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,6 +49,11 @@ public class StartAfterLoginManager : MonoBehaviour
     public void OnDoublePlayerSelect()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void OpenLoadGame()
+    {
+        SceneController.LoadSaveLoad(SaveOrLoad.LOAD);
     }
 
     public void OpenPreferenceShop()

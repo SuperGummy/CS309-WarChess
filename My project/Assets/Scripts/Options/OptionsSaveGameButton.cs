@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SaveLoad;
 using UnityEngine;
 
 namespace Options
@@ -20,7 +21,8 @@ namespace Options
 
         public void OnClick()
         {
-            GameManager.Instance.SaveArchive();
+            SceneController.LoadSaveLoad(SaveOrLoad.SAVE);
+            //GameManager.Instance.SaveArchive();
         }
     }
 }

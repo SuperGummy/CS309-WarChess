@@ -127,7 +127,7 @@ public class SkinShopManager : MonoBehaviour
                 GridController.fighterRedPickedId = i;
                 break;
             }
-
-        GridController.Instance.UpdateRenderManager(calledFromGame);
+        if(calledFromGame)
+            GridController.Instance.UpdateRenderManager(calledFromGame);
     }
 }
