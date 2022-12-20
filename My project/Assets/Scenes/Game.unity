@@ -624,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7305,13 +7305,16 @@ MonoBehaviour:
   foxMount: {fileID: 21300000, guid: 11d8cdc42cbf84249910aba0f8c9af8d, type: 3}
   elephantMount: {fileID: 21300000, guid: dc54495b9daa6af4c83f702f9a0e4360, type: 3}
   horseMount: {fileID: 21300000, guid: 9c0ee57bd57acaa4da6341fe0d19e1f6, type: 3}
+  rabbitMount: {fileID: 21300000, guid: 915930970b571f5489cb6a7b094e14d4, type: 3}
   potionProperty: {fileID: 21300000, guid: 117b17facff65dc42b1b57deb7c21551, type: 3}
   beerProperty: {fileID: 21300000, guid: d0c05b9125ed56349a5385e1a77547b7, type: 3}
   fishProperty: {fileID: 21300000, guid: adf92f5459022124193e381473dbcce6, type: 3}
+  appleProperty: {fileID: 21300000, guid: 766fe6ce4b3bf8d4baff7ef16c902010, type: 3}
   arrowEquipment: {fileID: 21300000, guid: bbf8638a8a75d9c42b93639213c92c9b, type: 3}
   cannonEquipment: {fileID: 21300000, guid: 24776abadd1cf6f438eb9d514bc0031a, type: 3}
   swordEquipment: {fileID: 21300000, guid: 8f28955d92038974a9b04aafaeea79b0, type: 3}
   shieldEquipment: {fileID: 21300000, guid: 256205b9c6ca12c45ab7762da8a65631, type: 3}
+  stickEquipment: {fileID: 21300000, guid: 19e2c8904d4da9847a14330ade5d1e06, type: 3}
   villageImage: {fileID: 21300000, guid: 3c20ffb634e46af4ea11584d1ad5d287, type: 3}
   villageBlueImage: {fileID: 21300000, guid: 7d9a1efa1df55f045b4acc93ee8a5bcd, type: 3}
   villageRedImage: {fileID: 21300000, guid: 2937c99a5eaba514793119c067fe1656, type: 3}

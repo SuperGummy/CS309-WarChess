@@ -21,6 +21,7 @@ namespace SaveLoad
         public void OnClick()
         {
             // TODO: Call gameManager to close scene
+            SceneController.UnLoadSaveLoad();
         }
     }
 }

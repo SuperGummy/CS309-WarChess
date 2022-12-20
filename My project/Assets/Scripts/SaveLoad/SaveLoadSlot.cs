@@ -9,7 +9,7 @@ namespace SaveLoad
     public class SaveLoadSlot : MonoBehaviour
     {
         public bool isFull;
-        public bool saveLoadRender;
+        public SaveOrLoad saveLoadRender;
 
         private DateTime _dateTime;
         [SerializeField] private Model.Player playerBlue, playerRed;
@@ -56,7 +56,7 @@ namespace SaveLoad
 
         public void OnClick()
         {
-            if (saveLoadRender is false)
+            if (saveLoadRender == SaveOrLoad.SAVE)
             {
                 if (isFull)
                 {

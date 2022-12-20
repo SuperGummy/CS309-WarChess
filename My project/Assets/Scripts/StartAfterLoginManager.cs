@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Model;
+using SaveLoad;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +27,7 @@ public class StartAfterLoginManager : MonoBehaviour
     void Start()
     {
         userName = PlayerPrefs.GetString("username", "123");
+        GameManager.Load = false;
     }
 
     // Update is called once per frame
@@ -47,7 +50,12 @@ public class StartAfterLoginManager : MonoBehaviour
 
     public void OnDoublePlayerSelect()
     {
-        SceneManager.LoadScene("Game");
+        PVP();
+    }
+
+    public void OpenLoadGame()
+    {
+        SceneController.LoadSaveLoad(SaveOrLoad.LOAD);
     }
 
     public void OpenPreferenceShop()
@@ -56,42 +64,35 @@ public class StartAfterLoginManager : MonoBehaviour
         SkinShopManager.calledFromGame = false;
         SceneManager.LoadScene("Preference Shop");
     }
-    
-    private async Task Initiate()
+
+    public void LoadArchive(string path)
     {
+        SceneManager.LoadSceneAsync("Game");
         SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
-        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
-        progress.ProgressChanged += ReportProgress;
-        await DataManager.Instance.Play(userName, null, progress);
-        var pos1 = new Vector3Int(0, 16, 0);
-        var pos2 = new Vector3Int(16, 0, 0);
-        GridController.Instance.CreateCharacter(pos1);
-        GridController.Instance.CreateCharacter(pos2);
+        GameManager.Load = true;
+        GameManager.LoadPath = path;
     }
-    
-    private void ReportProgress(object sender, ProgressReportModel report)
+
+    public void PVP()
     {
-        ProgressRenderer.Instance.SetSliderValue(report.ProgressValue);
-    }
-    
-    public async void LoadArchive()
-    {
+        SceneManager.LoadSceneAsync("Game");
         SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
-        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
-        progress.ProgressChanged += ReportProgress;
-        await DataManager.Instance.LoadArchive();
-        for (int i = 0; i < DataManager.MapSize; i++)
-        {
-            for (int j = 0; j < DataManager.MapSize; j++)
-            {
-                if (GridController.Instance.characterObjects[i * DataManager.MapSize + j] != null)
-                    GridController.Instance.DeleteCharacter(new Vector3Int(i, j));
-                GridController.Instance.SetStructure(new Vector3Int(i, j));
-                if (DataManager.Instance.GetCharacterByPosition(new Vector3Int(i, j)) != null)
-                {
-                    GridController.Instance.CreateCharacter(new Vector3Int(i, j));
-                }
-            }
-        }
+        GameManager.pvp = true;
+    }
+
+    public void EasyAI()
+    {
+        SceneManager.LoadSceneAsync("Game");
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        GameManager.pvp = false;
+        GameManager.AI = AI.GetAI(false);
+    }
+
+    public void HardAI()
+    {
+        SceneManager.LoadSceneAsync("Game");
+        SceneManager.LoadScene("Loading", LoadSceneMode.Additive);
+        GameManager.pvp = false;
+        GameManager.AI = AI.GetAI(true);
     }
 }

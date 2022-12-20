@@ -1,3 +1,4 @@
+using SaveLoad;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,7 +6,7 @@ public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
     private AsyncOperation _asyncOperation = null;
-    private static readonly string[] Scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "Shop", "Upgrade Building", "Equips", "Options"};
+    private static readonly string[] Scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "Shop", "Upgrade Building", "Equips", "Options", "Save Load"};
     // Start is called before the first frame update
 
     private void Awake()
@@ -28,6 +29,17 @@ public class SceneController : MonoBehaviour
         // }
         
         
+    }
+
+    public static void LoadSaveLoad(SaveOrLoad saveLoadRenderer)
+    {
+        SaveLoadManager.saveLoadRender = saveLoadRenderer;
+        SceneManager.LoadSceneAsync(Scene[8], LoadSceneMode.Additive);
+    }
+    
+    public static void UnLoadSaveLoad()
+    {
+        SceneManager.UnloadSceneAsync(Scene[8]);
     }
 
     public void LoadBackPack()
