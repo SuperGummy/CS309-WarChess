@@ -608,11 +608,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7227,8 +7227,6 @@ MonoBehaviour:
   stepBack: 0
   current: 0
   aiTurn: 0
-  aiType: 0
-  pvp: 0
 --- !u!114 &764328142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7315,6 +7313,8 @@ MonoBehaviour:
   swordEquipment: {fileID: 21300000, guid: 8f28955d92038974a9b04aafaeea79b0, type: 3}
   shieldEquipment: {fileID: 21300000, guid: 256205b9c6ca12c45ab7762da8a65631, type: 3}
   stickEquipment: {fileID: 21300000, guid: 19e2c8904d4da9847a14330ade5d1e06, type: 3}
+  castleBlueImage: {fileID: 21300000, guid: f2f631aecb57c274fa050010306b031d, type: 3}
+  castleRedImage: {fileID: 21300000, guid: 7ac7209faa8082249b89b8ffb7544ea3, type: 3}
   villageImage: {fileID: 21300000, guid: 3c20ffb634e46af4ea11584d1ad5d287, type: 3}
   villageBlueImage: {fileID: 21300000, guid: 7d9a1efa1df55f045b4acc93ee8a5bcd, type: 3}
   villageRedImage: {fileID: 21300000, guid: 2937c99a5eaba514793119c067fe1656, type: 3}

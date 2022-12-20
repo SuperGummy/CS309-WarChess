@@ -36,6 +36,8 @@ public class RenderManager : MonoBehaviour
     [SerializeField] private Sprite shieldEquipment;
     [SerializeField] private Sprite stickEquipment;
     
+    [SerializeField] private Sprite castleBlueImage;
+    [SerializeField] private Sprite castleRedImage;
     [SerializeField] private Sprite villageImage;
     [SerializeField] private Sprite villageBlueImage;
     [SerializeField] private Sprite villageRedImage;
