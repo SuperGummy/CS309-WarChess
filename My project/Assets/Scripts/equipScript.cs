@@ -4,6 +4,7 @@ using System.Runtime;
 using Model;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 using static  EquipManager;
@@ -98,6 +99,7 @@ public class equipScript : MonoBehaviour
     {
         for (int i = 0; i < DataManager.Instance.currentPlayer.equipments.Length; i++)
         {
+            if(DataManager.Instance.currentPlayer.equipments[i]==null) continue;
             if (DataManager.Instance.currentPlayer.equipments[i].name == name)
                 return DataManager.Instance.currentPlayer.equipments[i];
         }
@@ -108,6 +110,7 @@ public class equipScript : MonoBehaviour
     {
         for (int i = 0; i < DataManager.Instance.currentPlayer.mounts.Length; i++)
         {
+            if(DataManager.Instance.currentPlayer.mounts[i]==null) continue;
             if (DataManager.Instance.currentPlayer.mounts[i].name == name)
                 return DataManager.Instance.currentPlayer.mounts[i];
         }
@@ -143,7 +146,7 @@ public class equipScript : MonoBehaviour
             number--;
             //TODO: consume Item
         }
-        updateUI();
+        equipManager.loadCharacter();
     }
     public void confirmationPop()
     {
