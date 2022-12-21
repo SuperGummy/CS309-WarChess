@@ -117,15 +117,15 @@ public class equipScript : MonoBehaviour
 
         return new Mount();
     }
-    public void confirmedEquip()
+    public async void confirmedEquip()
     {
         if (ty == 0)
         {
-            if(equipManager.ch.equipment!=null) GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,true);
-            GameManager.Instance.ChangeEquipment(getEquipment().id, false);
+            if(equipManager.ch.equipment!=null) await GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,true);
+            await GameManager.Instance.ChangeEquipment(getEquipment().id, false);
 
-            equipManager.ch.equipment = getEquipment();
-            number--;
+            //quipManager.ch.equipment = getEquipment();
+            //number--;
         }
 
         if (ty == 1)
@@ -133,17 +133,17 @@ public class equipScript : MonoBehaviour
             if (equipManager.ch.mount != null)
             {
                 Debug.Log("off:"+equipManager.ch.mount.name);
-                GameManager.Instance.ChangeMount(equipManager.ch.mount.id,true);
+                await GameManager.Instance.ChangeMount(equipManager.ch.mount.id,true);
             }
-            GameManager.Instance.ChangeMount(getMount().id,false);
-            equipManager.ch.mount = getMount();
-            number--;
+            await GameManager.Instance.ChangeMount(getMount().id,false);
+            //equipManager.ch.mount = getMount();
+            //number--;
         }
 
         if (ty == 2)
         {
-            GameManager.Instance.UseItem(id);
-            number--;
+            await GameManager.Instance.UseItem(id);
+            //number--;
             //TODO: consume Item
         }
         equipManager.loadCharacter();

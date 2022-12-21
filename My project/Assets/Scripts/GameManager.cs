@@ -532,21 +532,21 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public async void UseItem(int itemid)
+    public async Task UseItem(int itemid)
     {
         await DataManager.Instance.UpdateItem(_previousPosition, itemid);
         characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
 
-    public async void ChangeEquipment(int equipmentid, bool off)
+    public async Task ChangeEquipment(int equipmentid, bool off)
     {
         await DataManager.Instance.UpdateEquipment(_previousPosition, equipmentid, off);
         characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);
         current = true;
     }
 
-    public async void ChangeMount(int mountid, bool off)
+    public async Task ChangeMount(int mountid, bool off)
     {
         await DataManager.Instance.UpdateMount(_previousPosition, mountid, off);
         characterInfoFrame.GetComponent<CharacterInfoFrame>().RenderData(_previousPosition);

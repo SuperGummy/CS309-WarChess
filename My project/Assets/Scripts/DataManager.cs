@@ -574,7 +574,11 @@ public class DataManager : MonoBehaviour
         {
             if (currentPlayer.items[i].id == itemId)
             {
-                currentPlayer.items[i] = null;
+                Item[] newItems = new Item[currentPlayer.items.Length - 1];
+                for (int j = 0; j < i; j++) newItems[j] = currentPlayer.items[j];
+                for (int j = i; j < newItems.Length; j++) newItems[j] = currentPlayer.items[j + 1];
+                currentPlayer.items = newItems;
+                //currentPlayer.items[i] = null;
                 break;
             }
         }
@@ -610,7 +614,11 @@ public class DataManager : MonoBehaviour
             {
                 if (currentPlayer.equipments[i].id == equipmentId)
                 {
-                    currentPlayer.equipments[i] = null;
+                    Equipment[] newEquipments = new Equipment[currentPlayer.equipments.Length - 1];
+                    for (int j = 0; j < i; j++) newEquipments[j] = currentPlayer.equipments[j];
+                    for (int j = i; j < newEquipments.Length; j++) newEquipments[j] = currentPlayer.equipments[j + 1];
+                    currentPlayer.equipments = newEquipments;
+                    //currentPlayer.equipments[i] = null;
                     break;
                 }
             }
@@ -647,7 +655,11 @@ public class DataManager : MonoBehaviour
             {
                 if (currentPlayer.mounts[i].id == mountId)
                 {
-                    currentPlayer.mounts[i] = null;
+                    Mount[] newMount = new Mount[currentPlayer.mounts.Length - 1];
+                    for (int j = 0; j < i; j++) newMount[j] = currentPlayer.mounts[j];
+                    for (int j = i; j < newMount.Length; j++) newMount[j] = currentPlayer.mounts[j + 1];
+                    currentPlayer.mounts=newMount;
+                    //currentPlayer.mounts[i] = null;
                     break;
                 }
             }
