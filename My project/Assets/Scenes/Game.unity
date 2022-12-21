@@ -2215,6 +2215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureImage: {fileID: 438360984}
   structureName: {fileID: 68717951}
+  structureInfo: {fileID: 881991254}
   addHealth: {fileID: 700130168}
   recruit: {fileID: 1002313219}
   function: {fileID: 2069422012}
@@ -7212,6 +7213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 1188997514}
   backpackButton: {fileID: 2021300017}
+  shopButton: {fileID: 944618986}
   finish: {fileID: 13824692}
   playerInfoBar: {fileID: 68718327}
   characterInfoButton: {fileID: 127121208}

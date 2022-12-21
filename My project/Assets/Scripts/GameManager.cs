@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public Button backpackButton;
     public Button finish;
+    public Button shopButton;
     public GameObject playerInfoBar;
     public GameObject characterInfoButton;
     public GameObject characterInfoFrame;
@@ -318,6 +319,7 @@ public class GameManager : MonoBehaviour
         ShowStructureInfoButton(_previousPosition);
         finish.enabled = true;
         backpackButton.enabled = true;
+        shopButton.enabled = true;
     }
 
     private void DisableBackground()
@@ -327,6 +329,7 @@ public class GameManager : MonoBehaviour
         CloseStructureInfoButton();
         finish.enabled = false;
         backpackButton.enabled = false;
+        shopButton.enabled = false;
     }
 
     private void ShowActionRange(Vector3Int position)
