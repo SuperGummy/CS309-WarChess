@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -62,9 +63,9 @@ public abstract class AI
 
         return true;
     }
-
     protected void UpgradeStructure()
     {
+        
     }
 
     protected void UpgradeTechTree()
@@ -77,6 +78,7 @@ public abstract class AI
         {
             GameManager.Instance.BuyEquipment(0);
         }
+
     }
 
 
@@ -86,10 +88,12 @@ public abstract class AI
         {
             GameManager.Instance.BuyEquipment(0);
         }
+
     }
 
     protected void BuyItems()
     {
+        
     }
 
     public abstract Task MoveCharacters();
@@ -102,5 +106,6 @@ public abstract class AI
     }
 
 
-    public abstract void Buy();
+    public abstract Task Buy();
+
 }

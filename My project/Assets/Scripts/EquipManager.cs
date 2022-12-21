@@ -19,13 +19,17 @@ public class EquipManager : MonoBehaviour
     public string[] equipnames,mountnames,itemnames;
     public static EquipManager equipManager;
     public static Vector3Int position;
+    private void Awake() => equipManager = this;
     void Start()
     {
         equipManager = this;
         ch = DataManager.Instance.GetCharacterByPosition(position);
-        equipnames=new[] {"lolipop","sword","arrow","shield","cannon"};
-        mountnames = new[] {"bunny", "horse", "elephant", "fox"};
-        itemnames = new[] {"apple", "a fish", "beer", "potion"};
+        equipnames=new[] {"basic","sword","arrow","shield","cannon"};
+        mountnames = new[] {"basic", "horse", "elephant", "fox"};
+        itemnames = new[] {"basic", "a fish", "beer", "potion"};
+        string side = DataManager.Instance.CheckCharacterSide(ch)==-1?"blue":"red";
+        characterImage.sprite = RenderManager.Instance.GetCharacterImage(ch.characterClass,side);
+        chname.text = ch.name;
         loadCharacter();
     }
 
@@ -37,8 +41,7 @@ public class EquipManager : MonoBehaviour
     public void loadCharacter()
     {
         //load character;
-        characterImage.sprite = RenderManager.Instance.GetCharacterImage(ch.characterClass,DataManager.Instance.currentPlayer.ToString());
-        chname.text = ch.name;
+        
         equipment = ch.equipment;
         mount = ch.mount;
         Debug.Log(ch.name);
@@ -49,46 +52,55 @@ public class EquipManager : MonoBehaviour
         {
             equips[i].ty = 0;
             equips[i].number = 0;
-            equips[i].id = i;
+            equips[i].index = i;
             equips[i].name = equipnames[i];
             for (int j = 0; j < DataManager.Instance.currentPlayer.equipments.Length; j++)
             {
+                if(DataManager.Instance.currentPlayer.equipments[j]==null) continue;
+                Debug.Log(DataManager.Instance.currentPlayer.equipments[j].name);
                 if (DataManager.Instance.currentPlayer.equipments[j].name == equipnames[i])
                 {
                     equips[i].number++;
                     equips[i].id = DataManager.Instance.currentPlayer.equipments[j].id;
                 }
             }
+            equips[i].updateUI();
         }
         for (int i = 0; i < mountnames.Length; i++)
         {
             mounts[i].ty = 1;
             mounts[i].number = 0;
-            mounts[i].id = i;
+            mounts[i].index = i;
             mounts[i].name = mountnames[i];
             for (int j = 0; j < DataManager.Instance.currentPlayer.mounts.Length; j++)
             {
+                if(DataManager.Instance.currentPlayer.mounts[j]==null) continue;
+                Debug.Log(DataManager.Instance.currentPlayer.mounts[j].name);
                 if (DataManager.Instance.currentPlayer.mounts[j].name == mountnames[i])
                 {
                     mounts[i].number++;
                     mounts[i].id = DataManager.Instance.currentPlayer.mounts[j].id;
                 }
             }
+            mounts[i].updateUI();
         }
         for (int i = 0; i < itemnames.Length; i++)
         {
-            items[i].id = 2;
+            items[i].ty = 2;
             items[i].number = 0;
-            items[i].id = i;
+            items[i].index = i;
             items[i].name = itemnames[i];
             for (int j = 0; j < DataManager.Instance.currentPlayer.items.Length; j++)
             {
+                if(DataManager.Instance.currentPlayer.items[j]==null) continue;
+                Debug.Log(DataManager.Instance.currentPlayer.items[j].name);
                 if (DataManager.Instance.currentPlayer.items[j].name == itemnames[i])
                 {
                     items[i].number++;
                     items[i].id = DataManager.Instance.currentPlayer.items[i].id;
                 }
             }
+            items[i].updateUI();
         }
     }
 

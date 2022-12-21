@@ -4,22 +4,24 @@ using System.Runtime;
 using Model;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 using static  EquipManager;
-using Button = UnityEngine.UIElements.Button;
 using Color = System.Drawing.Color;
 
 public class equipScript : MonoBehaviour
 {
     public GameObject conf;
     public int id;
+    public int index;
     public int ty;
     public string name;
     public TMP_Text nameText;
     public Image image;
     public int number;
     public TMP_Text numberText;
+    public Button button,imageButton;
     void Start()
     {
         updateUI();
@@ -53,43 +55,34 @@ public class equipScript : MonoBehaviour
         {
             nameText.color=new UnityEngine.Color(1, 1, 1);
             image.color = new UnityEngine.Color(1, 1, 1);
+            imageButton.interactable = true;
         }
-
         numberText.text = $"{number}";
         nameText.text = $"{name}";
-        equipManager.loadCharacter();
-    }
-    public void addChain()
-    {
-        //Debug.Log("addChain");
-        Transform[] father = GetComponentsInChildren<Transform>(true);
-
-        foreach (var child in father)
-        {
-            if(child.name=="Button") child.gameObject.SetActive(false);
-            if(child.name=="chain1"||child.name=="chain2") child.gameObject.SetActive(true);
-            //Debug.Log(child.name);
-        }
     }
 
     public void imageClicked()
     {
+        Debug.Log("Image clicked! name:"+name+" number: "+number);
+        
         if (number > 0)
         {
-            Transform[] father = GetComponentsInChildren<Transform>(true);
+            button.gameObject.SetActive(true);
+            /*Transform[] father = GetComponentsInChildren<Transform>(true);
 
             foreach (var child in father)
             {
                 if(child.name=="EquipButton") child.gameObject.SetActive(true);
-            }
+            }*/
         }
+        equipManager.loadCharacter();
     }
     public void equip()
     {
         equipManager.curTy = ty;
-        equipManager.curId = id;
+        equipManager.curId = index;
         //confirmationPop();
-        if (equipManager.equipment.name =="")
+        if ((ty==0&&equipManager.ch.equipment == null)||(ty==1&&equipManager.ch.mount==null)||ty==2)
         {
             Debug.Log("null");
             //confirmationPop();
@@ -106,6 +99,7 @@ public class equipScript : MonoBehaviour
     {
         for (int i = 0; i < DataManager.Instance.currentPlayer.equipments.Length; i++)
         {
+            if(DataManager.Instance.currentPlayer.equipments[i]==null) continue;
             if (DataManager.Instance.currentPlayer.equipments[i].name == name)
                 return DataManager.Instance.currentPlayer.equipments[i];
         }
@@ -116,38 +110,43 @@ public class equipScript : MonoBehaviour
     {
         for (int i = 0; i < DataManager.Instance.currentPlayer.mounts.Length; i++)
         {
+            if(DataManager.Instance.currentPlayer.mounts[i]==null) continue;
             if (DataManager.Instance.currentPlayer.mounts[i].name == name)
                 return DataManager.Instance.currentPlayer.mounts[i];
         }
 
         return new Mount();
     }
-    public void confirmedEquip()
+    public async void confirmedEquip()
     {
         if (ty == 0)
         {
-            GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,false);
-            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
+            if(equipManager.ch.equipment!=null) await GameManager.Instance.ChangeEquipment(equipManager.ch.equipment.id,true);
+            await GameManager.Instance.ChangeEquipment(getEquipment().id, false);
 
-            equipManager.ch.equipment = getEquipment();
-            number--;
+            //quipManager.ch.equipment = getEquipment();
+            //number--;
         }
 
         if (ty == 1)
         {
-            GameManager.Instance.ChangeEquipment(equipManager.ch.mount.id,false);
-            GameManager.Instance.ChangeEquipment(getEquipment().id,true);
-            equipManager.ch.mount = getMount();
-            number--;
+            if (equipManager.ch.mount != null)
+            {
+                Debug.Log("off:"+equipManager.ch.mount.name);
+                await GameManager.Instance.ChangeMount(equipManager.ch.mount.id,true);
+            }
+            await GameManager.Instance.ChangeMount(getMount().id,false);
+            //equipManager.ch.mount = getMount();
+            //number--;
         }
 
         if (ty == 2)
         {
-            GameManager.Instance.UseItem(id);
-            number--;
+            await GameManager.Instance.UseItem(id);
+            //number--;
             //TODO: consume Item
         }
-        updateUI();
+        equipManager.loadCharacter();
     }
     public void confirmationPop()
     {

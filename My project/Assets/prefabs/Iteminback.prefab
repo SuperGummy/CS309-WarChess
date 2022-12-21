@@ -727,6 +727,8 @@ MonoBehaviour:
   image: {fileID: 4872663647295001321}
   number: 0
   numberText: {fileID: 7008655757168702803}
+  button: {fileID: 8095785119814481363}
+  imageButton: {fileID: 5686706372064402902}
 --- !u!1 &8664660043061937663
 GameObject:
   m_ObjectHideFlags: 0
