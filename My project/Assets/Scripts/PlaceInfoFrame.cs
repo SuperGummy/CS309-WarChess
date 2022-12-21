@@ -11,6 +11,7 @@ public class PlaceInfoFrame : MonoBehaviour
 {
     public Image structureImage;
     public TextMeshProUGUI structureName;
+    public TextMeshProUGUI structureInfo;
     public Button addHealth;
     public Button recruit;
     public Button function;
@@ -60,17 +61,21 @@ public class PlaceInfoFrame : MonoBehaviour
         switch (structure.structureClass)
         {
             case StructureClass.CAMP:
+                structureInfo.text = "This is a camp. You can train your people here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "train";
                 function.onClick.AddListener(GameManager.Instance.OpenCamp);
                 break;
             case StructureClass.MARKET:
+                structureInfo.text = "This is a market. You can earn stars here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "earn";
                 break;
             case StructureClass.INSTITUTE:
+                structureInfo.text = "This is an institute. You can send scholars to learn new skills here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
                 function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
                 break;
             case StructureClass.VILLAGE:
+                structureInfo.text = "This is a village. Upgrade it to advanced buildings.";
                 if (side == "middle")
                 {
                     function.GetComponentInChildren<TextMeshProUGUI>().text = "waiting...";
