@@ -18,6 +18,7 @@ public class PlaceInfoFrame : MonoBehaviour
     public Slider hp;
     private Vector3Int _position;
     public GameObject levelUpPanel;
+    public GameObject levelUpButton;
 
     private void OnEnable()
     {
@@ -57,6 +58,8 @@ public class PlaceInfoFrame : MonoBehaviour
             side = "red";
         else
             side = "middle";
+        if(structure.structureClass == StructureClass.MARKET)
+            levelUpButton.SetActive(true);
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
         recruit.interactable = true;
         function.interactable = true;

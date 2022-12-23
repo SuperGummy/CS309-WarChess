@@ -2222,6 +2222,7 @@ MonoBehaviour:
   function: {fileID: 2069422012}
   hp: {fileID: 25051656}
   levelUpPanel: {fileID: 1715619316}
+  levelUpButton: {fileID: 992763749}
 --- !u!1 &353140011
 GameObject:
   m_ObjectHideFlags: 0
@@ -8226,12 +8227,12 @@ GameObject:
   - component: {fileID: 992763752}
   - component: {fileID: 992763751}
   m_Layer: 0
-  m_Name: Button
+  m_Name: LevelUpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &992763750
 RectTransform:
   m_ObjectHideFlags: 0
