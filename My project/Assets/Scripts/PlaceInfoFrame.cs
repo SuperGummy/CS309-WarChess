@@ -49,6 +49,7 @@ public class PlaceInfoFrame : MonoBehaviour
     public void RenderData(Vector3Int position)
     {
         var structure = DataManager.Instance.GetStructureByPosition(position);
+        var character = DataManager.Instance.GetCharacterByPosition(position);
         structureName.text = structure.structureClass.ToString();
         hp.value = structure.hp;
         string side;
@@ -58,7 +59,7 @@ public class PlaceInfoFrame : MonoBehaviour
             side = "red";
         else
             side = "middle";
-        if(structure.structureClass == StructureClass.MARKET)
+        if(structure.structureClass == StructureClass.MARKET || structure.structureClass == StructureClass.CAMP)
             levelUpButton.SetActive(true);
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
         recruit.interactable = true;
@@ -82,7 +83,11 @@ public class PlaceInfoFrame : MonoBehaviour
             case StructureClass.INSTITUTE:
                 structureInfo.text = "This is an institute. You can send scholars to learn new skills here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
-                function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
+                if (character.characterClass == CharacterClass.SCHOLAR)
+                {
+                    function.interactable = false;
+                    function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
+                }
                 break;
             case StructureClass.VILLAGE:
                 structureInfo.text = "This is a village. Upgrade it to advanced buildings.";
@@ -98,7 +103,11 @@ public class PlaceInfoFrame : MonoBehaviour
                     function.GetComponentInChildren<TextMeshProUGUI>().text = "evolve";
                     function.onClick.AddListener(GameManager.Instance.OpenUpgrade);
                 }
-
+                break;
+            default:
+                structureInfo.text = "This is the castle. Protect it until the last soldier falls.";
+                function.GetComponentInChildren<TextMeshProUGUI>().text = "nothing";
+                function.interactable = false;
                 break;
         }
     }

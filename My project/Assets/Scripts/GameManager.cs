@@ -562,6 +562,7 @@ public class GameManager : MonoBehaviour
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
         GridController.Instance.SetStructure(_previousPosition);
         placeInfoFrame.GetComponent<PlaceInfoFrame>().RenderData(_previousPosition);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         current = true;
     }
 

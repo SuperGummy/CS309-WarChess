@@ -146,7 +146,7 @@ public class RenderManager : MonoBehaviour
             StructureClass.MARKET => side == "blue" ? marketBlueImage : marketRedImage,
             StructureClass.INSTITUTE => side == "blue" ? schoolBlueImage : schoolRedImage,
             StructureClass.CAMP => side == "blue" ? campBlueImage : campRedImage,
-            _ => null
+            _ => side == "blue" ? castleBlueImage : castleRedImage
         };
     }
 

@@ -32,7 +32,7 @@ public class StructureLevelUpPanel : MonoBehaviour
 
     public void OnClickLevelUp()
     {
-        //TODO: LevelUp
+        GameManager.Instance.UpgradeStructure();
         OnClickCancel();
     }
 
