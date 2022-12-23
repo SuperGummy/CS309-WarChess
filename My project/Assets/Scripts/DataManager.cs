@@ -191,7 +191,7 @@ public class DataManager : MonoBehaviour
         var characters2 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player2.id);
 
         game.player1 = ChangePlayerModel(archive.player1, characters1, structures1);
-        game.player2 = ChangePlayerModel(archive.player2, characters1, structures2);
+        game.player2 = ChangePlayerModel(archive.player2, characters2, structures2);
         game.shop = game.currentPlayer ? archive.player2.shop : archive.player1.shop;
 
         var allStructure = UnionStructures(archive.structures, archive.structureCharacterCount,
@@ -218,7 +218,52 @@ public class DataManager : MonoBehaviour
         );
         game = GetModel<Model.Game>(res);
         if (game == null) return;
-        SetData(game);
+        InitiateData(game);
+        SetMap(game.map);
+        foreach (var structure in game.structures)
+        {
+            UpdateStructureAttribute(structure, false);
+            GridController.Instance.AddVillageAndRelic(new Vector3Int(structure.x - 8, structure.y - 8, 0),
+                structure.structureClass == StructureClass.VILLAGE ? 0 : 1);
+        }
+
+        foreach (var structure in game.player1.structures)
+        {
+            UpdateStructureAttribute(structure, false);
+            structures[structure.x * MapSize + structure.y].player = player1;
+        }
+
+        foreach (var structure in game.player2.structures)
+        {
+            UpdateStructureAttribute(structure, false);
+            structures[structure.x * MapSize + structure.y].player = player2;
+        }
+
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                GridController.Instance.SetStructure(new Vector3Int(i, j));
+            }
+        }
+
+        characters = new Character[MapSize * MapSize];
+        foreach (var character in game.player1.characters)
+        {
+            UpdateCharacterAttribute(character, false);
+            characters[character.x * MapSize + character.y].player = player1;
+            GridController.Instance.CreateCharacter(new Vector3Int(character.x, character.y));
+        }
+
+        foreach (var character in game.player2.characters)
+        {
+            UpdateCharacterAttribute(character, false);
+            characters[character.x * MapSize + character.y].player = player2;
+            GridController.Instance.CreateCharacter(new Vector3Int(character.x, character.y));
+        }
+
+        player1.shop = archive.player1.shop;
+        player2.shop = archive.player2.shop;
         report.ProgressValue = 100;
         if (progress is not null)
             progress.Report(report);
@@ -482,15 +527,6 @@ public class DataManager : MonoBehaviour
         }
 
         InitiateData(game);
-
-        for (int i = 0; i < MapSize; i++)
-        {
-            for (int j = 0; j < MapSize; j++)
-            {
-                GridController.Instance.SetStructure(new Vector3Int(i, j));
-            }
-        }
-
         foreach (var structure in game.structures)
             UpdateStructureAttribute(structure, false);
         foreach (var structure in game.player1.structures)
@@ -503,6 +539,14 @@ public class DataManager : MonoBehaviour
         {
             UpdateStructureAttribute(structure, false);
             structures[structure.x * MapSize + structure.y].player = player2;
+        }
+
+        for (int i = 0; i < MapSize; i++)
+        {
+            for (int j = 0; j < MapSize; j++)
+            {
+                GridController.Instance.SetStructure(new Vector3Int(i, j));
+            }
         }
 
         for (int i = 0; i < MapSize; i++)
@@ -658,7 +702,7 @@ public class DataManager : MonoBehaviour
                     Mount[] newMount = new Mount[currentPlayer.mounts.Length - 1];
                     for (int j = 0; j < i; j++) newMount[j] = currentPlayer.mounts[j];
                     for (int j = i; j < newMount.Length; j++) newMount[j] = currentPlayer.mounts[j + 1];
-                    currentPlayer.mounts=newMount;
+                    currentPlayer.mounts = newMount;
                     //currentPlayer.mounts[i] = null;
                     break;
                 }
@@ -1116,7 +1160,6 @@ public class DataManager : MonoBehaviour
         currentPlayer = game.currentPlayer ? player2 : player1;
         if (AI.player == null)
             AI.player = game.currentPlayer ? player1 : player2;
-        SetPlayerShop(game.currentPlayer ? player1 : player2, game.shop);
     }
 
     private void UpdateData(Game game)
@@ -1281,12 +1324,6 @@ public class DataManager : MonoBehaviour
                     sourcePlayer.technologyTree[i, j];
             }
         }
-    }
-
-    private void SetPlayerShop(Player player, Shop shop)
-    {
-        if (shop == null) return;
-        player.shop = shop;
     }
 
     private static bool CheckBound(int x, int y)

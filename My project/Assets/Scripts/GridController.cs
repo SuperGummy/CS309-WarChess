@@ -300,8 +300,8 @@ public class GridController : MonoBehaviour
                 break;
             case StructureClass.VILLAGE:
                 if(buildingMap.GetTile(newPosition) == village1)
-                    buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : redVillage);
-                else buildingMap.SetTile(newPosition, side == "blue" ? blueVillage2 : redVillage2);
+                    buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : side == "red" ? redVillage : null);
+                else buildingMap.SetTile(newPosition, side == "blue" ? blueVillage2 : side == "red" ? redVillage2 : null);
                 break;
             default:
                 Tile tile = null;
