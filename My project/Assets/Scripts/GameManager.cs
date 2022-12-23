@@ -494,7 +494,8 @@ public class GameManager : MonoBehaviour
 
     public void UpdateCharacterAtCamp(int option)
     {
-        DataManager.Instance.UpdateCharacter(_previousPosition, option);
+        Task task = Task.Run(async () => { await DataManager.Instance.UpdateCharacter(_previousPosition, option);});
+        task.Wait();
         current = true;
     }
 
@@ -556,7 +557,7 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public async void UpgradeStructure(int type = -1)
+    public async Task UpgradeStructure(int type = -1)
     {
         await DataManager.Instance.UpdateStructure(_previousPosition, type);
         GridController.Instance.SetStructure(_previousPosition);

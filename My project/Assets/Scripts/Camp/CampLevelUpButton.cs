@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Camp;
 using UnityEngine;
 
 public class CampLevelUpButton : MonoBehaviour
 {
     public GameObject CampManager;
     public GameObject levelUpPanel;
+    public GameObject showCantUpdateInfoPanel;
+
+    [SerializeField] private CampCharacterHolder campCharacterHolder;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +24,11 @@ public class CampLevelUpButton : MonoBehaviour
 
     public void OnClick()
     {
-        levelUpPanel.SetActive(true);
+        if (campCharacterHolder.structureInfo.remainingRound > 0)
+        {
+            showCantUpdateInfoPanel.SetActive(true);
+        }
+        else levelUpPanel.SetActive(true);
         CampManager.GetComponent<CampManager>().DisableBackGround();
     }
 }

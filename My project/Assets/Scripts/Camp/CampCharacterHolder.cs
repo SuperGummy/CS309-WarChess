@@ -8,7 +8,7 @@ namespace Camp
         public GameObject character, empty;
         private Vector3Int _position;
         [SerializeField] private Character characterInfo;
-        [SerializeField] private Structure structureInfo;
+        [SerializeField] public Structure structureInfo;
         [SerializeField] private CampCharacterImage characterImage;
       
 

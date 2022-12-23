@@ -35,7 +35,6 @@ public class CampManager : MonoBehaviour
 
     public void UpdateInfo()
     {
-        Debug.Log("Position? " + position);
         campPropObject.GetComponent<CampProp>().UpdateInfo(position);
         campCharacterHolderObject.GetComponent<CampCharacterHolder>().UpdateInfo(position);
     }

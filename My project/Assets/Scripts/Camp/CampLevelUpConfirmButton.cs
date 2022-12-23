@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Camp
@@ -18,10 +19,11 @@ namespace Camp
         
         }
 
-        public void OnClick() 
+        public async void OnClick()
         {
-            GameManager.Instance.UpgradeStructure(0);
+            await GameManager.Instance.UpgradeStructure(0);
             CloseButton.GetComponent<CampCloseParentPanelButton>().OnClick();
+            Debug.Log("Go update info after camp level up!");
             campManager.UpdateInfo();
         }
     }

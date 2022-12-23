@@ -35,7 +35,7 @@ namespace Camp
         {
             endTurnText.text = "Rounds to go: " + _endTurns;
             updateText.text = "+" + _updateValue;
-            switch (_updateValue)
+            switch (_updateType)
             {
                 case 0:
                     characterIcon.sprite = RenderManager.Instance.GetStatIcon(StatType.HEALTH);
