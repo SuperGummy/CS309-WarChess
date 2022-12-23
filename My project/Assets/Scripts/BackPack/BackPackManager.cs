@@ -94,20 +94,7 @@ namespace BackPack
         {
             UpdateInfo();
         }
-
-        // void CallSellObjectFrame()
-        // {
-        //     GameObject currentButton = EventSystem.current.currentSelectedGameObject;
-        //     Slot parentSlot = currentButton.gameObject.GetComponent<Slot>();
-        //     if(parentSlot.itemHolder == null || parentSlot.itemHolder.hold == 0)
-        //     {
-        //         return;
-        //     }
-        //     sellInfoBox.GetComponent<SellInfoBox>().slotId = parentSlot.slotId;
-        //     sellInfoBox.GetComponent<SellInfoBox>().value = parentSlot.itemHolder.item.GetComponent<ItemDisplay>().item.value;
-        //     sellInfoBox.SetActive(true);
-        // }
-
+        
         // Update is called once per frame
         void Update()
         {

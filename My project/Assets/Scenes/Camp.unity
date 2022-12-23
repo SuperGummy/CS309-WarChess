@@ -1299,7 +1299,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateType: 1
-  closeButton: {fileID: 0}
+  promptText: {fileID: 1339384969}
+  campProp: {fileID: 1814798063}
+  campManager: {fileID: 808570327}
 --- !u!1 &299409405
 GameObject:
   m_ObjectHideFlags: 0
@@ -3439,7 +3441,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateType: 0
-  closeButton: {fileID: 0}
+  promptText: {fileID: 1753589622}
+  campProp: {fileID: 1814798063}
+  campManager: {fileID: 808570327}
 --- !u!1 &1145936752
 GameObject:
   m_ObjectHideFlags: 0
@@ -4012,7 +4016,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1306543835}
   m_OnClick:
     m_PersistentCalls:
@@ -6317,7 +6321,7 @@ MonoBehaviour:
   strengthIncreaseText: {fileID: 2144107688}
   levelText: {fileID: 299409407}
   levelUpPanel: {fileID: 448213422}
-  trainingRounds: 0
+  trainingRounds: 2
   structureInfo:
     id: 0
     player:
@@ -6452,8 +6456,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0008544922, y: -57.14023}
-  m_SizeDelta: {x: 152.2488, y: 38.2852}
+  m_AnchoredPosition: {x: -2.8281, y: -55.3707}
+  m_SizeDelta: {x: 228.69, y: 34.7462}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1919955926
 MonoBehaviour:
@@ -6502,8 +6506,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 33.62
+  m_fontSizeBase: 33.62
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6538,7 +6542,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0.000061035156, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -7193,6 +7197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CloseButton: {fileID: 16774052}
+  campManager: {fileID: 808570327}
 --- !u!1 &2144107686
 GameObject:
   m_ObjectHideFlags: 0
