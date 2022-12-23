@@ -49,6 +49,7 @@ namespace BackPack
             }
 
             mounts = DataManager.Instance.currentPlayer.mounts;
+            _slotDictionary.Clear();
             for (int i = 0; i < mounts.Length; i++)
             {
                 string mountName = mounts[i].name;
@@ -67,6 +68,7 @@ namespace BackPack
             }
             
             items = DataManager.Instance.currentPlayer.items;
+            _slotDictionary.Clear();
             for (int i = 0; i < items.Length; i++)
             {
                 string itemName = items[i].name;
