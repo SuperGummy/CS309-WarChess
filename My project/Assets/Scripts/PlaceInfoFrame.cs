@@ -17,6 +17,7 @@ public class PlaceInfoFrame : MonoBehaviour
     public Button function;
     public Slider hp;
     private Vector3Int _position;
+    public GameObject levelUpPanel;
 
     private void OnEnable()
     {
@@ -29,6 +30,12 @@ public class PlaceInfoFrame : MonoBehaviour
         addHealth.onClick.RemoveAllListeners();
         recruit.onClick.RemoveAllListeners();
         
+    }
+
+    public void OnClickLevelUp()
+    {
+        StructureLevelUpPanel.position = _position;
+        levelUpPanel.SetActive(true);
     }
 
     public void Inform(Vector3Int position)

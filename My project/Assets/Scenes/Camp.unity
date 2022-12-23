@@ -4371,6 +4371,7 @@ MonoBehaviour:
         equipments: []
         items: []
         mounts: []
+      tech: 
     name: Luther
     characterClass: 0
     actionState: 0
@@ -4409,6 +4410,7 @@ MonoBehaviour:
         equipments: []
         items: []
         mounts: []
+      tech: 
     structureClass: 1
     level: 3
     hp: 0
@@ -4428,6 +4430,7 @@ MonoBehaviour:
           equipments: []
           items: []
           mounts: []
+        tech: 
       name: 
       characterClass: 0
       actionState: 0
@@ -4452,6 +4455,7 @@ MonoBehaviour:
         defense: 0
         actionRange: 0
         description: 
+    startIndex: 0
   characterImage: {fileID: 117911719}
 --- !u!1 &1427174861
 GameObject:
@@ -6328,12 +6332,14 @@ MonoBehaviour:
         equipments: []
         items: []
         mounts: []
+      tech: 
     structureClass: 1
     level: 3
     hp: 0
     remainingRound: 2
     value: 0
     characters: []
+    startIndex: 0
   levelUpText: {fileID: 1224245264}
 --- !u!1 &1864711042
 GameObject:
