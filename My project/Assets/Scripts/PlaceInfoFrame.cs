@@ -79,6 +79,7 @@ public class PlaceInfoFrame : MonoBehaviour
             case StructureClass.MARKET:
                 structureInfo.text = "This is a market. You can earn stars here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "earn";
+                function.onClick.AddListener(GameManager.Instance.EarnStars);
                 break;
             case StructureClass.INSTITUTE:
                 structureInfo.text = "This is an institute. You can send scholars to learn new skills here.";

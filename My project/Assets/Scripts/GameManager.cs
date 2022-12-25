@@ -486,6 +486,13 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
+    public void EarnStars()
+    {
+        Task task = Task.Run(async () => { await DataManager.Instance.EarnStars(_previousPosition);});
+        task.Wait();
+        current = true;
+    }
+    
     public async Task BuyEquipment(int shopId)
     {
         await DataManager.Instance.BuyEquipments(shopId);
