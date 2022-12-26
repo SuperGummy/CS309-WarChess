@@ -50,13 +50,13 @@ public class DataManager : MonoBehaviour
     {
     }
 
-    public void SaveArchive()
+    public void SaveArchive(string path)
     {
         var archive = CreateArchiveObject();
         var JsonString = JsonUtility.ToJson(archive, true);
         Debug.Log("-------save json string--------");
         Debug.Log(JsonString);
-        StreamWriter sw = new StreamWriter(Application.dataPath + "/JSONData.json");
+        StreamWriter sw = new StreamWriter(path);
         sw.Write(JsonString);
         sw.Close();
     }

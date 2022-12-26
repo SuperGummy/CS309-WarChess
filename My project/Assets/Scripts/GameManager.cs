@@ -580,9 +580,9 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void SaveArchive()
+    public void SaveArchive(string path)
     {
-        DataManager.Instance.SaveArchive();
+        DataManager.Instance.SaveArchive(path);
     }
 
     public async void LoadArchive(string path)

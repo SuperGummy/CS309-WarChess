@@ -25,13 +25,13 @@ namespace SaveLoad
 
         }
 
-        public void UpdateInfo(Model.Player player)
+        public void UpdateInfo(Player player, int characterNum, int structureNum)
         {
-            characterInfoText.text = player.characters.Length.ToString();
+            characterInfoText.text = characterNum.ToString();
             moneyInfoText.text = player.stars.ToString();
             peaceInfoText.text = player.peaceDegree.ToString();
             prosperityInfoText.text = player.prosperityDegree.ToString();
-            occupationInfoText.text = player.structures.Length.ToString();
+            occupationInfoText.text = structureNum.ToString();
         }
     }
 }
