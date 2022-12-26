@@ -41,41 +41,25 @@ namespace SaveLoad
 
         public async void UpdateInfo()
         {
-            StreamReader sr = new StreamReader(dataPath);
-            string jsonString = await sr.ReadToEndAsync();
-            sr.Close();
-            Sl archive = JsonUtility.FromJson<Sl>(jsonString);
-            playerBlue = archive.player1;
-            int characterNumBlue = 0;
-            int structureNumBlue = 0;
-            int characterNumRed = 0;
-            int structureNumRed = 0;
-            playerRed = archive.player2;
-            foreach (var t in archive.characterPlayer)
-                switch (t)
-                {
-                    case -1:
-                        characterNumBlue += 1;
-                        break;
-                    case 1:
-                        characterNumRed += 1;
-                        break;
-                }
-
-            foreach (var t in archive.structurePlayer)
-                switch (t)
-                {
-                    case -1:
-                        structureNumBlue += 1;
-                        break;
-                    case 1:
-                        structureNumRed += 1;
-                        break;
-                }
-
-            progressRecordTitle.text = "Game progress saved at: " + dateTime;
             if (isFull)
             {
+                StreamReader sr = new StreamReader(dataPath);
+                string jsonString = await sr.ReadToEndAsync();
+                sr.Close();
+                Sl archive = JsonUtility.FromJson<Sl>(jsonString);
+                int characterNumBlue = 0;
+                int structureNumBlue = 0;
+                int characterNumRed = 0;
+                int structureNumRed = 0;
+                playerBlue = archive.player1;
+                playerRed = archive.player2;
+                foreach (var t in archive.characterPlayer)
+                    if(t == playerBlue.id) characterNumBlue += 1;
+                    else if(t == playerRed.id) characterNumRed += 1;
+                foreach (var t in archive.structurePlayer)
+                    if(t == playerBlue.id) structureNumBlue += 1;
+                    else if(t == playerRed.id) structureNumRed += 1;
+                progressRecordTitle.text = "Game progress saved at: " + dateTime;
                 emptyPanel.SetActive(false);
                 propPanel.SetActive(true);
                 playerProp[0].GetComponent<SaveLoadPlayerProp>().UpdateInfo(playerBlue, characterNumBlue, structureNumBlue);
@@ -96,6 +80,7 @@ namespace SaveLoad
                 {
                     // TODO: tell coverWarningPanel which progress is currently been operated on
                     SaveLoadSaveConfirmButton.slotId = slotId;
+                    SaveLoadSaveConfirmButton.path = dataPath;
                     coverWarningPanel.SetActive(true);
                 }
                 else

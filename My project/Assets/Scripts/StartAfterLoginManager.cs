@@ -19,13 +19,14 @@ public class StartAfterLoginManager : MonoBehaviour
     [SerializeField] private Toggle singlePlayerButton;
 
     [SerializeField] private TextMeshProUGUI welcomeText;
-    
+    public static StartAfterLoginManager Instance;
     public string userName;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         userName = PlayerPrefs.GetString("username", "123");
         GameManager.Load = false;
     }

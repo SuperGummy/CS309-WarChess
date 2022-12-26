@@ -50,6 +50,11 @@ public class DataManager : MonoBehaviour
     {
     }
 
+    public void RemoveArchive(string path)
+    {
+        File.Delete(path);
+    }
+
     public void SaveArchive(string path)
     {
         var archive = CreateArchiveObject();

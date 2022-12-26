@@ -7,6 +7,8 @@ namespace SaveLoad
     public class SaveLoadSaveConfirmButton : MonoBehaviour
     {
         public static int slotId;
+
+        public static string path;
         // Start is called before the first frame update
         void Start()
         {
@@ -21,7 +23,8 @@ namespace SaveLoad
 
         public void OnClick()
         {
-            // TODO: Save on slot;
+            DataManager.Instance.RemoveArchive(path);
+            SaveLoadManager.Instance.SaveSlot(slotId);
         }
     }
 }

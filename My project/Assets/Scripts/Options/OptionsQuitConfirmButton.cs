@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OptionsQuitConfirmButton : MonoBehaviour
 {
@@ -18,6 +19,6 @@ public class OptionsQuitConfirmButton : MonoBehaviour
 
     public void OnClick()
     {
-        // TODO: Quit Game!
+        SceneManager.LoadScene("Start After Login");
     }
 }

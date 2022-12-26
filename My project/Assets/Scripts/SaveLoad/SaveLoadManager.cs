@@ -53,15 +53,28 @@ namespace SaveLoad
             {
                 saveLoadSlots[i].saveLoadRender = saveLoadRender;
                 saveLoadSlots[i].slotId = i;
+                saveLoadSlots[i].isFull = false;
             }
+            bool exists = Directory.Exists(_path);
+            if(!exists)
+                Directory.CreateDirectory(_path);
             string[] fileEntries = Directory.GetFiles(_path);
-            foreach (string fileName in fileEntries)
+            foreach (string fileNameRaw in fileEntries)
             {
-                int slotId = Int32.Parse(fileName.Split('|')[0]);
+                string fileName = fileNameRaw.Substring(_path.Length + 1, fileNameRaw.Length - _path.Length - 1);
+                Debug.Log(fileName.Split('=')[0] + " --- " + fileName.Split('=')[1]);
+                int slotId = Int32.Parse(fileName.Split('=')[0]);
                 saveLoadSlots[slotId].isFull = true;
-                saveLoadSlots[slotId].dataPath = fileName;
-                saveLoadSlots[slotId].dateTime = DateTime.Parse(fileName.Split('|')[1]);
-                saveLoadSlots[slotId].UpdateInfo();
+                saveLoadSlots[slotId].dataPath = fileNameRaw;
+                string dateTime = fileName.Split('=')[1];
+                dateTime = dateTime.Replace('_', '/');
+                dateTime = dateTime.Replace('^', ' ');
+                dateTime = dateTime.Replace('-', ':');
+                saveLoadSlots[slotId].dateTime = DateTime.Parse(dateTime);
+            }
+            for (int i = 0; i < saveLoadSlots.Length; i++)
+            {
+                saveLoadSlots[i].UpdateInfo();
             }
         }
 
@@ -83,13 +96,19 @@ namespace SaveLoad
 
         public void SaveSlot(int slotId)
         {
-            string filename = _path + "/" + slotId + "-" + DateTime.Now;
+            string dateTime = DateTime.Now.ToString();
+            dateTime = dateTime.Replace('/', '_');
+            dateTime = dateTime.Replace(' ', '^');
+            dateTime = dateTime.Replace(':', '-');
+            string filename = _path + "/" + slotId + "=" + dateTime;
+            Debug.Log("saved to : " + filename);
             GameManager.Instance.SaveArchive(filename);
+            saveLoadSlots[slotId].UpdateInfo();
         }
 
         public void LoadSlot(int slotId)
         {
-            GameManager.Instance.LoadArchive(saveLoadSlots[slotId].dataPath);
+            StartAfterLoginManager.Instance.LoadArchive(saveLoadSlots[slotId].dataPath);
         }
     }
 }
