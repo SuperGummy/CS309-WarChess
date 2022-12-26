@@ -165,7 +165,7 @@ public class DataManager : MonoBehaviour
 
         Debug.Log("-------LOAD-------");
         ProgressReportModel report = new ProgressReportModel();
-        StreamReader sr = new StreamReader(Application.dataPath + "/JSONData.json");
+        StreamReader sr = new StreamReader(path);
         string JsonString = await sr.ReadToEndAsync();
         sr.Close();
 

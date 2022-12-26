@@ -585,4 +585,9 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.SaveArchive();
     }
 
+    public async void LoadArchive(string path)
+    {
+        await DataManager.Instance.LoadArchive(path);
+    }
+
 }
