@@ -30,7 +30,7 @@ public class DataManager : MonoBehaviour
     private int[] _map = new int[MapSize * MapSize];
     private int[] _realMap = new int[MapSize * MapSize];
     private Character[] characters = new Character[MapSize * MapSize];
-    public Structure[] structures = new Structure[MapSize * MapSize];
+    private Structure[] structures = new Structure[MapSize * MapSize];
 
     public int purchasingIndex;
     public int purchasingType;
