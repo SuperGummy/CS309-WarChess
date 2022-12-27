@@ -12,6 +12,7 @@ public class PlaceInfoFrame : MonoBehaviour
     public Image structureImage;
     public TextMeshProUGUI structureName;
     public TextMeshProUGUI structureInfo;
+    public TextMeshProUGUI structureLevel;
     public Button addHealth;
     public Button recruit;
     public Button function;
@@ -51,6 +52,7 @@ public class PlaceInfoFrame : MonoBehaviour
         var structure = DataManager.Instance.GetStructureByPosition(position);
         var character = DataManager.Instance.GetCharacterByPosition(position);
         structureName.text = structure.structureClass.ToString();
+        structureLevel.text = "Lv." + structure.level;
         hp.value = structure.hp;
         string side;
         if (DataManager.Instance.CheckStructureSide(structure) == -1)
