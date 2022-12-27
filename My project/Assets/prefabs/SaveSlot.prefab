@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8704907702551084610}
-  - component: {fileID: 5712067393222802422}
-  - component: {fileID: 5350001131189014213}
   m_Layer: 5
   m_Name: PlayerInfo
   m_TagString: Untagged
@@ -40,46 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -41.1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5712067393222802422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1500193476180242374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0.73
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
---- !u!114 &5350001131189014213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1500193476180242374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!1 &1809642078998807377
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,27 +360,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFull: 0
+  slotId: 0
   saveLoadRender: 0
   playerBlue:
     id: 0
     stars: 0
     prosperityDegree: 0
     peaceDegree: 0
-    characters: []
     equipments: []
     mounts: []
     items: []
-    structures: []
+    shop:
+      equipments: []
+      items: []
+      mounts: []
+    tech: 
   playerRed:
     id: 0
     stars: 0
     prosperityDegree: 0
     peaceDegree: 0
-    characters: []
     equipments: []
     mounts: []
     items: []
-    structures: []
+    shop:
+      equipments: []
+      items: []
+      mounts: []
+    tech: 
   playerProp:
   - {fileID: 6410733604493862547}
   - {fileID: 694069517804424854}
@@ -430,6 +395,7 @@ MonoBehaviour:
   emptyPanel: {fileID: 7641911146578171987}
   progressRecordTitle: {fileID: 8486164413513207587}
   coverWarningPanel: {fileID: 0}
+  dataPath: 
 --- !u!1 &2606621674460934412
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,7 +852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -926,7 +892,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMin.x
@@ -934,7 +900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_SizeDelta.x
@@ -974,11 +940,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1113,7 +1079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 441.5159
       objectReference: {fileID: 0}
     - target: {fileID: 3015190811468216123, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1153,7 +1119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1161,7 +1127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1201,11 +1167,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 15.0000305
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -23.729996
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

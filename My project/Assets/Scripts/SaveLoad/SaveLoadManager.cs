@@ -22,7 +22,7 @@ namespace SaveLoad
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private List<Button> buttonList;
         public GameObject coverWarningPanel;
-        private string _path;
+        public string pathPrefix;
 
         // Start is called before the first frame update
         void Awake()
@@ -37,8 +37,8 @@ namespace SaveLoad
                 saveLoadSlots[i].coverWarningPanel = coverWarningPanel;
             }
 
-            _path = Application.persistentDataPath +
-                    "/" + PlayerPrefs.GetString("username").Replace('\\', '-');
+            pathPrefix = Application.persistentDataPath +
+                         "/" + PlayerPrefs.GetString("username").Replace('\\', '-');
         }
 
         // Update is called once per frame
@@ -55,22 +55,17 @@ namespace SaveLoad
                 saveLoadSlots[i].slotId = i;
                 saveLoadSlots[i].isFull = false;
             }
-            bool exists = Directory.Exists(_path);
+            bool exists = Directory.Exists(pathPrefix);
             if(!exists)
-                Directory.CreateDirectory(_path);
-            string[] fileEntries = Directory.GetFiles(_path);
+                Directory.CreateDirectory(pathPrefix);
+            string[] fileEntries = Directory.GetFiles(pathPrefix);
             foreach (string fileNameRaw in fileEntries)
             {
-                string fileName = fileNameRaw.Substring(_path.Length + 1, fileNameRaw.Length - _path.Length - 1);
+                string fileName = fileNameRaw.Substring(pathPrefix.Length + 1, fileNameRaw.Length - pathPrefix.Length - 1);
                 Debug.Log(fileName.Split('=')[0] + " --- " + fileName.Split('=')[1]);
                 int slotId = Int32.Parse(fileName.Split('=')[0]);
                 saveLoadSlots[slotId].isFull = true;
                 saveLoadSlots[slotId].dataPath = fileNameRaw;
-                string dateTime = fileName.Split('=')[1];
-                dateTime = dateTime.Replace('_', '/');
-                dateTime = dateTime.Replace('^', ' ');
-                dateTime = dateTime.Replace('-', ':');
-                saveLoadSlots[slotId].dateTime = DateTime.Parse(dateTime);
             }
             for (int i = 0; i < saveLoadSlots.Length; i++)
             {
@@ -100,9 +95,11 @@ namespace SaveLoad
             dateTime = dateTime.Replace('/', '_');
             dateTime = dateTime.Replace(' ', '^');
             dateTime = dateTime.Replace(':', '-');
-            string filename = _path + "/" + slotId + "=" + dateTime;
+            string filename = pathPrefix + "/" + slotId + "=" + dateTime;
             Debug.Log("saved to : " + filename);
             GameManager.Instance.SaveArchive(filename);
+            saveLoadSlots[slotId].isFull = true;
+            saveLoadSlots[slotId].dataPath = filename;
             saveLoadSlots[slotId].UpdateInfo();
         }
 

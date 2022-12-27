@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SaveLoad
 {
@@ -43,6 +44,14 @@ namespace SaveLoad
         {
             if (isFull)
             {
+                string fileName = dataPath.Substring(SaveLoadManager.Instance.pathPrefix.Length + 1, 
+                    dataPath.Length - SaveLoadManager.Instance.pathPrefix.Length - 1);
+                Debug.Log(fileName.Split('=')[0] + " --- " + fileName.Split('=')[1]);
+                string dateTimeParse = fileName.Split('=')[1];
+                dateTimeParse = dateTimeParse.Replace('_', '/');
+                dateTimeParse = dateTimeParse.Replace('^', ' ');
+                dateTimeParse = dateTimeParse.Replace('-', ':');
+                dateTime = DateTime.Parse(dateTimeParse);
                 StreamReader sr = new StreamReader(dataPath);
                 string jsonString = await sr.ReadToEndAsync();
                 sr.Close();
@@ -53,17 +62,20 @@ namespace SaveLoad
                 int structureNumRed = 0;
                 playerBlue = archive.player1;
                 playerRed = archive.player2;
-                foreach (var t in archive.characterPlayer)
+                Debug.Log("ids: " + playerBlue.id + " " + playerRed.id);
+                foreach (var t in archive.characterPlayer) {
                     if(t == playerBlue.id) characterNumBlue += 1;
                     else if(t == playerRed.id) characterNumRed += 1;
+                    Debug.Log("t = " + t);
+                }
                 foreach (var t in archive.structurePlayer)
                     if(t == playerBlue.id) structureNumBlue += 1;
                     else if(t == playerRed.id) structureNumRed += 1;
                 progressRecordTitle.text = "Game progress saved at: " + dateTime;
-                emptyPanel.SetActive(false);
-                propPanel.SetActive(true);
                 playerProp[0].GetComponent<SaveLoadPlayerProp>().UpdateInfo(playerBlue, characterNumBlue, structureNumBlue);
                 playerProp[1].GetComponent<SaveLoadPlayerProp>().UpdateInfo(playerRed, characterNumRed, structureNumRed);
+                emptyPanel.SetActive(false);
+                propPanel.SetActive(true);
             }
             else
             {
