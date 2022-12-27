@@ -30,7 +30,7 @@ public class DataManager : MonoBehaviour
     private int[] _map = new int[MapSize * MapSize];
     private int[] _realMap = new int[MapSize * MapSize];
     private Character[] characters = new Character[MapSize * MapSize];
-    private Structure[] structures = new Structure[MapSize * MapSize];
+    public Structure[] structures = new Structure[MapSize * MapSize];
 
     public int purchasingIndex;
     public int purchasingType;
@@ -59,8 +59,6 @@ public class DataManager : MonoBehaviour
     {
         var archive = CreateArchiveObject();
         var JsonString = JsonUtility.ToJson(archive, true);
-        Debug.Log("-------save json string--------");
-        Debug.Log(JsonString);
         StreamWriter sw = new StreamWriter(path);
         sw.Write(JsonString);
         sw.Close();
@@ -78,6 +76,10 @@ public class DataManager : MonoBehaviour
         result.items = player.items;
         result.characters = character;
         result.structures = structure;
+        result.technologyTree = new int[2, 11];
+        for (int i=0;i<2;i++)
+        for (int j = 0; j < 11; j++)
+            result.technologyTree[i, j] = player.tech[i * 11 + j];
         return result;
     }
 
@@ -125,13 +127,32 @@ public class DataManager : MonoBehaviour
         return result;
     }
 
+
+    private String TechnologiesToString(int[,] tech)
+    {
+        var res = "[";
+        for (int i = 0; i < tech.GetLength(0); i++)
+        {
+            if (i != 0) res += ',';
+            res += "[";
+            for (int j = 0; j < tech.GetLength(1); j++)
+            {
+                if (j != 0) res += ',';
+                res += tech[i, j].ToString();
+            }
+            res += ']';
+        }
+        res += ']';
+        return res;
+    }
+    
     private Model.Structure[] UnionStructures(Model.Structure[] structure,
-        int[] structureCharacterCount, Character[] structureCharacters, int[] structuresPlayer, int op = -1)
+        int[] structureCharacterCount, Character[] structureCharacters, int[] structuresPlayer, int op =0)
     {
         int length = 0;
         for (int i = 0; i < structure.Length; i++)
         {
-            if (op == -1 || structuresPlayer[i] == op)
+            if (structuresPlayer[i] == op)
             {
                 length++;
             }
@@ -140,9 +161,9 @@ public class DataManager : MonoBehaviour
         var result = new Model.Structure[length];
         var tmp = 0;
         length = 0;
-        for (int i = 0; i < structure.Length; i++)
+        for (int i = structure.Length-1; i>=0; i--)
         {
-            if (op == -1 || structuresPlayer[i] == op)
+            if (structuresPlayer[i] == op)
             {
                 var character = new Model.Character[structureCharacterCount[i]];
                 for (int j = 0; j < structureCharacterCount[i]; j++)
@@ -154,6 +175,10 @@ public class DataManager : MonoBehaviour
                 result[length] = structure[i];
                 result[length].characters = character;
                 length++;
+            }
+            else
+            {
+                tmp += structureCharacterCount[i];
             }
         }
 
@@ -168,7 +193,6 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("-------LOAD-------");
         ProgressReportModel report = new ProgressReportModel();
         StreamReader sr = new StreamReader(path);
         string JsonString = await sr.ReadToEndAsync();
@@ -180,13 +204,10 @@ public class DataManager : MonoBehaviour
 
         Sl a = new Sl();
         Sl archive = JsonUtility.FromJson<Sl>(JsonString);
-        Debug.Log("-------LOAD success-------");
-
-        Debug.Log("------- create Game object ---------");
-        var game = new Game();
-        game.id = archive.gameID;
-        game.round = archive.round;
-        game.currentPlayer = archive.currentPlayer;
+        var localArchive = new LocalArchive();
+        localArchive.id = archive.gameID;
+        localArchive.round = archive.round;
+        localArchive.currentPlayer = archive.currentPlayer;
 
         var structures1 = UnionStructures(archive.structures, archive.structureCharacterCount,
             archive.structureCharacters, archive.structurePlayer, archive.player1.id);
@@ -194,14 +215,25 @@ public class DataManager : MonoBehaviour
             archive.structureCharacters, archive.structurePlayer, archive.player2.id);
         var characters1 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player1.id);
         var characters2 = UnionCharacters(archive.characters, archive.characterPlayer, archive.player2.id);
+        
+        localArchive.player1 = ChangePlayerModel(archive.player1, characters1, structures1);
+        localArchive.player2 = ChangePlayerModel(archive.player2, characters2, structures2);
 
-        game.player1 = ChangePlayerModel(archive.player1, characters1, structures1);
-        game.player2 = ChangePlayerModel(archive.player2, characters2, structures2);
-        game.shop = game.currentPlayer ? archive.player2.shop : archive.player1.shop;
-
+        if (localArchive.currentPlayer)
+        {
+            localArchive.equipmentDTOs = archive.player2.shop.equipments;
+            localArchive.mountDTOs = archive.player2.shop.mounts;
+            localArchive.itemDTOs = archive.player2.shop.items;
+        }
+        else
+        {
+            localArchive.equipmentDTOs = archive.player1.shop.equipments;
+            localArchive.mountDTOs = archive.player1.shop.mounts;
+            localArchive.itemDTOs = archive.player1.shop.items;
+        }
         var allStructure = UnionStructures(archive.structures, archive.structureCharacterCount,
             archive.structureCharacters, archive.structurePlayer);
-        game.structures = allStructure;
+        localArchive.structures = allStructure;
         int[,] map = new int[MapSize, MapSize];
         for (int i = 0; i < MapSize; i++)
         {
@@ -211,25 +243,58 @@ public class DataManager : MonoBehaviour
             }
         }
 
-        game.map = map;
-        Debug.Log("------- create Game object success ---------");
+        localArchive.map = map;
+        var str = JsonUtility.ToJson(localArchive);
+        var mapstr = "\"map\":";
+        mapstr += '[';
+        for (int i = 0; i < MapSize; i++)
+        {
+            if (i != 0) mapstr += ',';
+            mapstr += '[';
+            for (int j = 0; j < MapSize; j++)
+            {
+                if (j!=0)mapstr += ',';
+                mapstr += map[i, j].ToString();
+            }
+            mapstr += ']';
+        }
+        mapstr += ']';
+        str ='{'+mapstr+',' +str.Substring(1);
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str.Substring(i, 7) == "player1")
+            {
+                str = str.Substring(0, i + 10)+"\"technologyTree\":"
+                                              +TechnologiesToString(localArchive.player1.technologyTree)+','+str.Substring(i+10);
+                break;
+            }
+        }
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str.Substring(i, 7) == "player2")
+            {
+                str = str.Substring(0, i + 10)+"\"technologyTree\":"
+                                              +TechnologiesToString(localArchive.player2.technologyTree)+','+str.Substring(i+10);
+                break;
+            }
+        }
 
         var res = await api.PUT(
             url: api.Copy,
             param: new Dictionary<string, string>
             {
-                { "game", JsonUtility.ToJson(game) },
+                { "game", str},
             }
         );
-        game = GetModel<Model.Game>(res);
+        var game = GetModel<Model.Game>(res);
         if (game == null) return;
         InitiateData(game);
         SetMap(game.map);
-        foreach (var structure in game.structures)
+        for (int i = 0; i < archive.structures.Length; i++)
         {
-            UpdateStructureAttribute(structure, false);
-            GridController.Instance.AddVillageAndRelic(new Vector3Int(structure.x - 8, structure.y - 8, 0),
-                structure.structureClass == StructureClass.VILLAGE ? 0 : 1);
+            var structure = archive.structures[i];
+            structures[structure.x * MapSize + structure.y] = new Structure();
+            structures[structure.x * MapSize + structure.y].startIndex = archive.startIndex[i];
         }
 
         foreach (var structure in game.player1.structures)
@@ -240,6 +305,7 @@ public class DataManager : MonoBehaviour
 
         foreach (var structure in game.player2.structures)
         {
+            Debug.Log(player2.id+":"+structure.id+"   "+structure.x+" "+structure.y+" "+structure.structureClass);
             UpdateStructureAttribute(structure, false);
             structures[structure.x * MapSize + structure.y].player = player2;
         }
@@ -251,7 +317,13 @@ public class DataManager : MonoBehaviour
                 GridController.Instance.SetStructure(new Vector3Int(i, j));
             }
         }
-
+        
+        foreach (var structure in game.structures)
+        {
+            UpdateStructureAttribute(structure, false);
+            GridController.Instance.AddVillageAndRelic(new Vector3Int(structure.x - 8, structure.y - 8, 0),
+                structure.structureClass == StructureClass.VILLAGE ? 0 : 1);
+        }
         characters = new Character[MapSize * MapSize];
         foreach (var character in game.player1.characters)
         {
@@ -303,7 +375,11 @@ public class DataManager : MonoBehaviour
                 structuresLength++;
                 if (structures[i].characters != null)
                 {
-                    structuresCharactersCount += structures[i].characters.Length;
+                    int cnt = 0;
+                    for  (int j=0;j<structures[i].characters.Length;j++)
+                        if (structures[i].characters[j] != null)
+                            cnt++; 
+                    structuresCharactersCount += cnt;
                 }
             }
         }
@@ -314,6 +390,7 @@ public class DataManager : MonoBehaviour
         archive.structurePlayer = new int[structuresLength];
         archive.structureCharacterCount = new int[structuresLength];
         archive.structureCharacters = new Character[structuresCharactersCount];
+        archive.startIndex = new int[structuresLength];
         structuresCharactersCount = 0;
         for (int i = 0; i < characters.Length; i++)
         {
@@ -335,8 +412,7 @@ public class DataManager : MonoBehaviour
 
                 saveCharacters[charactersLength].x = i / MapSize;
                 saveCharacters[charactersLength].y = i % MapSize;
-
-                archive.characterPlayer[charactersLength] = characters[i].id;
+                archive.characterPlayer[charactersLength] = characters[i].player.id;
             }
         }
 
@@ -359,15 +435,19 @@ public class DataManager : MonoBehaviour
                 archive.structureCharacterCount[structuresLength] = 0;
                 if (structures[i].characters != null)
                 {
-                    archive.structureCharacterCount[structuresLength] = structures[i].characters.Length;
+                    int cnt = 0;
                     for (int j = 0; j < structures[i].characters.Length; j++)
-                    {
-                        archive.structureCharacters[structuresCharactersCount] = structures[i].characters[j];
-                        structuresCharactersCount++;
-                    }
+                        if (structures[i].characters[j]!=null){
+                            archive.structureCharacters[structuresCharactersCount] = structures[i].characters[j];
+                            structuresCharactersCount++;
+                            cnt++;
+                        }
+                    archive.structureCharacterCount[structuresLength]=cnt;
                 }
 
-                archive.structurePlayer[structuresLength] = structures[i].id;
+                archive.startIndex[structuresLength] = structures[i].startIndex;
+                if (structures[i].player!=null)archive.structurePlayer[structuresLength] = structures[i].player.id;
+                else archive.structurePlayer[structuresLength] = 0;
             }
         }
 
@@ -1267,13 +1347,15 @@ public class DataManager : MonoBehaviour
         }
 
         structures[structure.x * MapSize + structure.y].characters = new Character[3];
-
+        Debug.Log("startindex:"+structure.x+"  "+structure.y+" "+structures[structure.x * MapSize + structure.y].startIndex);
         foreach (var character in structure.characters)
         {
+            Debug.Log(character.id);
             for (var i = 0; i < 3; i++)
             {
                 if (character.id == structures[structure.x * MapSize + structure.y].startIndex + i)
                 {
+                    Debug.Log(character.id);
                     structures[structure.x * MapSize + structure.y].characters[i] = new Character();
                     structures[structure.x * MapSize + structure.y].characters[i].id = character.id;
                     structures[structure.x * MapSize + structure.y].characters[i].name = character.name;

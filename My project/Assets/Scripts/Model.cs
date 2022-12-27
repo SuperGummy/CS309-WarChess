@@ -25,6 +25,21 @@ namespace Model
     }
 
     [Serializable]
+    public class LocalArchive
+    {
+        public int id;
+        public int round;
+        public bool currentPlayer;
+        public Player player1;
+        public Player player2;
+        public Equipment[] equipmentDTOs;
+        public Mount[] mountDTOs;
+        public Item[] itemDTOs;
+        public Structure[] structures;
+        public int[,] map;
+    }
+    
+    [Serializable]
     public class Account
     {
         public int id;
@@ -160,11 +175,12 @@ namespace Model
     [Serializable]
     public enum StructureClass
     {
-        VILLAGE = 1,
+        VILLAGE,
         CAMP,
         MARKET,
         INSTITUTE,
         RELIC,
+        BASE,
     }
 
     [Serializable]

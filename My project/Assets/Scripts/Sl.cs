@@ -20,4 +20,6 @@ public class Sl
 
     public int[] structureCharacterCount;
     public Character[] structureCharacters;
+
+    public int[] startIndex;
 }
