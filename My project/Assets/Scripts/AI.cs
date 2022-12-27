@@ -58,6 +58,7 @@ public abstract class AI
             {
                 int i = new Random().Next(0, pos.Count);
                 GameManager.Instance.BuyCharacter(pos[i]);
+                pos.RemoveAt(i);
             }
         }
 
