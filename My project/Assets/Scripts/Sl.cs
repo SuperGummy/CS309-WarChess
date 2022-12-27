@@ -10,7 +10,6 @@ public class Sl
     public Player player1;
     public Player player2;
 
-    public int[] tech;
     public int[] map;
 
     public Model.Character[] characters;
@@ -22,4 +21,5 @@ public class Sl
     public Character[] structureCharacters;
 
     public int[] startIndex;
+    public bool AIType;
 }

@@ -14,9 +14,11 @@ public abstract class AI
     protected List<Character> characters = new List<Character>();
     protected List<Vector3Int> chPositions;
     protected int round;
+    public static bool AIType;
 
     public static AI GetAI(bool type)
     {
+        AIType = type;
         if (type)
             return new AISenior();
         return new AIJunior();

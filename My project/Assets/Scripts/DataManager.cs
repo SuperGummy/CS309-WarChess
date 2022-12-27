@@ -305,7 +305,6 @@ public class DataManager : MonoBehaviour
 
         foreach (var structure in game.player2.structures)
         {
-            Debug.Log(player2.id+":"+structure.id+"   "+structure.x+" "+structure.y+" "+structure.structureClass);
             UpdateStructureAttribute(structure, false);
             structures[structure.x * MapSize + structure.y].player = player2;
         }
@@ -344,12 +343,14 @@ public class DataManager : MonoBehaviour
         report.ProgressValue = 100;
         if (progress is not null)
             progress.Report(report);
+        GameManager.AI = AI.GetAI(archive.AIType);
+        GameManager.pvp = false;
     }
 
     private Sl CreateArchiveObject()
     {
         var archive = new Sl();
-
+        archive.AIType = AI.AIType;
         archive.gameID = gameID;
         archive.round = round;
         archive.currentPlayer = (player2.id == currentPlayer.id);
@@ -1347,15 +1348,12 @@ public class DataManager : MonoBehaviour
         }
 
         structures[structure.x * MapSize + structure.y].characters = new Character[3];
-        Debug.Log("startindex:"+structure.x+"  "+structure.y+" "+structures[structure.x * MapSize + structure.y].startIndex);
         foreach (var character in structure.characters)
         {
-            Debug.Log(character.id);
             for (var i = 0; i < 3; i++)
             {
                 if (character.id == structures[structure.x * MapSize + structure.y].startIndex + i)
                 {
-                    Debug.Log(character.id);
                     structures[structure.x * MapSize + structure.y].characters[i] = new Character();
                     structures[structure.x * MapSize + structure.y].characters[i].id = character.id;
                     structures[structure.x * MapSize + structure.y].characters[i].name = character.name;
