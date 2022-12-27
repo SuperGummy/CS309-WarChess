@@ -254,7 +254,7 @@ public class AISenior: AI
             if (structure.structureClass == StructureClass.VILLAGE)
             {
                 Debug.Log("给爷升级！");
-                await DataManager.Instance.UpdateStructure(position, 2);
+                await GameManager.Instance.UpgradeStructure(position, 2);
             }
             await buyPeople(strPositions[i]);
         }
@@ -295,11 +295,14 @@ public class AISenior: AI
         if(structure.structureClass==StructureClass.BASE||structure.structureClass==StructureClass.RELIC) return;
         Debug.Log("buyPeople:"+position);
         if (structure.characters[0] != null)
-            await DataManager.Instance.BuyCharacters(position, structure.characters[0].id, position.x, position.y, 0);
+        {
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[0].id, position.x, position.y, 0);
+        }
+            
         else if (structure.characters[1] != null)
-            await DataManager.Instance.BuyCharacters(position, structure.characters[1].id, position.x, position.y, 0);
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[1].id, position.x, position.y, 0);
         else if (structure.characters[2] != null)
-            await DataManager.Instance.BuyCharacters(position, structure.characters[2].id, position.x, position.y, 0);
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[2].id, position.x, position.y, 0);
     }
     private bool Recruit()
     {
