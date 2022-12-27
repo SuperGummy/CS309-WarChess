@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
         Initiate();
     }
 
+    private void OnDestroy()
+    {
+        AI.player = null;
+    }
+
     // Update is called once per frame
     void Update()
     {
