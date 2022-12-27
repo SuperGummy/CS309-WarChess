@@ -6,7 +6,7 @@ public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
     private AsyncOperation _asyncOperation = null;
-    private static readonly string[] Scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "Shop", "Upgrade Building", "Equips", "Options", "Save Load"};
+    private static readonly string[] Scene = {"Back Pack", "Camp", "recruit", "Tech Tree", "Shop", "Upgrade Building", "Equips", "Options", "Save Load", "Win", "Lose"};
     // Start is called before the first frame update
 
     private void Awake()
@@ -120,5 +120,15 @@ public class SceneController : MonoBehaviour
     public void UnloadEquip()
     {
         SceneManager.UnloadSceneAsync(Scene[6]);
+    }
+    
+    public void LoadWin()
+    {
+        SceneManager.LoadSceneAsync(Scene[9], LoadSceneMode.Additive);
+    }
+    
+    public void LoadLose()
+    {
+        SceneManager.LoadSceneAsync(Scene[10], LoadSceneMode.Additive);
     }
 }

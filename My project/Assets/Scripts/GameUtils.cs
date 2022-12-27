@@ -13,6 +13,68 @@ public class GameUtils : MonoBehaviour
         Instance = this;
     }
 
+    public bool JudgeEnd()
+    {
+        var player = DataManager.Instance.currentPlayer;
+        if (player.prosperityDegree >= 50 && player.peaceDegree >= 30)
+        {
+            WinManager.side = player.id == DataManager.Instance.player1.id ? -1 : 1;
+            if (GameManager.pvp)
+                SceneController.Instance.LoadWin();
+            else
+            {
+                if (player.id == DataManager.Instance.player1.id)
+                    SceneController.Instance.LoadWin();
+                else
+                    SceneController.Instance.LoadLose();
+            }
+
+            return true;
+        }
+
+        var structure = DataManager.Instance.GetStructureByPosition(new Vector3Int(0, DataManager.MapSize - 1));
+        if (structure == null) return false;
+        if (structure.player.id == player.id)
+        {
+            var structureP = DataManager.Instance.GetStructureByPosition(new Vector3Int(DataManager.MapSize - 1, 0));
+            if (structureP.hp == 0)
+            {
+                WinManager.side = player.id == DataManager.Instance.player1.id ? -1 : 1;
+                if (GameManager.pvp)
+                    SceneController.Instance.LoadWin();
+                else
+                {
+                    if (player.id == DataManager.Instance.player1.id)
+                        SceneController.Instance.LoadWin();
+                    else
+                        SceneController.Instance.LoadLose();
+                }
+
+                return true;
+            }
+        }
+        else
+        {
+            if (structure.hp == 0)
+            {
+                WinManager.side = player.id == DataManager.Instance.player1.id ? -1 : 1;
+                if (GameManager.pvp)
+                    SceneController.Instance.LoadWin();
+                else
+                {
+                    if (player.id == DataManager.Instance.player1.id)
+                        SceneController.Instance.LoadWin();
+                    else
+                        SceneController.Instance.LoadLose();
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool CheckAccessible(Vector3Int position, bool type)
     {
         var x = position.x;
@@ -411,8 +473,7 @@ public class GameUtils : MonoBehaviour
         return res;
     }
 
-    
-    
+
     public List<Vector3Int> GetAttackRange(Vector3Int position)
     {
         var character = DataManager.Instance.GetCharacterByPosition(position);

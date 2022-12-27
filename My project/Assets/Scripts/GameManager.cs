@@ -83,6 +83,9 @@ public class GameManager : MonoBehaviour
                 ShowStructureInfoButton(position);
             }
         }
+        
+        if (GameUtils.Instance.JudgeEnd())
+            DisableBackground();
     }
 
     private void UpdatePosition(Vector3Int position)
