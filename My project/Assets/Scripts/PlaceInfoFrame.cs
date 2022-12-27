@@ -31,7 +31,6 @@ public class PlaceInfoFrame : MonoBehaviour
         function.onClick.RemoveAllListeners();
         addHealth.onClick.RemoveAllListeners();
         recruit.onClick.RemoveAllListeners();
-        
     }
 
     public void OnClickLevelUp()
@@ -61,8 +60,10 @@ public class PlaceInfoFrame : MonoBehaviour
             side = "red";
         else
             side = "middle";
-        if(structure.structureClass == StructureClass.MARKET || structure.structureClass == StructureClass.CAMP)
+        if (structure.structureClass == StructureClass.MARKET)
             levelUpButton.SetActive(true);
+        else
+            levelUpButton.SetActive(false);
         structureImage.sprite = RenderManager.Instance.GetStructureImage(structure.structureClass, side);
         recruit.interactable = true;
         function.interactable = true;
@@ -88,7 +89,6 @@ public class PlaceInfoFrame : MonoBehaviour
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
                 function.interactable = true;
                 function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
-                
                 break;
             case StructureClass.VILLAGE:
                 structureInfo.text = "This is a village. Upgrade it to advanced buildings.";
@@ -104,6 +104,7 @@ public class PlaceInfoFrame : MonoBehaviour
                     function.GetComponentInChildren<TextMeshProUGUI>().text = "evolve";
                     function.onClick.AddListener(GameManager.Instance.OpenUpgrade);
                 }
+
                 break;
             default:
                 structureInfo.text = "This is the castle. Protect it until the last soldier falls.";
