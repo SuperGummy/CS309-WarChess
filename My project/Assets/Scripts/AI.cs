@@ -12,8 +12,8 @@ public abstract class AI
 {
     public static Player player;
     protected List<Character> characters = new List<Character>();
-    protected List<Vector3Int> chPositions;
-    protected int round;
+    protected List<Vector3Int> chPositions,strPositions;
+    protected int round,star;
     public static bool AIType;
 
     public static AI GetAI(bool type)
@@ -24,6 +24,15 @@ public abstract class AI
         return new AIJunior();
     }
 
+    public void getStar()
+    {
+        star = (int)DataManager.Instance.currentPlayer.stars;
+    }
+
+    public void getStructurePos()
+    {
+        strPositions = DataManager.Instance.GetStructurePosByPlayer(player.id);
+    }
     public void GetCharactersPos()
     {
         chPositions = DataManager.Instance.GetCharacterPosByPlayer(player.id);
@@ -44,6 +53,7 @@ public abstract class AI
     {
         await MoveCharacters();
         await AttackCharacters();
+        await Buy();
         // this.Buy();
         await NextRound();
     }
