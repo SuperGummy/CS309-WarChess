@@ -86,11 +86,9 @@ public class PlaceInfoFrame : MonoBehaviour
             case StructureClass.INSTITUTE:
                 structureInfo.text = "This is an institute. You can send scholars to learn new skills here.";
                 function.GetComponentInChildren<TextMeshProUGUI>().text = "skill";
-                if (character.characterClass == CharacterClass.SCHOLAR)
-                {
-                    function.interactable = false;
-                    function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
-                }
+                function.interactable = true;
+                function.onClick.AddListener(GameManager.Instance.OpenTechnologies);
+                
                 break;
             case StructureClass.VILLAGE:
                 structureInfo.text = "This is a village. Upgrade it to advanced buildings.";

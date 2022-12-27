@@ -32,7 +32,7 @@ public class ShopTemplate1 : MonoBehaviour
         if (ty == 2) image.sprite = RenderManager.Instance.GetItemImage(ic);
         if (DataManager.Instance.currentPlayer.stars < 7) button.gameObject.SetActive(false);
         else button.gameObject.SetActive(true);
-        Debug.Log(name+" "+ty+" "+ec+" "+mc+" "+ic);
+//        Debug.Log(name+" "+ty+" "+ec+" "+mc+" "+ic);
     }
     public async void buy()
     {
