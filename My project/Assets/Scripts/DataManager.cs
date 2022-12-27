@@ -1246,6 +1246,7 @@ public class DataManager : MonoBehaviour
         currentPlayer = game.currentPlayer ? player2 : player1;
         if (AI.player == null)
             AI.player = game.currentPlayer ? player1 : player2;
+        SetPlayerShop(game.currentPlayer ? player1 : player2, game.shop);
     }
 
     private void UpdateData(Game game)
@@ -1410,7 +1411,13 @@ public class DataManager : MonoBehaviour
             }
         }
     }
-
+    
+    private void SetPlayerShop(Player player, Shop shop)
+    {
+        if (shop == null) return;
+        player.shop = shop;
+    }
+    
     private static bool CheckBound(int x, int y)
     {
         return !(x < 0 || x >= MapSize || y < 0 || y >= MapSize);
