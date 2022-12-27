@@ -71,6 +71,7 @@ public class Skill : MonoBehaviour
 
     public async void Buy()
     {
+        if (skilltree.character == null || skilltree.character.characterClass != CharacterClass.SCHOLAR) return;
         if (skilltree.structure.remainingRound > 0)
         {
             Debug.Log("have other tech in process");

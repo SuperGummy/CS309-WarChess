@@ -12,6 +12,7 @@ public class Skilltree : MonoBehaviour
     public static Vector3Int position;
     private void Awake() => skilltree = this;
     public Structure structure;
+    public Character character;
     public int[] SkillLevels;
     public int[] SkillCaps;
     public int[] SkillRounds;
@@ -47,6 +48,7 @@ public class Skilltree : MonoBehaviour
     {
         stars = getStars();
         structure = DataManager.Instance.GetStructureByPosition(position);
+        character = DataManager.Instance.GetCharacterByPosition(position);
         techStatus = DataManager.Instance.currentPlayer.tech;
         //stars = (int)DataManager.Instance.currentPlayer.stars;
         //techStatus = new[] {2, 2, 2, 2,1,1,1,1,0,0,0};

@@ -32,6 +32,7 @@ public class RecruitManager : MonoBehaviour
         string characterName = btnName.Split(" ")[1];
         foreach (Character character in _characters)
         {
+            if(character==null) continue;
             if ((character.name).Equals(characterName))
             {
                 _id = character.id;
