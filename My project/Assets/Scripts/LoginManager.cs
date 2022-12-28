@@ -8,12 +8,14 @@ using api = API.Service;
 using UnityEditor;
 using Model;
 using Newtonsoft.Json;
+using TMPro;
 
 public class LoginManager : MonoBehaviour
 {
     private String _userNameInput;
 
     private String _passwordInput;
+    [SerializeField] private TextMeshProUGUI message;
 
     // Start is called before the first frame update
     void Start()
@@ -49,13 +51,17 @@ public class LoginManager : MonoBehaviour
 
         if (res == null)
         {
-            EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
+            message.text = "Network errors, please check your network!";
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
             return;
         }
 
         if (res.StatusCode != HttpStatusCode.OK)
         {
-            EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
+            message.text = res.ReasonPhrase;
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
             return;
         }
 
@@ -63,11 +69,12 @@ public class LoginManager : MonoBehaviour
 
         if (token == null)
         {
+            message.text = "Login failed, please check username and password.";
+            message.color = Color.red;
             EditorUtility.DisplayDialog("Errors", "Login failed", "ok");
             return;
         }
-
-        EditorUtility.DisplayDialog("Congratulations", "Login successfully", "ok");
+        //EditorUtility.DisplayDialog("Congratulations", "Login successfully", "ok");
         PlayerPrefs.SetString("username", _userNameInput);
         PlayerPrefs.SetString("token", token);
         SceneManager.LoadSceneAsync("Start After Login");
@@ -87,13 +94,17 @@ public class LoginManager : MonoBehaviour
 
         if (res == null)
         {
-            EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
+            message.text = "Network errors, please check your network!";
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
             return;
         }
 
         if (res.StatusCode != HttpStatusCode.OK)
         {
-            EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
+            message.text = res.ReasonPhrase;
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
             return;
         }
 
@@ -102,24 +113,32 @@ public class LoginManager : MonoBehaviour
 
         if (model == null)
         {
-            EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
+            message.text = "Network errors, please check your network!";
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
             return;
         }
 
         if (model.code != 200)
         {
-            EditorUtility.DisplayDialog("Bad Request", model.msg, "ok");
+            message.text = model.msg;
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Bad Request", model.msg, "ok");
             return;
         }
 
         var account = model.data;
         if (account == null)
         {
-            EditorUtility.DisplayDialog("Errors", "Register failed", "ok");
+            message.text = "Register failed, please check username and password: Password length is 6-16.";
+            message.color = Color.red;
+            //EditorUtility.DisplayDialog("Errors", "Register failed", "ok");
         }
         else
         {
-            EditorUtility.DisplayDialog("Congratulations", "Register successfully", "ok");
+            message.text = "Register successful!";
+            message.color = Color.green;
+            //EditorUtility.DisplayDialog("Congratulations", "Register successfully", "ok");
         }
     }
 }
