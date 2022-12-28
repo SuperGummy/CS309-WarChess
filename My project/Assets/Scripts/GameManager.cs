@@ -88,9 +88,19 @@ public class GameManager : MonoBehaviour
                 ShowStructureInfoButton(position);
             }
         }
-        
+
         if (GameUtils.Instance.JudgeEnd())
+        {
+            var shop = GameObject.Find("ShopButton");
+            shop.SetActive(false);
+            var backpack = GameObject.Find("BackpackButton");
+            backpack.SetActive(false);
+            var rollback = GameObject.Find("RollBackButton");
+            rollback.SetActive(false);
+            var option = GameObject.Find("OptionsButton");
+            option.SetActive(false);
             DisableBackground();
+        }
     }
 
     private void UpdatePosition(Vector3Int position)

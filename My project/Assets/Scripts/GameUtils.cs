@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameUtils : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameUtils : MonoBehaviour
 
     public bool JudgeEnd()
     {
+        var scene = SceneManager.GetActiveScene();
+        if (scene.name != "Game") return false;
         var player = DataManager.Instance.currentPlayer;
         if (player.prosperityDegree >= 50 && player.peaceDegree >= 30)
         {
@@ -23,7 +26,7 @@ public class GameUtils : MonoBehaviour
                 SceneController.Instance.LoadWin();
             else
             {
-                if (player.id == DataManager.Instance.player1.id)
+                if (!GameManager.Instance.aiTurn)
                     SceneController.Instance.LoadWin();
                 else
                     SceneController.Instance.LoadLose();
@@ -44,7 +47,7 @@ public class GameUtils : MonoBehaviour
                     SceneController.Instance.LoadWin();
                 else
                 {
-                    if (player.id == DataManager.Instance.player1.id)
+                    if (!GameManager.Instance.aiTurn)
                         SceneController.Instance.LoadWin();
                     else
                         SceneController.Instance.LoadLose();
@@ -62,7 +65,7 @@ public class GameUtils : MonoBehaviour
                     SceneController.Instance.LoadWin();
                 else
                 {
-                    if (player.id == DataManager.Instance.player1.id)
+                    if (!GameManager.Instance.aiTurn)
                         SceneController.Instance.LoadWin();
                     else
                         SceneController.Instance.LoadLose();
