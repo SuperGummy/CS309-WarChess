@@ -4,12 +4,17 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WinManager : MonoBehaviour
 {
     public static int side;
+    private bool isOn;
 
     [SerializeField] private TextMeshProUGUI winnerText;
+
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private Toggle animationButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +43,20 @@ public class WinManager : MonoBehaviour
 
     public void OnExit()
     {
-        SceneManager.UnloadSceneAsync("Win");
+        winPanel.SetActive(false);
+        animationButton.isOn = false;
+        isOn = false;
+    }
+
+    public void OnReturnMenu()
+    {
+        SceneManager.LoadSceneAsync("Start After Login");
+    }
+
+    public void OnAnimationButtonSelectChange()
+    {
+        isOn = animationButton.isOn;
+        if(isOn) winPanel.SetActive(true);
+        else winPanel.SetActive(false);
     }
 }
