@@ -16,8 +16,7 @@ public class GameUtils : MonoBehaviour
 
     public bool JudgeEnd()
     {
-        var scene = SceneManager.GetActiveScene();
-        if (scene.name != "Game") return false;
+        if (GameManager.Instance.end) return false;
         var player = DataManager.Instance.currentPlayer;
         if (player.prosperityDegree >= 50 && player.peaceDegree >= 30)
         {

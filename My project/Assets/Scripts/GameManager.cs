@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public GameObject placeInfoFrame;
 
     public bool error;
+    public bool end;
     public bool func;
     public bool recruit;
     public bool characterInfo;
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
 
         if (GameUtils.Instance.JudgeEnd())
         {
+            end = true;
             var shop = GameObject.Find("ShopButton");
             shop.SetActive(false);
             // var backpack = GameObject.Find("BackpackButton");
@@ -423,7 +425,7 @@ public class GameManager : MonoBehaviour
             await DataManager.Instance.LoadArchive(LoadPath, progress);
         }
     }
-    
+
     private void ReportProgress(object sender, ProgressReportModel report)
     {
         ProgressRenderer.Instance.SetSliderValue(report.ProgressValue);
@@ -443,11 +445,13 @@ public class GameManager : MonoBehaviour
     {
         if (DataManager.Instance.GetCharacterByPosition(positionAttacked) != null)
         {
-            await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
             GridController.Instance.ShowDamageText(positionAttacked,
                 DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
                 DataManager.Instance.GetCharacterByPosition(positionAttacked).defense);
             AudioManager.Instance.Play(1);
+            await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
+            if (DataManager.Instance.GetCharacterByPosition(positionAttacked) == null)
+                GridController.Instance.DeleteCharacter(positionAttacked);
             current = true;
         }
         else if (DataManager.Instance.GetStructureByPosition(positionAttacked) != null)
@@ -501,18 +505,18 @@ public class GameManager : MonoBehaviour
 
     public void UpdateCharacterAtCamp(int option)
     {
-        Task task = Task.Run(async () => { await DataManager.Instance.UpdateCharacter(_previousPosition, option);});
+        Task task = Task.Run(async () => { await DataManager.Instance.UpdateCharacter(_previousPosition, option); });
         task.Wait();
         current = true;
     }
 
     public void EarnStars()
     {
-        Task task = Task.Run(async () => { await DataManager.Instance.EarnStars(_previousPosition);});
+        Task task = Task.Run(async () => { await DataManager.Instance.EarnStars(_previousPosition); });
         task.Wait();
         current = true;
     }
-    
+
     public async Task BuyEquipment(int shopId)
     {
         await DataManager.Instance.BuyEquipments(shopId);
@@ -548,6 +552,7 @@ public class GameManager : MonoBehaviour
         playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         current = true;
     }
+
     public async Task BuyCharacter(Vector3Int position)
     {
         await DataManager.Instance.BuyCharacters(_previousPosition, DataManager.Instance.purchasingIndex, position.x,
@@ -616,5 +621,4 @@ public class GameManager : MonoBehaviour
     {
         await DataManager.Instance.LoadArchive(path);
     }
-
 }

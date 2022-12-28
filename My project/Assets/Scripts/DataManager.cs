@@ -993,6 +993,7 @@ public class DataManager : MonoBehaviour
         if (character.hp <= 0)
         {
             GetStructure(new Vector3Int(character.x, character.y));
+            characters[character.x * MapSize + character.y] = null;
         }
     }
 
