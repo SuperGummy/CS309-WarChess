@@ -99,6 +99,8 @@ public class GameManager : MonoBehaviour
             rollback.SetActive(false);
             var option = GameObject.Find("OptionsButton");
             option.SetActive(false);
+            var endTurn = GameObject.Find("EndTurnButton");
+            endTurn.SetActive(false);
             DisableBackground();
         }
     }
