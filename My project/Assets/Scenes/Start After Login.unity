@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelButton (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 540657001113130602, guid: 119414c1061f407439a6bf95f7522caf, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1092571644379972325, guid: 119414c1061f407439a6bf95f7522caf, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
