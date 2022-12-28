@@ -93,8 +93,8 @@ public class GameManager : MonoBehaviour
         {
             var shop = GameObject.Find("ShopButton");
             shop.SetActive(false);
-            var backpack = GameObject.Find("BackpackButton");
-            backpack.SetActive(false);
+            // var backpack = GameObject.Find("BackpackButton");
+            // backpack.SetActive(false);
             var rollback = GameObject.Find("RollBackButton");
             rollback.SetActive(false);
             var option = GameObject.Find("OptionsButton");
