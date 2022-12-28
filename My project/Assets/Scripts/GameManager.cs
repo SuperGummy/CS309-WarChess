@@ -539,7 +539,14 @@ public class GameManager : MonoBehaviour
         GridController.Instance.SetMovableHighlight(_characterAvailablePosition, true);
     }
 
-    public async void BuyCharacter(Vector3Int position)
+    public async Task AIbuyCharacter(Vector3Int position, int id, int x, int y, int type)
+    {
+        await DataManager.Instance.BuyCharacters(position, id, x, y, type);
+        GridController.Instance.CreateCharacter(position);
+        playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+        current = true;
+    }
+    public async Task BuyCharacter(Vector3Int position)
     {
         await DataManager.Instance.BuyCharacters(_previousPosition, DataManager.Instance.purchasingIndex, position.x,
             position.y, DataManager.Instance.purchasingType);
@@ -578,7 +585,7 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public async void UpgradeStructure(Vector3Int position, int type = -1)
+    public async Task UpgradeStructure(Vector3Int position, int type = -1)
     {
         await DataManager.Instance.UpdateStructure(position, type);
         GridController.Instance.SetStructure(position);

@@ -6,6 +6,7 @@ using Model;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = System.Random;
+using Vector2 = System.Numerics.Vector2;
 using Vector3 = UnityEngine.Vector3;
 public class AISenior: AI
 {
@@ -37,7 +38,7 @@ public class AISenior: AI
         }
         if (DataManager.Instance.GetCharacterByPosition(position) != null)
         {
-            if (DataManager.Instance.GetCharacterByPosition(position).player.id != currentPlayer) return 2; //into enemy
+            if (DataManager.Instance.GetCharacterByPosition(position).player.id != DataManager.Instance.currentPlayer.id) return 2; //into enemy
             else return 0;
         }
 
@@ -70,7 +71,7 @@ public class AISenior: AI
             }
         }
 
-        int actionRange = n,currentPlayer=character.player.id;
+        int actionRange = n+n,currentPlayer=character.player.id;
         dis[position.x, position.y] = 1;
         for (var t = 1; t < actionRange; t++)
         for (var i = 0; i < n; i++)
@@ -152,6 +153,8 @@ public class AISenior: AI
     }
     public override async Task MoveCharacters()
     {
+        getRound();
+        GetCharacters();
         //greedy, get to the nearest village/enemy in terms of rounds
         GetCharactersPos();
         for (int i = 0; i < characters.Count; i++)
@@ -189,13 +192,16 @@ public class AISenior: AI
                         destPos = movableList[j];
                     }
                 }
+                Debug.Log("closest enemy:"+destPos);
             }
-            GameManager.Instance.MoveCharacter(pos, destPos);
+            Debug.Log("Move: "+pos+" "+destPos);
+            if(pos.x!=destPos.x||pos.y!=destPos.y) await GameManager.Instance.MoveCharacter(pos, destPos);
         }
     }
 
     private int getEnemyHPByPosition(Vector3Int position)
     {
+        Debug.Log("Attack:"+position);
         Structure objectStructure = DataManager.Instance.GetStructureByPosition(position);
         Character objectCharacter = DataManager.Instance.GetCharacterByPosition(position);
         if (objectStructure == null) return objectCharacter.hp;
@@ -204,16 +210,18 @@ public class AISenior: AI
     public override async Task AttackCharacters()
     {
         //attack a thing with the min hp
-        GetCharactersPos();
+        chPositions = DataManager.Instance.GetCharacterPosByPlayer(player.id);
         foreach (Vector3Int pos in chPositions)
         {
-            List<Vector3Int> attackPositions = GameUtils.Instance.GetActionRange(pos);
-            if (attackPositions.Count != 0)
+            Debug.Log("charapos:"+pos);
+            List<Vector3Int> attackPositions = GameUtils.Instance.GetAttackRange(pos);
+            if (attackPositions != null&&attackPositions.Count != 0)
             {
                 Vector3Int attackPos = attackPositions[0];
                 int minHP = INF;
                 for (int i = 0; i < attackPositions.Count; i++)
                 {
+                    Debug.Log("attackposition:"+attackPositions[i]);
                     int HPleft = getEnemyHPByPosition(attackPositions[i]);
                     if (HPleft < minHP)
                     {
@@ -221,35 +229,37 @@ public class AISenior: AI
                         attackPos = attackPositions[i];
                     }
                 }
-                GameManager.Instance.AttackPosition(pos, attackPos);
+                await GameManager.Instance.AttackPosition(pos, attackPos);
             }
         }
     }
 
-    public override Task Buy()
+    public override async Task Buy()
     {
         List<Structure> structures = DataManager.Instance.GetStructureByPlayer(player.id);
-        List<Vector3Int> structPos = DataManager.Instance.GetStructurePosByPlayer(player.id);
-        List<Vector3Int> recruitPos = new List<Vector3Int>();
+        //List<Vector3Int> structPos = DataManager.Instance.GetStructurePosByPlayer(player.id);
+        //List<Vector3Int> recruitPos = new List<Vector3Int>();
         if (structures.Count == 0)
         {
-            return default;
+            return;
         }
         //upgrade structure
-        for (int i = 0; i < structures.Count; i++)
+        getStructurePos();
+        getStar();
+        for (int i = 0; i < strPositions.Count; i++)
         {
-            if (structures[i].structureClass == StructureClass.VILLAGE)
+            Vector3Int position = strPositions[i];
+            Structure structure = DataManager.Instance.GetStructureByPosition(strPositions[i]);
+            Debug.Log("nmd"+structure.structureClass);
+            if (structure.structureClass == StructureClass.VILLAGE)
             {
-                
-                int type = _random.Next(0, 3);
-                GameManager.Instance.UpgradeStructure(structPos[i], type);
+                Debug.Log("给爷升级！");
+                await GameManager.Instance.UpgradeStructure(position, 2);
             }
-
-            int personNum = 3 - (structures[i].characters).Length;
-            personNum = Math.Min(personNum, structures[i].remainingRound);
+            await buyPeople(strPositions[i]);
         }
 
-        bool flag = true;
+        /*bool flag = true;
         while (flag)
         {
             int action = _random.Next(0, 5);
@@ -271,11 +281,29 @@ public class AISenior: AI
                     UpgradeStructure();
                     break;
             }
-        }
+        }*/
 
-        return default;
+        return;
     }
-    
+
+    private async Task buyPeople(Vector3Int position)
+    {
+        getStar();
+        
+        Structure structure = DataManager.Instance.GetStructureByPosition(position);
+        if (DataManager.Instance.GetCharacterByPosition(position) != null||star<3) return;
+        if(structure.structureClass==StructureClass.BASE||structure.structureClass==StructureClass.RELIC) return;
+        Debug.Log("buyPeople:"+position);
+        if (structure.characters[0] != null)
+        {
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[0].id, position.x, position.y, 0);
+        }
+            
+        else if (structure.characters[1] != null)
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[1].id, position.x, position.y, 0);
+        else if (structure.characters[2] != null)
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[2].id, position.x, position.y, 0);
+    }
     private bool Recruit()
     {
         if (player.stars < 3)
