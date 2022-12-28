@@ -279,8 +279,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Horse Riding
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
-  m_sharedMaterial: {fileID: 5529558929322663302, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
+  m_sharedMaterial: {fileID: 2955412709385583021, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

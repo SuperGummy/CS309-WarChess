@@ -1134,8 +1134,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Item
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bd506abec339e3343912aab19f69f947, type: 2}
-  m_sharedMaterial: {fileID: -186517934808929769, guid: bd506abec339e3343912aab19f69f947, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
+  m_sharedMaterial: {fileID: 2955412709385583021, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1525,8 +1525,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Equip
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bd506abec339e3343912aab19f69f947, type: 2}
-  m_sharedMaterial: {fileID: -186517934808929769, guid: bd506abec339e3343912aab19f69f947, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
+  m_sharedMaterial: {fileID: 2955412709385583021, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4045,8 +4045,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 59
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bd506abec339e3343912aab19f69f947, type: 2}
-  m_sharedMaterial: {fileID: -186517934808929769, guid: bd506abec339e3343912aab19f69f947, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
+  m_sharedMaterial: {fileID: 553304804916231977, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5455,8 +5455,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Mount
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bd506abec339e3343912aab19f69f947, type: 2}
-  m_sharedMaterial: {fileID: -186517934808929769, guid: bd506abec339e3343912aab19f69f947, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
+  m_sharedMaterial: {fileID: 2955412709385583021, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6120,7 +6120,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   star: 0
   startext: {fileID: 949878892}
-  shopItemList: []
   ShopTemplate0:
   - {fileID: 1905345749}
   - {fileID: 1584476556}

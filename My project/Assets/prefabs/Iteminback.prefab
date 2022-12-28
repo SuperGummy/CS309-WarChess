@@ -721,6 +721,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   conf: {fileID: 0}
   id: 0
+  index: 0
   ty: 0
   name: 
   nameText: {fileID: 2097087115457769281}
@@ -797,8 +798,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Horse
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
-  m_sharedMaterial: {fileID: 5529558929322663302, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 28e5eba647e4cb348b93b2c18737eef0, type: 2}
+  m_sharedMaterial: {fileID: 6349790089403641662, guid: 28e5eba647e4cb348b93b2c18737eef0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

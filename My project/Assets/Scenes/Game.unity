@@ -160,8 +160,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 854.31, y: -496.7478}
-  m_SizeDelta: {x: 193.33, y: 73.78}
+  m_AnchoredPosition: {x: 851.50836, y: -496.94}
+  m_SizeDelta: {x: 204.5367, y: 73.388}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &13824692
 MonoBehaviour:
@@ -712,7 +712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -466
+      value: -441
       objectReference: {fileID: 0}
     - target: {fileID: 4024985042785065136, guid: ce4f0dbeaf7e5b248b1d48e574fdc697, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7374,6 +7374,7 @@ MonoBehaviour:
   placeInfoButton: {fileID: 1878142712}
   placeInfoFrame: {fileID: 342910644}
   error: 0
+  end: 0
   func: 0
   recruit: 0
   characterInfo: 0
@@ -12286,8 +12287,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: End Turn
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 894f2b1ac0d44da4ea2d6344f6513e21, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 894f2b1ac0d44da4ea2d6344f6513e21, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b8d9a8aee27e2064b9d96e423d2b7dc3, type: 2}
+  m_sharedMaterial: {fileID: 6709369725752529116, guid: b8d9a8aee27e2064b9d96e423d2b7dc3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

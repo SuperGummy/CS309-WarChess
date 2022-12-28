@@ -2379,8 +2379,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 851438ba9f0062b4aa17597808234dbc, type: 2}
-  m_sharedMaterial: {fileID: -3562483465503399562, guid: 851438ba9f0062b4aa17597808234dbc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
+  m_sharedMaterial: {fileID: 553304804916231977, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2980,8 +2980,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 155, y: -1}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 163, y: 3.3901978}
+  m_SizeDelta: {x: 200, y: 58.7804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &884547802
 MonoBehaviour:
@@ -3005,8 +3005,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
+  m_sharedMaterial: {fileID: 553304804916231977, guid: d78b97ec353b5fe44ad428b812006ec2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3036,8 +3036,8 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_fontStyle: 1
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3066,7 +3066,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: -10.090515}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3451,6 +3451,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5555cf88899dccb4b86bf11ad3ff2cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure:
+    id: 0
+    player:
+      id: 0
+      stars: 0
+      prosperityDegree: 0
+      peaceDegree: 0
+      equipments: []
+      mounts: []
+      items: []
+      shop:
+        equipments: []
+        items: []
+        mounts: []
+      tech: 
+    structureClass: 0
+    level: 0
+    hp: 0
+    remainingRound: 0
+    value: 0
+    characters: []
+    startIndex: 0
+  character:
+    id: 0
+    player:
+      id: 0
+      stars: 0
+      prosperityDegree: 0
+      peaceDegree: 0
+      equipments: []
+      mounts: []
+      items: []
+      shop:
+        equipments: []
+        items: []
+        mounts: []
+      tech: 
+    name: 
+    characterClass: 0
+    actionState: 0
+    actionRange: 0
+    attack: 0
+    defense: 0
+    hp: 0
+    level: 0
+    equipment:
+      id: 0
+      name: 
+      equipmentClass: 0
+      attack: 0
+      defense: 0
+      attackRange: 0
+      description: 
+    mount:
+      id: 0
+      name: 
+      mountClass: 0
+      attack: 0
+      defense: 0
+      actionRange: 0
+      description: 
   SkillLevels: 
   SkillCaps: 
   SkillRounds: 
@@ -3903,8 +3964,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Technology Tree
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 49ef572c9eed5164082700488da25ff6, type: 2}
-  m_sharedMaterial: {fileID: -4463233749364695859, guid: 49ef572c9eed5164082700488da25ff6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 42d04b1d36aeed341b5a1bb7db6710eb, type: 2}
+  m_sharedMaterial: {fileID: 6074865998378264037, guid: 42d04b1d36aeed341b5a1bb7db6710eb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6952,11 +7013,11 @@ PrefabInstance:
     - target: {fileID: 860232381665012004, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
+      objectReference: {fileID: 11400000, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
     - target: {fileID: 860232381665012004, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 5529558929322663302, guid: fe6d27c320ce65b49b741e21e942db2d, type: 2}
+      objectReference: {fileID: 2955412709385583021, guid: 4361a23b3a0777843814dc7cacf9936b, type: 2}
     - target: {fileID: 860232381991014080, guid: 36e4927317c3984459899acda34bc73f, type: 3}
       propertyPath: m_Name
       value: skill0
