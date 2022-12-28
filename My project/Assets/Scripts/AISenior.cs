@@ -164,7 +164,7 @@ public class AISenior: AI
             movableList = GameUtils.Instance.GetActionRange(pos);
             //int rand = _random.Next(0, movableList.Count);
             Vector3Int destPos = pos;
-            
+            if(characters[i].characterClass==CharacterClass.SCHOLAR) continue;
             if (round < ATTACKINGROUND)
             {
                 //get to the place which gets closest to an unoccupied village
@@ -254,10 +254,17 @@ public class AISenior: AI
             if (structure.structureClass == StructureClass.VILLAGE)
             {
                 Debug.Log("给爷升级！");
-                await GameManager.Instance.UpgradeStructure(position, 2);
+                int type = 0;
+                if (getStructureCnt(StructureClass.MARKET) < 3) type = 1;
+                if (getStructureCnt(StructureClass.INSTITUTE) == 0) type = 2;
+                await GameManager.Instance.UpgradeStructure(position, type);
             }
             await buyPeople(strPositions[i]);
         }
+
+        buyTech();
+        clearShop();
+        for(int i=0;i<3;i++) useShop();
 
         /*bool flag = true;
         while (flag)
@@ -286,6 +293,36 @@ public class AISenior: AI
         return;
     }
 
+    private async Task useShop()
+    {
+
+        if (shopCnt > 2 || star < 7) return;
+        int t = _random.Next(3);
+        if(t==0) BuyEquipment();
+        if(t==1) BuyMount();
+        if(t==2) BuyItems();
+    }
+
+    private async Task buyTech()
+    {
+        if (getCharacterCnt(CharacterClass.SCHOLAR) == 0 || getStructureCnt(StructureClass.INSTITUTE) == 0) return;
+        getStructurePos();
+        for (int i = 0; i < strPositions.Count; i++)
+        {
+            Structure structure = DataManager.Instance.GetStructureByPosition(strPositions[i]);
+            if(structure.structureClass!=StructureClass.INSTITUTE) continue;
+            if(structure.remainingRound>0) continue;
+            for (int j = 0; j < 11; j++)
+            {
+                if (DataManager.Instance.currentPlayer.tech[j] == 1)
+                { 
+                    GameManager.Instance.UpdateTech(j);
+                    break;
+                }
+            }
+        }
+    }
+
     private async Task buyPeople(Vector3Int position)
     {
         getStar();
@@ -294,15 +331,18 @@ public class AISenior: AI
         if (DataManager.Instance.GetCharacterByPosition(position) != null||star<3) return;
         if(structure.structureClass==StructureClass.BASE||structure.structureClass==StructureClass.RELIC) return;
         Debug.Log("buyPeople:"+position);
+        int type = 0;
+        if (getCharacterCnt(CharacterClass.SCHOLAR) == 0
+            &&DataManager.Instance.GetStructureByPosition(position).structureClass==StructureClass.INSTITUTE) type = 2;
+        if (getCharacterCnt(CharacterClass.EXPLORER)<4) type = 1;
         if (structure.characters[0] != null)
         {
-            await GameManager.Instance.AIbuyCharacter(position, structure.characters[0].id, position.x, position.y, 0);
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[0].id, position.x, position.y, type);
         }
-            
         else if (structure.characters[1] != null)
-            await GameManager.Instance.AIbuyCharacter(position, structure.characters[1].id, position.x, position.y, 0);
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[1].id, position.x, position.y, type);
         else if (structure.characters[2] != null)
-            await GameManager.Instance.AIbuyCharacter(position, structure.characters[2].id, position.x, position.y, 0);
+            await GameManager.Instance.AIbuyCharacter(position, structure.characters[2].id, position.x, position.y, type);
     }
     private bool Recruit()
     {

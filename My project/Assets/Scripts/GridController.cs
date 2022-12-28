@@ -279,6 +279,7 @@ public class GridController : MonoBehaviour
             buildingMap.SetTile(new Vector3Int(position.x - 8, position.y - 8, 0), emptyTile);
             return;
         }
+
         string side;
         if (DataManager.Instance.CheckStructureSide(structure) == -1)
             side = "blue";
@@ -299,9 +300,18 @@ public class GridController : MonoBehaviour
                 buildingMap.SetTile(newPosition, side == "blue" ? blueInstitute : redInstitute);
                 break;
             case StructureClass.VILLAGE:
-                if(buildingMap.GetTile(newPosition) == village1)
-                    buildingMap.SetTile(newPosition, side == "blue" ? blueVillage : side == "red" ? redVillage : null);
-                else buildingMap.SetTile(newPosition, side == "blue" ? blueVillage2 : side == "red" ? redVillage2 : null);
+                if (buildingMap.GetTile(newPosition) == village1)
+                    buildingMap.SetTile(newPosition,
+                        side == "blue" ? blueVillage : side == "red" ? redVillage : village1);
+                else
+                    buildingMap.SetTile(newPosition,
+                        side == "blue" ? blueVillage2 : side == "red" ? redVillage2 : village2);
+                break;
+            case StructureClass.RELIC:
+                if (buildingMap.GetTile(newPosition) == relic1)
+                    buildingMap.SetTile(newPosition, relic1);
+                else
+                    buildingMap.SetTile(newPosition, relic2);
                 break;
             default:
                 Tile tile = null;

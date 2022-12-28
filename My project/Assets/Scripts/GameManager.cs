@@ -423,6 +423,7 @@ public class GameManager : MonoBehaviour
         else
         {
             await DataManager.Instance.LoadArchive(LoadPath, progress);
+            playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
         }
     }
 

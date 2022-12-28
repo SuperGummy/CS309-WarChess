@@ -68,7 +68,7 @@ public class DataManager : MonoBehaviour
     {
         Model.Player result = new Model.Player();
         result.id = player.id;
-        result.stars = player.id;
+        result.stars = player.stars;
         result.prosperityDegree = player.prosperityDegree;
         result.peaceDegree = player.peaceDegree;
         result.equipments = player.equipments;
@@ -947,7 +947,7 @@ public class DataManager : MonoBehaviour
         var characterOld = GetCharacterByPosition(position);
         if (characterOld == null) return;
         var res = await api.PUT(
-            url: api.Character + "/" + characterOld + "/dismiss",
+            url: api.Character + "/" + characterOld.id + "/dismiss",
             param: null
         );
         var character = GetModel<Model.Character>(res);

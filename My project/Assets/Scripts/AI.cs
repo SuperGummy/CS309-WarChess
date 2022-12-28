@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Model;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public abstract class AI
     public static Player player;
     protected List<Character> characters = new List<Character>();
     protected List<Vector3Int> chPositions,strPositions;
-    protected int round,star;
+    protected int round,star,shopCnt;
     public static bool AIType;
 
     public static AI GetAI(bool type)
@@ -22,6 +23,34 @@ public abstract class AI
         if (type)
             return new AISenior();
         return new AIJunior();
+    }
+
+    public int getCharacterCnt(CharacterClass c)
+    {
+        int ret = 0;
+        GetCharacters();
+        for(int i=0;i<characters.Count;i++)
+            if (characters[i].characterClass == c)
+                ret++;
+        return ret;
+    }
+
+    public void clearShop()
+    {
+        shopCnt = 0;
+    }
+
+    public int getStructureCnt(StructureClass c)
+    {
+        int ret = 0;
+        getStructurePos();
+        for (int i = 0; i < strPositions.Count; i++)
+        {
+            Structure structure = DataManager.Instance.GetStructureByPosition(strPositions[i]);
+            if (structure.structureClass == c) ret++;
+        }
+
+        return ret;
     }
 
     public void getStar()
@@ -95,26 +124,36 @@ public abstract class AI
 
     protected void BuyEquipment()
     {
-        if (player.stars >= 7)
+        if (DataManager.Instance.currentPlayer.stars < 7) return; 
+        for (int i = 0; i < DataManager.Instance.currentPlayer.shop.equipments.Length; i++)
         {
-            GameManager.Instance.BuyEquipment(0);
+            Equipment equipment = DataManager.Instance.currentPlayer.shop.equipments[i];
+            if(equipment==null) continue;
+            GameManager.Instance.BuyEquipment(equipment.id);
         }
-
     }
 
 
     protected void BuyMount()
     {
-        if (player.stars > 7)
+        if (DataManager.Instance.currentPlayer.stars < 7) return; 
+        for (int i = 0; i < DataManager.Instance.currentPlayer.shop.mounts.Length; i++)
         {
-            GameManager.Instance.BuyEquipment(0);
+            Mount mount = DataManager.Instance.currentPlayer.shop.mounts[i];
+            if(mount==null) continue;
+            GameManager.Instance.BuyMount(mount.id);
         }
-
     }
 
     protected void BuyItems()
     {
-        
+        if (DataManager.Instance.currentPlayer.stars < 7) return; 
+        for (int i = 0; i < DataManager.Instance.currentPlayer.shop.items.Length; i++)
+        {
+            Item item = DataManager.Instance.currentPlayer.shop.items[i];
+            if(item==null) continue;
+            GameManager.Instance.BuyItem(item.id);
+        }
     }
 
     public abstract Task MoveCharacters();
