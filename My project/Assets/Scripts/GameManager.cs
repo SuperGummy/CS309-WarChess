@@ -447,8 +447,8 @@ public class GameManager : MonoBehaviour
         if (DataManager.Instance.GetCharacterByPosition(positionAttacked) != null)
         {
             GridController.Instance.ShowDamageText(positionAttacked,
-                DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
-                DataManager.Instance.GetCharacterByPosition(positionAttacked).defense);
+                Math.Max(0,DataManager.Instance.GetCharacterByPosition(positionAttack).attack -
+                                DataManager.Instance.GetCharacterByPosition(positionAttacked).defense));
             AudioManager.Instance.Play(1);
             await DataManager.Instance.AttackCharacter(positionAttack, positionAttacked);
             if (DataManager.Instance.GetCharacterByPosition(positionAttacked) == null)
@@ -511,10 +511,10 @@ public class GameManager : MonoBehaviour
         current = true;
     }
 
-    public void EarnStars()
+    public async void EarnStars()
     {
-        Task task = Task.Run(async () => { await DataManager.Instance.EarnStars(_previousPosition); });
-        task.Wait();
+        await DataManager.Instance.EarnStars(_previousPosition);
+        
         current = true;
     }
 

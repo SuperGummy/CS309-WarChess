@@ -614,7 +614,11 @@ public class DataManager : MonoBehaviour
 
         InitiateData(game);
         foreach (var structure in game.structures)
+        {
             UpdateStructureAttribute(structure, false);
+            structures[structure.x * MapSize + structure.y].player = null;
+        }
+            
         foreach (var structure in game.player1.structures)
         {
             UpdateStructureAttribute(structure, false);
