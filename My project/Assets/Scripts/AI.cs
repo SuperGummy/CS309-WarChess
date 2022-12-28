@@ -69,7 +69,15 @@ public abstract class AI
             if (pos.Count > 0)
             {
                 int i = new Random().Next(0, pos.Count);
-                GameManager.Instance.BuyCharacter(pos[i]);
+                Structure structure = DataManager.Instance.GetStructureByPosition(pos[i]);
+                Character[] characters = structure.characters.Where(x => x != null).ToArray();
+                if (characters.Length == 0)
+                {
+                    return false;
+                }
+
+                int type = new Random().Next(0, 3);
+                GameManager.Instance.AIbuyCharacter(pos[i], characters[0].id, pos[i].x, pos[i].y, type);
                 pos.RemoveAt(i);
             }
         }
