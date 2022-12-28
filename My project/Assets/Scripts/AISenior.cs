@@ -255,8 +255,9 @@ public class AISenior: AI
             {
                 Debug.Log("给爷升级！");
                 int type = 0;
-                if (getStructureCnt(StructureClass.MARKET) < 3) type = 1;
                 if (getStructureCnt(StructureClass.INSTITUTE) == 0) type = 2;
+                if (getStructureCnt(StructureClass.MARKET) < 3) type = 1;
+                
                 await GameManager.Instance.UpgradeStructure(position, type);
             }
             await buyPeople(strPositions[i]);

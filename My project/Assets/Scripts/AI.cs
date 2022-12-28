@@ -130,6 +130,7 @@ public abstract class AI
             Equipment equipment = DataManager.Instance.currentPlayer.shop.equipments[i];
             if(equipment==null) continue;
             GameManager.Instance.BuyEquipment(equipment.id);
+            return;
         }
     }
 
@@ -142,6 +143,7 @@ public abstract class AI
             Mount mount = DataManager.Instance.currentPlayer.shop.mounts[i];
             if(mount==null) continue;
             GameManager.Instance.BuyMount(mount.id);
+            return;
         }
     }
 
@@ -153,6 +155,7 @@ public abstract class AI
             Item item = DataManager.Instance.currentPlayer.shop.items[i];
             if(item==null) continue;
             GameManager.Instance.BuyItem(item.id);
+            return;
         }
     }
 
