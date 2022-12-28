@@ -27,7 +27,6 @@ public class StartAfterLoginManager : MonoBehaviour
     void Start()
     {
         Instance = this;
-        userName = PlayerPrefs.GetString("username", "123");
         GameManager.Load = false;
     }
 
@@ -39,6 +38,7 @@ public class StartAfterLoginManager : MonoBehaviour
 
     private void OnEnable()
     {
+        userName = PlayerPrefs.GetString("username", "123");
         welcomeText.text = "Welcome home " + userName + "!";
     }
 
