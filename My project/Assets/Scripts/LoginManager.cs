@@ -71,7 +71,7 @@ public class LoginManager : MonoBehaviour
         {
             message.text = "Login failed, please check username and password.";
             message.color = Color.red;
-            EditorUtility.DisplayDialog("Errors", "Login failed", "ok");
+            //EditorUtility.DisplayDialog("Errors", "Login failed", "ok");
             return;
         }
         //EditorUtility.DisplayDialog("Congratulations", "Login successfully", "ok");

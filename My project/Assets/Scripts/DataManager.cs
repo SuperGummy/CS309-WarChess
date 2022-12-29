@@ -8,13 +8,13 @@ using api = API.Service;
 using Model;
 using Newtonsoft.Json;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.UIElements;
+
+#if UNITY_WINRT
 using File = UnityEngine.Windows.File;
+#else
+using File = System.IO.File;
+#endif
 using Random = System.Random;
 
 public class DataManager : MonoBehaviour
@@ -543,14 +543,14 @@ public class DataManager : MonoBehaviour
             });
 
         var account = GetModel<Account>(res);
-        if (account == null)
-        {
-            EditorUtility.DisplayDialog("Errors", "Update Password failed", "ok");
-        }
-        else
-        {
-            EditorUtility.DisplayDialog("Congratulations", "Update Password successfully", "ok");
-        }
+        // if (account == null)
+        // {
+        //     EditorUtility.DisplayDialog("Errors", "Update Password failed", "ok");
+        // }
+        // else
+        // {
+        //     EditorUtility.DisplayDialog("Congratulations", "Update Password successfully", "ok");
+        // }
     }
 
     public async Task Play(string username1, string username2, IProgress<ProgressReportModel> progress = null)
@@ -1158,14 +1158,14 @@ public class DataManager : MonoBehaviour
     {
         if (res == null)
         {
-            EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
+            //EditorUtility.DisplayDialog("Unknown errors", "Check your network", "ok");
             GameManager.Instance.error = true;
             return default;
         }
 
         if (res.StatusCode != HttpStatusCode.OK)
         {
-            EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
+            //EditorUtility.DisplayDialog("Errors", res.ReasonPhrase, "ok");
             GameManager.Instance.error = true;
             return default;
         }
@@ -1181,7 +1181,7 @@ public class DataManager : MonoBehaviour
 
         if (model.code != 200)
         {
-            EditorUtility.DisplayDialog("Bad Request", model.msg, "ok");
+            //EditorUtility.DisplayDialog("Bad Request", model.msg, "ok");
             GameManager.Instance.error = true;
             return default;
         }
