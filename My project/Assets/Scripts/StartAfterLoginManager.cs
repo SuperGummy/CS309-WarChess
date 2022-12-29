@@ -42,6 +42,11 @@ public class StartAfterLoginManager : MonoBehaviour
         welcomeText.text = "Welcome home " + userName + "!";
     }
 
+    public void OnQuit()
+    {
+        Application.Quit();
+    }
+
     public void OnSinglePlayerSelectChange()
     {
         isOn = singlePlayerButton.isOn;
