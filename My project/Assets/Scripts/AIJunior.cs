@@ -46,21 +46,21 @@ public class AIJunior: AI
         }
     }
 
-    public override Task Buy()
+    public override async Task Buy()
     {
         List<Structure> structures = DataManager.Instance.GetStructureByPlayer(player.id);
         List<Vector3Int> structPos = DataManager.Instance.GetStructurePosByPlayer(player.id);
         List<Vector3Int> recruitPos = new List<Vector3Int>();
         if (structures.Count == 0)
         {
-            return default;
+            return;
         }
         for (int i = 0; i < structures.Count; i++)
         {
             if (structures[i].structureClass == StructureClass.VILLAGE)
             {
                 int type = new Random().Next(0, 3);
-                GameManager.Instance.UpgradeStructure(structPos[i], type);
+                await GameManager.Instance.UpgradeStructure(structPos[i], type);
             }
 
         }
@@ -96,8 +96,6 @@ public class AIJunior: AI
                     break;
             }
         }
-
-        return default;
     }
     
 
