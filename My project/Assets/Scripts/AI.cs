@@ -99,6 +99,7 @@ public abstract class AI
             {
                 int i = new Random().Next(0, pos.Count);
                 Structure structure = DataManager.Instance.GetStructureByPosition(pos[i]);
+                if (structure.characters == null) return false;
                 Character[] characters = structure.characters.Where(x => x != null).ToArray();
                 if (characters.Length == 0)
                 {
