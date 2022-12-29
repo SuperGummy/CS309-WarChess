@@ -411,6 +411,7 @@ public class GameManager : MonoBehaviour
     {
         Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
         progress.ProgressChanged += ReportProgress;
+        AudioManager.Instance.Stop(4);
         if (!Load)
         {
             await DataManager.Instance.Play(PlayerPrefs.GetString("username", "123"), null, progress);
@@ -419,11 +420,13 @@ public class GameManager : MonoBehaviour
             GridController.Instance.CreateCharacter(pos1);
             GridController.Instance.CreateCharacter(pos2);
             playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+            AudioManager.Instance.Play(4);
         }
         else
         {
             await DataManager.Instance.LoadArchive(LoadPath, progress);
             playerInfoBar.GetComponent<PlayerInfoBar>().RenderData();
+            AudioManager.Instance.Play(4);
         }
     }
 
