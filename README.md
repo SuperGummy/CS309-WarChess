@@ -4,13 +4,13 @@ This repository contains the front end code of a Warchess game -SUSTechtopia whi
 
 Followings are some screen-shots from the game and some brief descriptions.
 
- ![entrance](Screen shots/entrance.png)
+ ![entrance](Screen_shots/entrance.png)
 
  Register an account and login to play.![entrance](Screen shots/register.png)
 
 Starting menu, both single player (play with computer AI) and double player mode is supported.
 
-![entrance](Screen shots/single_player.png)
+![entrance](Screen_shots/single_player.png)
 
 ![entrance](Screen shots/loading.png)
 
