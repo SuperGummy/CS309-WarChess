@@ -1,6 +1,6 @@
 # CS309-WarChess
 
-This repository contains the front end code of a Warchess game -SUSTechtopia which we made for our Project of course CS309. The code is in C# and we implement it with the unity engine, the back end code is written in java which is currently not open-sourced.
+This repository contains the front end code of a Warchess game -SUSTechtopia which we made for our Project of course CS309. The code is in C# and we implement it with the unity engine(version 2021.3.9f1), the back end code is written in java which is currently not open-sourced.
 
 Followings are some screen-shots from the game and some brief descriptions.
 
